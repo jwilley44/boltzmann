@@ -1,0 +1,39 @@
+package willey.lib.physics.polymer.lattice;
+
+import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.util.Function;
+
+public class RectangleLattice implements Lattice
+{
+	private final int mXDimension;
+	private final int mYDimension;
+	private final int mZDimension;
+	
+	public RectangleLattice(int pXDimension, int pYDimension, int pZDimension)
+	{
+		mXDimension = pXDimension;
+		mYDimension = pYDimension;
+		mZDimension = pZDimension;
+	}
+
+	@Override
+	public CartesianVector randomStart()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Function<CartesianVector, CartesianVector>> getNewLatticeCoordinatesFunctions()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CartesianVector getLatticeCoordinates(CartesianVector pVector)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

@@ -1,0 +1,96 @@
+package willey.lib.util;
+
+public class StringJoiner
+{
+	private final String mDelimitter;
+	private final StringBuilder mBuilder = new StringBuilder();
+	
+	private StringJoiner(String pDelimitter)
+	{
+		mDelimitter = pDelimitter;
+	}
+	
+	public static StringJoiner on(String pDelimitter)
+	{
+		return new StringJoiner(pDelimitter);
+	}
+	
+	public void addAll(double...pElements)
+	{
+		for (double vElement : pElements)
+		{
+			addElement(String.valueOf(vElement));
+		}
+	}
+	
+	public void addAll(Object...pElements)
+	{
+		addAll(kDefault, pElements);
+	}
+	
+	public void addAll(Iterable<?> pElements)
+	{
+		addAll(kDefault, pElements);
+	}
+	
+	public <T> void addAll(Function<T, String> pFunction, T...pElements)
+	{
+		for (T vElement : pElements)
+		{
+			addElement(pFunction.apply(vElement));
+		}
+	}
+	
+	public <T> void addAll(Iterable<T> pElements, Function<T, String> pFunction)
+	{
+		for (T vElement : pElements)
+		{
+			addElement(pFunction.apply(vElement));
+		}
+	}
+	
+	public void addElement(String pElement)
+	{
+		mBuilder.append(pElement);
+		mBuilder.append(mDelimitter);
+	}
+	
+	@Override
+	public String toString()
+	{
+		String vString = mBuilder.toString();
+		return vString.substring(0, vString.lastIndexOf(mDelimitter));
+	}
+	
+	public static String joinString(String pDelimitter, double...pElements)
+	{
+		StringJoiner vJoiner = on(pDelimitter);
+		vJoiner.addAll(pElements);
+		return vJoiner.toString();
+	}
+	
+	public static <T> String joinString(String pDelimitter, Iterable<T> pElements)
+	{
+		StringJoiner vJoiner = on(pDelimitter);
+		vJoiner.addAll(pElements);
+		return vJoiner.toString();
+	}
+	
+	public static <T> String joinString(String pDelimitter, Function<T, String> pFunction, Iterable<T> pElements)
+	{
+		StringJoiner vJoiner = on(pDelimitter);
+		vJoiner.addAll(pElements, pFunction);
+		return vJoiner.toString();
+	}
+	
+	public static final StandardToString kDefault = new StandardToString();
+	
+	private static class StandardToString implements Function<Object, String>
+	{
+		@Override
+		public String apply(Object pFrom)
+		{
+			return pFrom.toString();
+		}
+	}
+}

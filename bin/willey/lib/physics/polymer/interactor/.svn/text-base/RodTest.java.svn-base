@@ -1,0 +1,108 @@
+package willey.lib.physics.polymer.interactor;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import willey.lib.math.MathUtil;
+import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.physics.polymer.interactor.Rod;
+import willey.lib.test.AbstractTest;
+
+import static willey.lib.math.linearalgebra.CartesianVector.*;
+
+public class RodTest extends AbstractTest
+{
+	@Test
+	public void testEndPoint()
+	{
+		Rod vRod = new Rod(vector(1, 0, 0), vector(0, 0, 0), 10, 0.5);
+		Assert.assertTrue(vector(10.0, 0, 0).coordinatesEqual(vRod.endPoint()));
+	}
+
+	@Test
+	public void testParametric()
+	{
+		Rod vRod = createRodAtOrigin();
+		CartesianVector vPoint = vRod.parametricEquation(MathUtil.kRng
+				.nextDouble());
+		Assert.assertTrue(vPoint.magnitude() <= vRod.endPoint().magnitude());
+		Assert.assertTrue(vPoint.crossProduct(vRod.direction()).isZeroVector());
+	}
+
+	@Test
+	public void testTranslateOnly()
+	{
+		Rod vRod = createRodAtOrigin();
+		double vDistance = 1.0;
+		Rod vTranslated = vRod.move(vDistance, 0.0);
+		Assert.assertTrue(vRod.direction().coordinatesEqual(
+				vTranslated.direction()));
+		assertEquals(
+				vDistance,
+				vRod.parametricEquation(0.5).distance(
+						vTranslated.parametricEquation(0.5)), 0.0000001);
+	}
+
+	@Test
+	public void testRotateOnly()
+	{
+		Rod vRod = createRodAtOrigin();
+		Rod vRotated = vRod.move(0.0, 0.1);
+		Assert.assertTrue(vRod.parametricEquation(0.5).coordinatesEqual(
+				vRotated.parametricEquation(0.5)));
+	}
+	
+	@Test
+	public void testMoveRod()
+	{
+		Rod vRod = createRodAtOrigin();
+		for (int i = 0 ; i < 1e6; i++)
+		{
+			vRod = vRod.randomTestableMove();
+		}
+	}
+
+	@Test
+	public void testInteraction()
+	{
+		Rod vRod1 = new Rod(vector(1, 0, 0), zeroVector(), 10, 0.5);
+		Assert.assertFalse(vRod1.interactsWith(vRod1.move(2.0, 0.0)));
+		Assert.assertTrue(vRod1.interactsWith(vRod1.move(0.5, 0.0)));
+		Assert.assertTrue(vRod1.interactsWith(vRod1.move(0.0, 0.1)));
+		Rod vRod3 = new Rod(
+				vector(0.9914842636532833, 0.08505461057720182, 0.09861373204309427),
+				vector(10.070898314989606, 0.1656970555271226, 0.0867059093792131), 
+				10, 0.5);
+		Assert.assertTrue(vRod1.interactsWith(vRod3));
+		for (int i = 0; i < 1000000; i++)
+		{
+			CartesianVector vPosition = vRod1.endPoint().add(
+					randomUnitVector().scale(0.2));
+			Rod vRod2 = new Rod(randomUnitVector(), vPosition, 10, 0.5);
+			boolean vInteracts = vRod1.interactsWith(vRod2);
+			if (!vInteracts)
+			{
+				System.err.println(vRod2.position());
+				System.err.println(vRod2.direction());
+			}
+			Assert.assertTrue(vInteracts);
+		}
+		for (int i = 0; i < 1000000; i++)
+		{
+			Rod vRod2 = vRod1.move(vRod1.length() + 1, MathUtil.kRng.nextDouble());
+			boolean vInteracts = vRod1.interactsWith(vRod2);
+			if (vInteracts)
+			{
+				System.err.println(vRod2.position());
+				System.err.println(vRod2.direction());
+			}
+			Assert.assertFalse(vInteracts);
+		}
+	}
+
+	private Rod createRodAtOrigin()
+	{
+		return new Rod(randomUnitVector(), zeroVector(), 10, 0.5);
+	}
+}

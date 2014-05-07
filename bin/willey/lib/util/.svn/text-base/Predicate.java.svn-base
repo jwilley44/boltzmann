@@ -1,0 +1,6 @@
+package willey.lib.util;
+
+public interface Predicate<T>
+{
+	public boolean apply(T pArgument) throws Exception;
+}

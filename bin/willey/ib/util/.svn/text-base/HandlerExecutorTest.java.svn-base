@@ -1,0 +1,69 @@
+package willey.ib.util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import willey.lib.test.AbstractTest;
+import willey.lib.util.HandlerAndExecutor;
+import willey.lib.util.Timer;
+
+public class HandlerExecutorTest extends AbstractTest
+{
+	@Test
+	public void testAllTrue() throws Exception
+	{
+		Assert.assertTrue(HandlerAndExecutor.executeAll( get(1000, true)));
+	}
+
+	@Test
+	public void testAllFalse() throws Exception
+	{
+		Assert.assertFalse(HandlerAndExecutor.executeAll( get(10, false)));
+	}
+	
+	@Test
+	public void testBoth() throws Exception
+	{
+		int vCount = 25;
+		List<Callable<Boolean>> vCallables= get(vCount, true);
+		vCallables.addAll(get(vCount, false));
+		Assert.assertFalse(HandlerAndExecutor.executeAll(vCallables));
+	}
+
+	private List<Callable<Boolean>> get(int pCount, boolean pReturn)
+	{
+		List<Callable<Boolean>> vCallables = new ArrayList<Callable<Boolean>>();
+		for (int i = 0; i < pCount; i++)
+		{
+			vCallables.add(pReturn ? new TrueCallable() : new FalseCallable());
+		}
+		return vCallables;
+	}
+
+	private static class TrueCallable implements Callable<Boolean>
+	{
+		@Override
+		public Boolean call() throws Exception
+		{
+			Timer vTimer = Timer.start();
+			while (vTimer.getElapsedTimeMilliseconds() < 1){};
+			return Boolean.TRUE;
+		}
+	}
+
+	private static class FalseCallable implements Callable<Boolean>
+	{
+		@Override
+		public Boolean call() throws Exception
+		{
+			Timer vTimer = Timer.start();
+			while (vTimer.getElapsedTimeMilliseconds() < 1){};
+			return Boolean.FALSE;
+		}
+	}
+}

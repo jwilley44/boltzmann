@@ -1,0 +1,106 @@
+package willey.lib.math.linearalgebra;
+
+import org.junit.Test;
+
+import willey.lib.test.AbstractTest;
+
+import junit.framework.Assert;
+
+import static willey.lib.math.linearalgebra.CartesianVector.*;
+
+public class CartesianVectorTest extends AbstractTest
+{
+	@Test
+	public void testAdd()
+	{
+		CartesianVector v1 = vector(1,0,1);
+		Assert.assertTrue(vector(2,0,2).coordinatesEqual(v1.add(v1)));
+	}
+	
+	@Test
+	public void testScale()
+	{
+		CartesianVector v1 = vector(1,0,1);
+		double vMagnitude = v1.magnitude();
+		CartesianVector vScaled = v1.scale(2);
+		Assert.assertTrue(vector(2,0,2).coordinatesEqual(vScaled));
+		Assert.assertTrue(vMagnitude*2 == vScaled.magnitude());
+	}
+	
+	@Test
+	public void testSubtract() throws Exception
+	{
+		CartesianVector v1 = vector(1,0,1);
+		CartesianVector v2 = vector(2,4,1);
+		Assert.assertTrue(vector(-1,-4,0).coordinatesEqual(v1.subtract(v2)));
+	}
+	
+	@Test
+	public void testMagnitude()
+	{
+		CartesianVector v1 = vector(1,0,1);
+		Assert.assertTrue(Math.abs(v1.magnitude() - Math.sqrt(2)) < 0.00001);
+	}
+	
+	@Test
+	public void testDotProduct()
+	{
+		Assert.assertTrue(vector(1,2,3).dotProduct(vector(4,5,6)) == 32);
+	}
+	
+	@Test
+	public void testRandomUnitVector()
+	{
+		assertEquals(1.0, randomUnitVector().magnitude(), 0.00000001);
+		Assert.assertFalse(randomUnitVector().coordinatesEqual(randomUnitVector()));
+	}
+	
+	@Test
+	public void testCrossProduct()
+	{
+		CartesianVector v1 = vector(1,0,0);
+		CartesianVector v2 = vector(0, 1, 0);
+		Assert.assertTrue(vector(0, 0, 1).coordinatesEqual(v1.crossProduct(v2)));
+		
+		v1 = randomUnitVector();
+		v2 = v1.scale(2.0);
+		Assert.assertTrue(v1.crossProduct(v2).isZeroVector());
+	}
+	
+	@Test
+	public void testPerpendicular()
+	{
+		CartesianVector v1 = randomUnitVector();
+		assertEquals(0.0, v1.dotProduct(v1.getPerpendicularVector()), 0.00000001);
+	}
+	
+	@Test
+	public void randomRotationInPlane()
+	{
+		CartesianVector v1 = randomVector();
+		CartesianVector v2 = v1.getPerpendicularVector();
+		CartesianVector vRotated = v1.randomRotaionInPlane(v2);
+		CartesianVector vPerpendicular = v1.crossProduct(v2);
+		assertEquals(v1.magnitude(), vRotated.magnitude(), 0.0000000001);
+		assertEquals(0.0, vRotated.dotProduct(vPerpendicular), 0.00000001);
+	}
+	
+	@Test
+	public void testSmallRotation()
+	{
+		CartesianVector v1 = vector(1,1,1);
+		CartesianVector vRotated = v1.randomSmallRotation(v1.magnitude()*.1);
+		Assert.assertTrue(Math.abs(v1.magnitude() - vRotated.magnitude()) < 0.000000001);
+		Assert.assertFalse(v1.crossProduct(vRotated).isZeroVector());
+	}
+	
+	@Test
+	public void testNullSpace()
+	{
+		CartesianVector v1 = randomUnitVector();
+		CartesianPlane vPlane = v1.getNullSpace();
+		assertEquals(0.0, v1.dotProduct(vPlane.getV1()), 0.0000001);
+		assertEquals(0.0, v1.dotProduct(vPlane.getV2()), 0.0000001);
+		assertEquals(0.0, v1.dotProduct(vPlane.randomUnitVector()), .00000001);
+	}
+}
