@@ -1,0 +1,42 @@
+package willey.lib.math.linearalgebra;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import willey.lib.test.AbstractTest;
+import static willey.lib.math.linearalgebra.CartesianVector.*;
+
+
+public class LineSegmentTest extends AbstractTest
+{
+	@Test
+	public void translate()
+	{
+		LineSegment v1 = new LineSegment(randomVector(), randomVector());
+		CartesianVector vTranslate = randomVector();
+		LineSegment vMoved = v1.translate(vTranslate);
+		Assert.assertTrue(v1.start().add(vTranslate).coordinatesEqual(vMoved.start()));
+		Assert.assertTrue(v1.end().add(vTranslate).coordinatesEqual(vMoved.end()));
+		Assert.assertTrue(v1.direction().equals(vMoved.direction()));
+		Assert.assertTrue(v1.length() == vMoved.length());
+	}
+	
+	@Test
+	public void rotate()
+	{
+		LineSegment v1 = new LineSegment(randomVector(), randomVector());
+		LineSegment vRotated = v1.changeDirectionThroughMiddle(randomUnitVector());
+		Assert.assertTrue(v1.length() == vRotated.length());
+		Assert.assertTrue(v1.getPoint(0.5).coordinatesEqual(vRotated.getPoint(0.5)));
+	}
+	
+	@Test
+	public void testClosestPoint()
+	{
+		LineSegment v1 = new LineSegment(vector(0,0,0), vector(10,0,0));
+		LineSegment v2 = new LineSegment(vector(0,0.1,0), vector(-100,-0.1,0));
+		assertEquals(0.1, v1.minimumDistance(v2), 0.00001);
+		assertEquals(1.0, v1.translate(vector(1,0,0)).minimumDistance(v1), 0.00001);
+	}
+}

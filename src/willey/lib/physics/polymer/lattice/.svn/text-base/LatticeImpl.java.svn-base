@@ -1,0 +1,187 @@
+package willey.lib.physics.polymer.lattice;
+
+import static willey.lib.math.linearalgebra.CartesianVector.of;
+import static willey.lib.util.FunctionUtil.combine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import willey.lib.math.MathUtil;
+import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.util.Function;
+
+public class LatticeImpl implements Lattice
+{
+	private final List<Function<CartesianVector, CartesianVector>> mLatticeMovements = new ArrayList<Function<CartesianVector, CartesianVector>>();
+	private final int mXDimension;
+	private final int mYDimension;
+	private final int mZDimension;
+	
+	public static LatticeImpl cubeLattice(int pDimension)
+	{
+		return new LatticeImpl(pDimension, pDimension, pDimension);
+	}
+	
+	public static LatticeImpl rectangleLattice(int pXDimension, int pYDimension, int pZDimension)
+	{
+		return new LatticeImpl(pXDimension, pYDimension, pZDimension);
+	}
+	
+	private LatticeImpl(int pXDimension, int pYDimension, int pZDimension)
+	{
+		mXDimension = pXDimension;
+		mYDimension = pYDimension;
+		mZDimension = pZDimension;
+		
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				for (int k = -1; k <= 1; k++)
+				{
+					if (i != 0 || j !=0 || k !=0)
+					{
+						mLatticeMovements.add(getFunction(i, j, k));
+					}
+				}
+			}
+		}
+	}
+
+	public CartesianVector randomStart()
+	{
+		CartesianVector vRandom = CartesianVector.randomUnitVector();
+		double vX = vRandom.x() * mXDimension;
+		double vY = vRandom.y() * mYDimension;
+		double vZ = vRandom.z() * mZDimension;
+		return CartesianVector.of(vX, vY, vZ);
+	}
+
+	CartesianVector getInNewLattice(CartesianVector pVector,
+			Function<LatticeCube, LatticeCube> pCubeMovement)
+	{
+		return pCubeMovement.apply(getCube(pVector)).add(getRelative(pVector));
+	}
+
+	public Iterable<Function<CartesianVector, CartesianVector>> getNewLatticeCoordinatesFunctions()
+	{
+		return mLatticeMovements;
+	}
+
+	private Function<CartesianVector, CartesianVector> getFunction(int pX,
+			int pY, int pZ)
+	{
+		Function<LatticeCube, LatticeCube> vFunction = new NoMove();
+		vFunction = pX == 1 ? combine(vFunction, new AddX(mXDimension))
+				: pX == -1 ? combine(vFunction, new AddX(-mXDimension))
+						: vFunction;
+		vFunction = pY == 1 ? combine(vFunction, new AddY(mYDimension))
+				: pY == -1 ? combine(vFunction, new AddY(-mYDimension))
+						: vFunction;
+		vFunction = pZ == 1 ? combine(vFunction, new AddZ(mZDimension))
+				: pZ == -1 ? combine(vFunction, new AddZ(-mZDimension))
+						: vFunction;
+		return new NewLatticeCoordinatesFunction(this, vFunction);
+	}
+
+	private CartesianVector floor(CartesianVector pVector)
+	{
+		return of(Math.floor(pVector.x()), Math.floor(pVector.y()),
+				Math.floor(pVector.z()));
+	}
+
+	private CartesianVector getRelative(CartesianVector pCoordinates)
+	{
+		return pCoordinates.subtract(floor(pCoordinates));
+	}
+
+	private long latticeMod(long pArgument)
+	{
+		return pArgument >= 0 ? pArgument % mDimension
+				: (mDimension + (pArgument % mDimension)) % mDimension;
+	}
+
+	private LatticeCube getCube(CartesianVector pVector)
+	{
+		CartesianVector vFloor = floor(pVector);
+		return new LatticeCube(latticeMod((long) vFloor.x()),
+				latticeMod((long) vFloor.y()), latticeMod((long) vFloor.z()));
+	}
+
+	private static class NewLatticeCoordinatesFunction implements
+			Function<CartesianVector, CartesianVector>
+	{
+		private final LatticeImpl mLattice;
+		private final Function<LatticeCube, LatticeCube> mCubeFunction;
+
+		private NewLatticeCoordinatesFunction(LatticeImpl pLattice,
+				Function<LatticeCube, LatticeCube> pCubeFunction)
+		{
+			mLattice = pLattice;
+			mCubeFunction = pCubeFunction;
+		}
+
+		@Override
+		public CartesianVector apply(CartesianVector pFrom)
+		{
+			return mLattice.getInNewLattice(pFrom, mCubeFunction);
+		}
+	}
+
+	private static class NoMove implements Function<LatticeCube, LatticeCube>
+	{
+		@Override
+		public LatticeCube apply(LatticeCube pCube)
+		{
+			return pCube;
+		}
+	}
+
+	private static class AddX implements Function<LatticeCube, LatticeCube>
+	{
+		private final int mDimension;
+
+		AddX(int pDimension)
+		{
+			mDimension = pDimension;
+		}
+
+		@Override
+		public LatticeCube apply(LatticeCube pCube)
+		{
+			return pCube.addX(mDimension);
+		}
+	}
+
+	private static class AddY implements Function<LatticeCube, LatticeCube>
+	{
+		private final int mDimension;
+
+		AddY(int pDimension)
+		{
+			mDimension = pDimension;
+		}
+
+		@Override
+		public LatticeCube apply(LatticeCube pCube)
+		{
+			return pCube.addY(mDimension);
+		}
+	}
+
+	private static class AddZ implements Function<LatticeCube, LatticeCube>
+	{
+		private final int mDimension;
+
+		AddZ(int pDimension)
+		{
+			mDimension = pDimension;
+		}
+
+		@Override
+		public LatticeCube apply(LatticeCube pCube)
+		{
+			return pCube.addZ(mDimension);
+		}
+	}
+}

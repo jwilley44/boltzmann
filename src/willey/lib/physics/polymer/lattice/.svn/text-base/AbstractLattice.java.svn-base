@@ -1,0 +1,6 @@
+package willey.lib.physics.polymer.lattice;
+
+public abstract class AbstractLattice implements Lattice
+{
+
+}

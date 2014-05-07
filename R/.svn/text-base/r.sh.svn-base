@@ -1,0 +1,3 @@
+#!/bin/bash
+expression="source('/Users/jwilley44/Documents/workspace/dev/R/analyze.R'); ${1}";
+/usr/bin/R --slave --vanilla -e "$expression"

@@ -1,0 +1,13 @@
+package willey.lib.physics.polymer.lattice;
+
+import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.util.Function;
+
+public interface Lattice
+{
+	public CartesianVector randomStart();
+	
+	public Iterable<Function<CartesianVector, CartesianVector>> getNewLatticeCoordinatesFunctions();
+	
+	public CartesianVector getLatticeCoordinates(CartesianVector pVector);
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+dir=$1
+dataFile="data.tsv"
+expFile="${dir}.exp"
+errorFile="${dir}.err"
+java willey.app.physics.polymer.ExperimentApp $@ > $dataFile 2> $errorFile
+expDate=$(date | tr ' ' '.')
+newDir="${dir}/${expDate}"
+mkdir ../results/$newDir
+mv $dataFile $expFile $errorFile ../results/$newDir

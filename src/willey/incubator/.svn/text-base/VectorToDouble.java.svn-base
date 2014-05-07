@@ -1,0 +1,8 @@
+package willey.incubator;
+
+import willey.lib.util.Function;
+
+public interface VectorToDouble extends Function<DoubleVector, Double> 
+{
+
+}

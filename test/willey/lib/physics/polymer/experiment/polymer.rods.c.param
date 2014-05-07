@@ -1,0 +1,15 @@
+I=LatticeSize=32
+I=Size=8,16,32
+D=Radius=0.4,0.5
+I=RodCount=10,100 
+D=RodLength=5,10
+S=RodOrientation=Ordered 
+S=RodPosition=Random 
+D=RodRadius=0.1,0.5 
+D=RodRotation=0.0,0.1 
+D=RodTranslation=0.0,0.5
+S=TerminationCriteria=PolymerSize
+D=TerminationValue=2
+I=Equilibrations=2
+S=Type=Continuous
+D=PolymerWeight=0.9
