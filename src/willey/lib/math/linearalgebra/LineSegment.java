@@ -161,32 +161,32 @@ public class LineSegment
 		return getPoint(vP);
 	}
 	
-	private CartesianVector closestPoint(CartesianVector pPoint)
-	{
-		CartesianVector vToPoint = start().subtract(pPoint);
-		CartesianVector vNorm = vToPoint.crossProduct(direction());
-		CartesianVector vClosest;
-		if (vNorm.isZeroVector())
-		{
-			double vStartDist = vToPoint.magnitude();
-			double vEndDist = end().distance(pPoint);
-			vClosest = vStartDist < length() && vEndDist < length() ? pPoint
-					: vStartDist < vEndDist ? start() : end();
-		}
-		else
-		{
-			CartesianVector vUnitNorm = vNorm.crossProduct(direction())
-					.unitVector();
-			double vDistanceToInf = vToPoint.dotProduct(vUnitNorm);
-			double vT = direction().dotProduct(
-					pPoint.add(vUnitNorm.scale(vDistanceToInf)).subtract(
-							start()))
-					/ direction().dotProduct(direction());
-			vT = vT < 0 ? 0 : vT > 1 ? 1 : vT;
-			vClosest = getPoint(vT);
-		}
-		return vClosest;
-	}
+//	private CartesianVector closestPoint(CartesianVector pPoint)
+//	{
+//		CartesianVector vToPoint = start().subtract(pPoint);
+//		CartesianVector vNorm = vToPoint.crossProduct(direction());
+//		CartesianVector vClosest;
+//		if (vNorm.isZeroVector())
+//		{
+//			double vStartDist = vToPoint.magnitude();
+//			double vEndDist = end().distance(pPoint);
+//			vClosest = vStartDist < length() && vEndDist < length() ? pPoint
+//					: vStartDist < vEndDist ? start() : end();
+//		}
+//		else
+//		{
+//			CartesianVector vUnitNorm = vNorm.crossProduct(direction())
+//					.unitVector();
+//			double vDistanceToInf = vToPoint.dotProduct(vUnitNorm);
+//			double vT = direction().dotProduct(
+//					pPoint.add(vUnitNorm.scale(vDistanceToInf)).subtract(
+//							start()))
+//					/ direction().dotProduct(direction());
+//			vT = vT < 0 ? 0 : vT > 1 ? 1 : vT;
+//			vClosest = getPoint(vT);
+//		}
+//		return vClosest;
+//	}
 	
 	public double minimumDistance(CartesianVector pPoint)
 	{

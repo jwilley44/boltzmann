@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class ConsumerUtil
 {
-	public static <T, C extends Collection<T>> C toCollection(Stream<T> pStream, C pCollection)
+	public static <T, C extends Collection<T>> C toCollection(Stream<? extends T> pStream, C pCollection)
 	{
 		ToCollectionConsumer<T, C> vConsumer = new ToCollectionConsumer<T, C>(pCollection);
 		pStream.forEach(vConsumer);

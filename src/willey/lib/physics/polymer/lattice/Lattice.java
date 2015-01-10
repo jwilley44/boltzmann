@@ -65,13 +65,11 @@ public class Lattice
 			{
 				for (int k = -1; k <= 1; k++)
 				{
-					if (i != 0 || j != 0 || k != 0)
-					{
-						CartesianVector vRepositionVector = CartesianVector.of(i*mXDimension, j*mYDimension, k*mZDimension);
-						Function<CartesianVector, CartesianVector> vRespostionFunction = (pVector) -> pVector.add(vRepositionVector);
-						mLatticeMovements.add(vRespostionFunction);
-						mLatticeMovements.add(getFunction(i, j, k));
-					}
+					CartesianVector vRepositionVector = CartesianVector.of(i
+							* mXDimension, j * mYDimension, k * mZDimension);
+					Function<CartesianVector, CartesianVector> vRespostionFunction = (
+							pVector) -> pVector.add(vRepositionVector);
+					mLatticeMovements.add(vRespostionFunction);
 				}
 			}
 		}
@@ -105,22 +103,6 @@ public class Lattice
 	public Collection<Function<CartesianVector, CartesianVector>> getNewLatticeCoordinatesFunctions()
 	{
 		return mLatticeMovements;
-	}
-
-	private Function<CartesianVector, CartesianVector> getFunction(int pX,
-			int pY, int pZ)
-	{
-		Function<LatticeCube, LatticeCube> vFunction = new NoMove();
-		vFunction = pX == 1 ? vFunction.compose(new AddX(mXDimension))
-				: pX == -1 ? vFunction.compose(new AddX(-mXDimension))
-						: vFunction;
-		vFunction = pY == 1 ? vFunction.compose(new AddY(mYDimension))
-				: pY == -1 ? vFunction.compose(new AddY(-mYDimension))
-						: vFunction;
-		vFunction = pZ == 1 ? vFunction.compose(new AddZ(mZDimension))
-				: pZ == -1 ? vFunction.compose(new AddZ(-mZDimension))
-						: vFunction;
-		return new NewLatticeCoordinatesFunction(this, vFunction);
 	}
 
 	private CartesianVector floor(CartesianVector pVector)
@@ -170,82 +152,5 @@ public class Lattice
 		CartesianVector vFloor = floor(pVector);
 		return new LatticeCube(xMod((long) vFloor.x()),
 				yMod((long) vFloor.y()), zMod((long) vFloor.z()));
-	}
-
-	private static class NewLatticeCoordinatesFunction implements
-			Function<CartesianVector, CartesianVector>
-	{
-		private final Lattice mLattice;
-		private final Function<LatticeCube, LatticeCube> mCubeFunction;
-
-		private NewLatticeCoordinatesFunction(Lattice pLattice,
-				Function<LatticeCube, LatticeCube> pCubeFunction)
-		{
-			mLattice = pLattice;
-			mCubeFunction = pCubeFunction;
-		}
-
-		@Override
-		public CartesianVector apply(CartesianVector pFrom)
-		{
-			return mLattice.getInNewLattice(pFrom, mCubeFunction);
-		}
-	}
-
-	private static class NoMove implements Function<LatticeCube, LatticeCube>
-	{
-		@Override
-		public LatticeCube apply(LatticeCube pCube)
-		{
-			return pCube;
-		}
-	}
-
-	private static class AddX implements Function<LatticeCube, LatticeCube>
-	{
-		private final int mDimension;
-
-		AddX(int pDimension)
-		{
-			mDimension = pDimension;
-		}
-
-		@Override
-		public LatticeCube apply(LatticeCube pCube)
-		{
-			return pCube.addX(mDimension);
-		}
-	}
-
-	private static class AddY implements Function<LatticeCube, LatticeCube>
-	{
-		private final int mDimension;
-
-		AddY(int pDimension)
-		{
-			mDimension = pDimension;
-		}
-
-		@Override
-		public LatticeCube apply(LatticeCube pCube)
-		{
-			return pCube.addY(mDimension);
-		}
-	}
-
-	private static class AddZ implements Function<LatticeCube, LatticeCube>
-	{
-		private final int mDimension;
-
-		AddZ(int pDimension)
-		{
-			mDimension = pDimension;
-		}
-
-		@Override
-		public LatticeCube apply(LatticeCube pCube)
-		{
-			return pCube.addZ(mDimension);
-		}
 	}
 }

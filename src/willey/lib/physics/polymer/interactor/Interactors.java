@@ -15,11 +15,11 @@ public interface Interactors
 	
 	Stream<? extends Interactor> stream();
 	
-	default Stream<? extends Interactor> projectedStream()
+	default Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
 	{
 		final Lattice vLattice = getLattice();
 		Function<Interactor, Interactor> vProjectFunction = (pInteractor) -> pInteractor.reposition(vLattice.projectIntoLattice(pInteractor.position()));
-		return stream().map(vProjectFunction);
+		return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor)).map(vProjectFunction);
 	}
 
 	Interactor chooseRandom();
@@ -48,12 +48,14 @@ public interface Interactors
 	default boolean randomMove() {
 		Interactor vOld = chooseRandom();
 		Interactor vNew = vOld.randomMove();
-		Stream<Interactor> vProjectedInteractors = getTestPoints(vNew);
-		boolean vValidMove = StreamUtil.nestedStream(projectedStream()
-				.filter((pInteractor) -> !pInteractor.equals(vOld)), vProjectedInteractors)
-				.parallel().noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
+		boolean vValidMove = StreamUtil.nestedStream(
+				projectedStream(vOld),
+				getTestPoints(vNew))
+				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
 		if (vValidMove)
+		{
 			replace(vOld, vNew);
+		}
 		return vValidMove;
 	}
 }

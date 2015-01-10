@@ -1,0 +1,15 @@
+I=LatticeSize=50
+I=RodCount=1,10,100,1000,2500
+D=RodLength=50
+S=RodOrientation=Ordered 
+S=RodPosition=Ordered 
+D=RodRadius=0.1 
+D=RodRotation=0.1 
+D=RodTranslation=0.4
+I=Equilibrations=10
+S=Type=Continuous
+I=Size=8,16,32,64
+D=Radius=0.5
+S=TerminationCriteria=PolymerSize
+D=TerminationValue=2
+D=PolymerWeight=1.0

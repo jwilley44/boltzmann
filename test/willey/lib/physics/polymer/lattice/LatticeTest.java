@@ -35,7 +35,7 @@ public class LatticeTest extends AbstractTest
 			vIterator.next();
 			vCount++;
 		}
-		Assert.assertEquals(26, vCount);
+		Assert.assertEquals(27, vCount);
 	}
 
 	@Test

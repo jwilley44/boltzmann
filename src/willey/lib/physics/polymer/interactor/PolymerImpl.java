@@ -172,9 +172,9 @@ public class PolymerImpl implements Polymer
 		}
 		
 		@Override
-		public Stream<? extends Interactor> projectedStream()
+		public Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
 		{
-			return stream();
+			return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor));
 		}
 
 		@Override

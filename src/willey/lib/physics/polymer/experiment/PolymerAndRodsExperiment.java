@@ -25,7 +25,9 @@ public class PolymerAndRodsExperiment extends Experiment<PolymerAndRods>
 						Measurements.kAverageRodDistance,
 						Measurements.kAverageRodRadius,
 						Measurements.kAverageRodLength,
-						Measurements.kOccupiedVolume, Measurements.kRodCount));
+						Measurements.kAverageRodDirection,
+						Measurements.kRodPolymerCorrelation,
+						Measurements.kOccupiedVolume, Measurements.kRodCount, Measurements.kHash));
 	}
 
 	private static class CreatePolymerAndRodsEquilibration implements

@@ -14,6 +14,7 @@ import willey.lib.physics.polymer.lattice.Lattice;
 
 public class RodsImpl implements Rods
 {
+	
 	public enum Parameter
 	{
 		LatticeSize,
@@ -61,6 +62,7 @@ public class RodsImpl implements Rods
 	{
 		mRods = RodsUtil.getRods(pCount, pLength, pRadius, pTranslation,
 				pRotation, pLattice, pOrientation, pPosition);
+		
 		mLattice = pLattice;
 		mVolume = mLattice.volume();
 		mRodCount = mRods.size();

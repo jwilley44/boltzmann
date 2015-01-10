@@ -14,7 +14,8 @@ public class MeasurementsTest
 	@Test
 	public void testCorrelation()
 	{
-		List<CartesianVector> vVectors = Arrays.asList(of(1,1,1), of(1,1,1), of(1,1,1), of(1,1,1));
+		CartesianVector vVector = of(0,0,1);
+		List<CartesianVector> vVectors = Arrays.asList(vVector, vVector, vVector, vVector, vVector);
 		double vCorrelation = Measurements.correlation(vVectors.stream(), vVectors.stream(), vVectors.size());
 		Assert.assertEquals(1.0, vCorrelation, 1e-4);
 	}

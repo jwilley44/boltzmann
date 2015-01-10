@@ -38,7 +38,7 @@ public class Measurements
 	public static final OccupiedVolume kOccupiedVolume = new OccupiedVolume();
 	public static final RodCount kRodCount = new RodCount();
 	public static final RodPolymerCorrelation kRodPolymerCorrelation = new RodPolymerCorrelation();
-	public static final RodUniformity kRodUniformity = new RodUniformity();
+	public static final RodCorrelation kRodUniformity = new RodCorrelation();
 	public static final PolymerDirectionRadius kPolymerDirectionRadius = new PolymerDirectionRadius();
 	public static final PolymerDirection kPolymerDirection = new PolymerDirection();
 	public static final PolymerFractalization kPolymerFractalization = new PolymerFractalization();
@@ -204,7 +204,7 @@ public class Measurements
 			double vSum = pFrom
 					.getRods()
 					.map((pRod1) -> pFrom
-							.getRods()
+							.getRods().filter((pRod2) -> !pRod2.equals(pRod1))
 							.map((pRod2) -> Double.valueOf(pRod1
 									.minimumDistance(pRod2)))
 							.min(Double::compare))
@@ -247,7 +247,7 @@ public class Measurements
 		}
 	}
 
-	private static class AverageRodDirection implements
+	public static class AverageRodDirection implements
 			Measurement<Rods, CartesianVector>
 	{
 		@Override
@@ -445,14 +445,14 @@ public class Measurements
 		return Math.sqrt(vCos * vCos);
 	}
 
-	public static class RodUniformity implements Measurement<Rods, Double>
+	public static class RodCorrelation implements Measurement<Rods, Double>
 	{
 		@Override
 		public Double apply(Rods pFrom)
 		{
 			return correlation(
-					pFrom.getRods().map((pRodA) -> pRodA.position()), 
-					pFrom.getRods().map((pRodB) -> pRodB.position()),
+					pFrom.getRods().map((pRodA) -> pRodA.direction()), 
+					pFrom.getRods().map((pRodB) -> pRodB.direction()),
 					pFrom.rodCount());
 		}
 
@@ -554,10 +554,7 @@ public class Measurements
 		{
 			CartesianVector vAverageRodDirection = kAverageRodDirection
 					.apply(pFrom);
-			double vCorrelation = StreamUtil.getIncrementedStream(pFrom.getMonomers(), pFrom.getMonomers())
-					.mapToDouble((pPair) -> 
-					correlation(vAverageRodDirection, pPair.getB().position().subtract(pPair.getA().position())))
-					.sum();
+			double vCorrelation = pFrom.getDirections().mapToDouble((pDirection) -> correlation(vAverageRodDirection, pDirection)).sum();
 			return Double.valueOf(vCorrelation / (pFrom.getSize() - 1));
 		}
 
