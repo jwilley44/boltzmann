@@ -17,6 +17,8 @@ public interface Monomer extends Interactor
 	public Monomer rightNeighbor();
 
 	public Monomer leftNeighbor();
+	
+	public Monomer randomMove();
 
 	public boolean isNeighbor(Monomer pMonomer);
 

@@ -10,7 +10,6 @@ import org.junit.Test;
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.math.linearalgebra.LineSegment;
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.util.ConsumerUtil;
 import willey.lib.util.StreamUtil;
 
@@ -103,6 +102,13 @@ public class InteractorsTest
 		{
 			return mInteractors.toString();
 		}
+
+		@Override
+		public MovedInteractor testMoveRandom()
+		{
+			Interactor vOld = chooseRandom();
+			return new MovedInteractor(vOld, vOld.reposition(vOld.position().add(CartesianVector.randomUnitVector())));
+		}
 	}
 
 	private static class TestInteractor implements Interactor
@@ -132,13 +138,6 @@ public class InteractorsTest
 		public double interactionRadius()
 		{
 			return 0.5;
-		}
-
-		@Override
-		public Interactor randomMove()
-		{
-			return reposition(position()
-					.add(CartesianVector.randomUnitVector()));
 		}
 
 		@Override

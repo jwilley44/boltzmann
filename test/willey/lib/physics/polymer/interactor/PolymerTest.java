@@ -3,7 +3,6 @@ package willey.lib.physics.polymer.interactor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.test.AbstractTest;
 import willey.lib.util.StreamUtil;
 

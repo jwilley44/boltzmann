@@ -6,54 +6,31 @@ import willey.lib.math.linearalgebra.LineSegment;
 public class Rod implements Interactor
 {
 	private final LineSegment mLineSegment;
-	private final CartesianVector mMidPoint;
-	private final double mLength;
 	private final double mRadius;
-	
-	private final double mTranslation;
-	private final double mRotation;
 
 	public Rod(CartesianVector pDirection, CartesianVector pPosition,
-			double pLength, double pRadius, double pTranslation, double pRotation)
+			double pLength, double pRadius)
 	{
 		mLineSegment = LineSegment.get(pPosition,
 				pPosition.add(pDirection.unitVector().scale(pLength)));
-		mLength = pLength;
-		mMidPoint = mLineSegment.getPoint(0.5);
 		mRadius = pRadius;
-		mTranslation = pTranslation;
-		mRotation = pRotation;
 	}
 
-	private Rod(LineSegment pLineSegment, CartesianVector pMidPoint,
-			double pLength, double pRadius, double pTranslation, double pRotation)
+	Rod(LineSegment pLineSegment, double pRadius)
 	{
 		mLineSegment = pLineSegment;
-		mMidPoint = pMidPoint;
-		mLength = pLength;
 		mRadius = pRadius;
-		mTranslation = pTranslation;
-		mRotation = pRotation;
 	}
 
 	public double volume()
 	{
-		return Math.PI * mRadius * mRadius * (mLength + mRadius * 4 / 3);
+		return Math.PI * mRadius * mRadius
+				* (mLineSegment.length() + mRadius * 4 / 3);
 	}
 
-	Rod move(double pTranslation, double pRotationPercentage)
+	Rod move(LineSegment pNewLineSegment)
 	{
-		LineSegment vNewLineSegment = mLineSegment.translate(
-				CartesianVector.randomUnitVector().scale(pTranslation)).rotate(
-				pRotationPercentage);
-		return new Rod(vNewLineSegment, vNewLineSegment.getPoint(0.5), mLength,
-				mRadius, mTranslation, mRotation);
-
-	}
-	
-	public Rod randomMove()
-	{
-		return move(mTranslation, mRotation);
+		return new Rod(pNewLineSegment, mRadius);
 	}
 
 	public CartesianVector direction()
@@ -73,7 +50,7 @@ public class Rod implements Interactor
 
 	public double length()
 	{
-		return mLength;
+		return mLineSegment.length();
 	}
 
 	public double radius()
@@ -107,8 +84,7 @@ public class Rod implements Interactor
 	public Rod reposition(CartesianVector pNewPosition)
 	{
 		return new Rod(LineSegment.get(pNewPosition,
-				pNewPosition.add(mLineSegment.direction())), mMidPoint,
-				mLength, mRadius, mTranslation, mRotation);
+				pNewPosition.add(mLineSegment.direction())), mRadius);
 	}
 
 	@Override

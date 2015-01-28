@@ -11,8 +11,6 @@ public interface Interactor
 	
 	double interactionRadius();
 	
-	Interactor randomMove();
-	
 	CartesianVector getNearestPoint(Interactor pInteractor);
 	
 	double getDistance(CartesianVector pVector);

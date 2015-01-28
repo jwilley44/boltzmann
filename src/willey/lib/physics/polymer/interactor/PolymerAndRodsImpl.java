@@ -6,7 +6,6 @@ import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.util.StreamUtil;
 
 public class PolymerAndRodsImpl implements PolymerAndRods
@@ -114,6 +113,12 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	{
 		mRods.replace(pOldRod, pNewRod);
 	}
+	
+	PolymerAndRodsImpl getMeasurableState()
+	{
+		
+		return new PolymerAndRodsImpl(mPolymer.getMeasurableState(), mRods.getMeasurableState());
+	}
 
 	private static class PolymerAndRodsEquilibration implements
 			Equilibration<PolymerAndRods>
@@ -167,7 +172,15 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 		@Override
 		public PolymerAndRods getMeasurableState()
 		{
-			return mPolymerAndRods;
+			return mPolymerAndRods.getMeasurableState();
+		}
+
+		@Override
+		public MovedInteractor testMoveRandom()
+		{
+			mRandomWasMonomer = MathUtil.kRng.nextDouble() <= mPolymerWeight;
+			return mRandomWasMonomer ? mPolymerAndRods.mPolymer.testMoveRandom()
+					: mPolymerAndRods.mRods.testMoveRandom();
 		}
 	}
 }

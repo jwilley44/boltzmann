@@ -46,7 +46,27 @@ public class Measurements
 	public static final PolymerRadius kPolymerRadius = new PolymerRadius();
 	public static final PolymerRodDistance kPolymerRodDistance = new PolymerRodDistance();
 	public static final PolymerSize kPolymerSize = new PolymerSize();
+	public static final MaxRodDistance kMaxRodDistance = new MaxRodDistance();
 
+	public static class MaxRodDistance implements Measurement<Rods, Double>
+	{
+		@Override
+		public Double apply(Rods pFrom)
+		{
+			return Double.valueOf(StreamUtil
+			.nestedStream(pFrom.getRods(), pFrom.getRods())
+			.mapToDouble(
+					(pPair) -> pPair.getA().minimumDistance(
+							pPair.getB())).max().getAsDouble());
+		}
+		
+		@Override
+		public String getName()
+		{
+			return "max.rod.distance";
+		}
+	}
+	
 	public static class Interactions implements
 			Measurement<Measurable, Integer>
 	{

@@ -3,14 +3,16 @@ package willey.lib.physics.polymer.interactor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
+import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.math.linearalgebra.LineSegment;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.RodsUtil.Orientation;
 import willey.lib.physics.polymer.interactor.RodsUtil.Position;
-import willey.lib.physics.polymer.lattice.Lattice;
 
 public class RodsImpl implements Rods
 {
@@ -31,6 +33,8 @@ public class RodsImpl implements Rods
 	private final int mRodCount;
 	private final Lattice mLattice;
 	private final long mVolume;
+	private final double mTranslation;
+	private final double mRotation;
 
 	public static Equilibration<Rods> getEquilibration(ParameterMap pParameters)
 	{
@@ -66,12 +70,24 @@ public class RodsImpl implements Rods
 		mLattice = pLattice;
 		mVolume = mLattice.volume();
 		mRodCount = mRods.size();
+		mRotation = pRotation;
+		mTranslation = pTranslation;
+	}
+	
+	RodsImpl(List<Rod> pRods, Lattice pLattice, double pTranslation, double pRotation)
+	{
+		mRods = pRods;
+		mLattice = pLattice;
+		mRodCount = mRods.size();
+		mVolume = pLattice.volume();
+		mTranslation = pTranslation;
+		mRotation = pRotation;
 	}
 
 	@Override
 	public Stream<Rod> getRods()
 	{
-		return mRods.stream();
+		return mRods.stream().map((pRod) -> pRod.reposition(getLattice().projectIntoLattice(pRod.position())));
 	}
 
 	public synchronized Collection<Interactor> excludeAndGet(
@@ -86,6 +102,21 @@ public class RodsImpl implements Rods
 	{
 		int vIndex = MathUtil.kRng.nextInt(rodCount());
 		return mRods.get(vIndex);
+	}
+	
+	public MovedInteractor testMoveRandom()
+	{
+		Rod vOld = chooseRandom();
+		Rod vNew = randomMove(vOld);
+		return new MovedInteractor(vOld,  vNew);
+	}
+	
+	private Rod randomMove(Rod pRod)
+	{
+		LineSegment vNewLineSegment = pRod.getLineSegment().translate(
+				CartesianVector.randomUnitVector().scale(mTranslation)).rotate(
+				mRotation);
+		return pRod.move(vNewLineSegment);
 	}
 
 	@Override
@@ -127,6 +158,13 @@ public class RodsImpl implements Rods
 	{
 		return mLattice;
 	}
+	
+	RodsImpl getMeasurableState()
+	{
+		
+		List<Rod> vRods = mRods.stream().map((pRod) -> pRod.reposition(getLattice().projectIntoLattice(pRod.position()))).collect(Collectors.toList());
+		return new RodsImpl(vRods, mLattice, mTranslation, mRotation);
+	}
 
 	private static class RodEquilibration implements Equilibration<Rods>
 	{
@@ -164,7 +202,13 @@ public class RodsImpl implements Rods
 		@Override
 		public Rods getMeasurableState()
 		{
-			return mRods;
+			return mRods.getMeasurableState();
+		}
+
+		@Override
+		public MovedInteractor testMoveRandom()
+		{
+			return mRods.testMoveRandom();
 		}
 	}
 }

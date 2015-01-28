@@ -9,7 +9,6 @@ import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.util.Check;
 import willey.lib.util.Pair;
 import willey.lib.util.StreamUtil;
@@ -97,6 +96,11 @@ public class PolymerImpl implements Polymer
 	{
 		return mMonomerRadius;
 	}
+	
+	PolymerImpl getMeasurableState()
+	{
+		return this;
+	}
 
 	@Override
 	public CartesianVector getDirection()
@@ -118,6 +122,12 @@ public class PolymerImpl implements Polymer
 	public Equilibration<Polymer> getEquilibration()
 	{
 		return new PolymerEquilibration(this);
+	}
+	
+	public MovedInteractor testMoveRandom()
+	{
+		Monomer vOld = chooseRandom();
+		return new MovedInteractor(vOld, vOld.randomMove());
 	}
 
 	private List<Monomer> createMonomers(CartesianVector pStartingPosition)
@@ -205,6 +215,12 @@ public class PolymerImpl implements Polymer
 		public Polymer getMeasurableState()
 		{
 			return mPolymer;
+		}
+
+		@Override
+		public MovedInteractor testMoveRandom()
+		{
+			return mPolymer.testMoveRandom();
 		}
 	}
 }

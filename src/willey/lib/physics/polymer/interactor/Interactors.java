@@ -3,16 +3,10 @@ package willey.lib.physics.polymer.interactor;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.util.StreamUtil;
 
 public interface Interactors
 {
-	default Stream<? extends Interactor> excludeAndGet(Interactor pOldInteractor)
-	{
-		return stream().filter((pInteractor) -> !pOldInteractor.equals(pOldInteractor));
-	}
-	
 	Stream<? extends Interactor> stream();
 	
 	default Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
@@ -23,6 +17,8 @@ public interface Interactors
 	}
 
 	Interactor chooseRandom();
+	
+	MovedInteractor testMoveRandom();
 
 	void replace(Interactor pOldInteractor, Interactor pNewInteractor);
 
@@ -46,11 +42,12 @@ public interface Interactors
 	}
 
 	default boolean randomMove() {
-		Interactor vOld = chooseRandom();
-		Interactor vNew = vOld.randomMove();
+		MovedInteractor vMoved = testMoveRandom();
+		Interactor vOld = vMoved.getOldInteractor();
+		Interactor vNew = vMoved.getNewInteractor();
 		boolean vValidMove = StreamUtil.nestedStream(
 				projectedStream(vOld),
-				getTestPoints(vNew))
+				getTestPoints(vNew)).parallel()
 				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
 		if (vValidMove)
 		{

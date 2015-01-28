@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.physics.polymer.lattice.Lattice;
 import willey.lib.util.ConsumerUtil;
 import willey.lib.util.Pair;
 import willey.lib.util.StreamUtil;
@@ -23,8 +22,7 @@ class RodsUtil
 			Orientation pOrientation, Position pPosition)
 	{
 		Stream<Rod> vRods = StreamUtil.toStream(new RodSupplier(pLength,
-				pRadius, pTranslation, pRotation, pOrientation.getSupplier(),
-				pPosition.getSupplier(pLattice)), pCount);
+				pRadius, pOrientation.getSupplier(), pPosition.getSupplier(pLattice)), pCount);
 		return ConsumerUtil.toCollection(vRods, new ArrayList<Rod>());
 	}
 
@@ -32,19 +30,14 @@ class RodsUtil
 	{
 		private final double mLength;
 		private final double mRadius;
-		private final double mTranslation;
-		private final double mRotation;
 		private final Supplier<CartesianVector> mOrientation;
 		private final Supplier<CartesianVector> mPosition;
 
-		RodSupplier(double pLength, double pRadius, double pTranslation,
-				double pRotation, Supplier<CartesianVector> pOrientation,
+		RodSupplier(double pLength, double pRadius, Supplier<CartesianVector> pOrientation,
 				Supplier<CartesianVector> pPosition)
 		{
 			mLength = pLength;
 			mRadius = pRadius;
-			mTranslation = pTranslation;
-			mRotation = pRotation;
 			mOrientation = pOrientation;
 			mPosition = pPosition;
 		}
@@ -53,7 +46,7 @@ class RodsUtil
 		public Rod get()
 		{
 			return new Rod(mOrientation.get(), mPosition.get(), mLength,
-					mRadius, mTranslation, mRotation);
+					mRadius);
 		}
 	}
 
