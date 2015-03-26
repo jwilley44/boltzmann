@@ -9,4 +9,4 @@ ln -s $newDir /Users/jwilley44/Documents/workspace/dev/results/Polymer/latest
 results=${newDir}/results.tsv
 error=${newDir}/err.log
 cp $parameters ${newDir}/
-java -Xmx2048m willey.app.physics.PolymerExperimentApp $parameters > $results 2> $error
+time java -Xmx2048m willey.app.physics.PolymerExperimentApp $parameters > $results 2> $error

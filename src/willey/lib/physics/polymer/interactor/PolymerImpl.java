@@ -181,11 +181,11 @@ public class PolymerImpl implements Polymer
 			return mPolymer.getMonomers();
 		}
 		
-		@Override
-		public Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
-		{
-			return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor));
-		}
+//		@Override
+//		public Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
+//		{
+//			return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor));
+//		}
 
 		@Override
 		public Interactor chooseRandom()
@@ -193,11 +193,11 @@ public class PolymerImpl implements Polymer
 			return mPolymer.chooseRandom();
 		}
 		
-		@Override
-		public Stream<Interactor> getTestPoints(Interactor pNew)
-		{
-			return StreamUtil.toStream(pNew);
-		}
+//		@Override
+//		public Stream<Interactor> getTestPoints(Interactor pNew)
+//		{
+//			return StreamUtil.toStream(pNew);
+//		}
 
 		@Override
 		public void replace(Interactor pOldInteractor, Interactor pNewInteractor)
