@@ -9,4 +9,8 @@ public interface Rods extends Measurable
 	int rodCount();
 	
 	double rodsVolume();
+	
+	double rodRotation();
+	
+	double rodTranslation();
 }

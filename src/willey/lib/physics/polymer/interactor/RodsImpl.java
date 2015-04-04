@@ -42,6 +42,11 @@ public class RodsImpl implements Rods
 		return new RodEquilibration(vRods);
 	}
 	
+	Equilibration<Rods> getEquilibration()
+	{
+		return new RodEquilibration(this);
+	}
+	
 	public static RodsImpl fromParameterMap(ParameterMap pParameters)
 	{
 		int vCount = pParameters.getInt(Parameter.RodCount.name());
@@ -142,6 +147,18 @@ public class RodsImpl implements Rods
 		}
 		return vTotal / mVolume;
 	}
+	
+	@Override
+	public double rodRotation()
+	{
+		return mRotation;
+	}
+	
+	@Override
+	public double rodTranslation()
+	{
+		return mTranslation;
+	}
 
 	public Stream<Rod> stream()
 	{
@@ -178,7 +195,7 @@ public class RodsImpl implements Rods
 		@Override
 		public Stream<? extends Interactor> stream()
 		{
-			return mRods.getInteractors();
+			return mRods.stream();
 		}
 
 		@Override

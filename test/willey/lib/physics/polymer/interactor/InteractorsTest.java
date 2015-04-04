@@ -16,6 +16,18 @@ import willey.lib.util.StreamUtil;
 public class InteractorsTest
 {
 	@Test
+	public void testProjectedStream()
+	{
+		int vCount = 10;
+		Stream<CartesianVector> vPositions = StreamUtil.toStream(() -> CartesianVector.randomUnitVector().scale(MathUtil.kRng.nextDouble()*vCount), vCount);
+		List<CartesianVector> vList = new ArrayList<CartesianVector>();
+		ConsumerUtil.toCollection(vPositions, vList);
+		TestInteractors vInteractors = new TestInteractors(vCount, vList.stream());
+		long vProjected = vInteractors.projectedStream(vInteractors.chooseRandom()).count();
+		Assert.assertEquals(vCount - 1, vProjected);
+	}
+	
+	@Test
 	public void testInteractions()
 	{
 		int vCount = 10;

@@ -73,6 +73,11 @@ public class PolymerImpl implements Polymer
 	{
 		return mMonomers.stream();
 	}
+	
+	public Stream<? extends Interactor> stream()
+	{
+		return mMonomers.stream();
+	}
 
 	@Override
 	public Stream<? extends Interactor> getInteractors()

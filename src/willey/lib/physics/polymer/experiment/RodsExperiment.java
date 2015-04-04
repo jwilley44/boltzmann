@@ -17,7 +17,8 @@ public class RodsExperiment extends Experiment<Rods>
 		super(pParameterFile, new CreateRodEquilibration(), Arrays.asList(
 				Measurements.kRodUniformity, Measurements.kAverageRodDistance,
 				Measurements.kAverageRodRadius, Measurements.kAverageRodLength, Measurements.kMaxRodDistance,
-				Measurements.kOccupiedVolume, Measurements.kRodCount));
+				Measurements.kRodRotation, Measurements.kRodTranslation,
+				Measurements.kOccupiedVolume, Measurements.kRodCount, Measurements.kOrderParameter));
 	}
 
 	private static class CreateRodEquilibration implements

@@ -19,7 +19,8 @@ public class PolymerExperiment extends Experiment<Polymer>
 				Measurements.kPolymerRadius, Measurements.kPolymerSize,
 				Measurements.kInteractions,
 				Measurements.kMonomerDirectionCorrelation,
-				Measurements.kMonomerRadius));
+				Measurements.kMonomerRadius,
+				Measurements.kHash));
 	}
 
 	private static class CreatePolymerEquilibration implements

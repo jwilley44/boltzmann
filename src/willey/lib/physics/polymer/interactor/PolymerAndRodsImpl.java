@@ -45,6 +45,18 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 		return StreamUtil.combine(mPolymer.getInteractors(),
 				mRods.getInteractors());
 	}
+	
+	@Override
+	public double rodRotation()
+	{
+		return mRods.rodRotation();
+	}
+	
+	@Override
+	public double rodTranslation()
+	{
+		return mRods.rodTranslation();
+	}
 
 	@Override
 	public Stream<Rod> getRods()
@@ -138,7 +150,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 		@Override
 		public Stream<? extends Interactor> stream()
 		{
-			return mPolymerAndRods.getInteractors();
+			return StreamUtil.combine(mPolymerAndRods.mRods.stream(), mPolymerAndRods.mPolymer.getInteractors());
 		}
 
 		@Override

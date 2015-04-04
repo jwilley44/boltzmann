@@ -36,9 +36,12 @@ public class Measurements
 	public static final MaxDistance kMaxDistance = new MaxDistance();
 	public static final NearestRod kNearestRod = new NearestRod();
 	public static final OccupiedVolume kOccupiedVolume = new OccupiedVolume();
+	public static final OrderParameter kOrderParameter = new OrderParameter();
 	public static final RodCount kRodCount = new RodCount();
 	public static final RodPolymerCorrelation kRodPolymerCorrelation = new RodPolymerCorrelation();
 	public static final RodCorrelation kRodUniformity = new RodCorrelation();
+	public static final RodRotation kRodRotation = new RodRotation();
+	public static final RodTranslation kRodTranslation = new RodTranslation();
 	public static final PolymerDirectionRadius kPolymerDirectionRadius = new PolymerDirectionRadius();
 	public static final PolymerDirection kPolymerDirection = new PolymerDirection();
 	public static final PolymerFractalization kPolymerFractalization = new PolymerFractalization();
@@ -48,6 +51,40 @@ public class Measurements
 	public static final PolymerSize kPolymerSize = new PolymerSize();
 	public static final MaxRodDistance kMaxRodDistance = new MaxRodDistance();
 
+	public static class RodRotation implements Measurement<Rods, Double>
+	{
+
+		@Override
+		public Double apply(Rods pMeasurable)
+		{
+			return pMeasurable.rodRotation();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "rod.rotation";
+		}
+		
+	}
+	
+	public static class RodTranslation implements Measurement<Rods, Double>
+	{
+
+		@Override
+		public Double apply(Rods pMeasurable)
+		{
+			return pMeasurable.rodTranslation();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "rod.translation";
+		}
+		
+	}
+	
 	public static class MaxRodDistance implements Measurement<Rods, Double>
 	{
 		@Override
@@ -266,7 +303,7 @@ public class Measurements
 			return "MonomerDirectionCorrelation";
 		}
 	}
-
+	
 	public static class AverageRodDirection implements
 			Measurement<Rods, CartesianVector>
 	{
@@ -463,6 +500,24 @@ public class Measurements
 	{
 		double vCos = pA.cosTheta(pB);
 		return Math.sqrt(vCos * vCos);
+	}
+	
+	public static class OrderParameter implements Measurement<Rods, Double>
+	{
+		@Override
+		public Double apply(Rods pMeasurable)
+		{
+			CartesianVector vDirector = kAverageRodDirection.apply(pMeasurable);
+			return pMeasurable.getRods()
+			.mapToDouble((pRod) -> 1.5*correlation(vDirector, pRod.direction()) - 0.5)
+			.sum()/pMeasurable.rodCount();
+		}
+		
+		@Override
+		public String getName()
+		{
+			return "order.parameter";
+		}
 	}
 
 	public static class RodCorrelation implements Measurement<Rods, Double>
