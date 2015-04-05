@@ -342,7 +342,7 @@ public class Measurements
 		@Override
 		public String getName()
 		{
-			return "AverageRodDirection";
+			return "average.rod.direction";
 		}
 	}
 
@@ -380,7 +380,7 @@ public class Measurements
 		@Override
 		public String getName()
 		{
-			return "PolymerDirectionRadius";
+			return "polymer.direction.radius";
 		}
 	}
 
@@ -395,7 +395,7 @@ public class Measurements
 		@Override
 		public String getName()
 		{
-			return "OccupiedVolume";
+			return "occupied.volume";
 		}
 	}
 
@@ -413,7 +413,7 @@ public class Measurements
 
 		public String getName()
 		{
-			return "MaxDistance";
+			return "max.distance";
 		}
 	}
 
@@ -447,7 +447,7 @@ public class Measurements
 		@Override
 		public String getName()
 		{
-			return "MaxDirectionCorrelation";
+			return "max.direction.correlation";
 		}
 	}
 
@@ -462,7 +462,7 @@ public class Measurements
 		@Override
 		public String getName()
 		{
-			return "Hash";
+			return "hash";
 		}
 
 	}
@@ -483,7 +483,7 @@ public class Measurements
 
 		public String getName()
 		{
-			return "MonomerDistance";
+			return "monomer.distance";
 		}
 	}
 

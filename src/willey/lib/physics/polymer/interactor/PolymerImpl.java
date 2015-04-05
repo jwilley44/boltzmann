@@ -48,7 +48,7 @@ public class PolymerImpl implements Polymer
 		Check.kIllegalArgument.checkTrue(pMonomerRadius >= 0
 				&& pMonomerRadius <= 1.0,
 				"Monomer radius must be in the interval [0, 1.0]");
-		mSize = pSize;
+		mSize = pSize + 1;
 		mMonomerRadius = pMonomerRadius;
 		mMonomers = createMonomers(pLattice.randomStart());
 		mLattice = pLattice;
@@ -57,6 +57,11 @@ public class PolymerImpl implements Polymer
 	@Override
 	public int getSize()
 	{
+		return getMonomerCount() - 1;
+	}
+	
+	private int getMonomerCount()
+	{
 		return mSize;
 	}
 
@@ -64,7 +69,7 @@ public class PolymerImpl implements Polymer
 	public double getEndToEndDistance()
 	{
 		Monomer vFront = mMonomers.get(0);
-		Monomer vEnd = mMonomers.get(mSize - 1);
+		Monomer vEnd = mMonomers.get(getMonomerCount() - 1);
 		return vFront.position().distance(vEnd.position());
 	}
 
@@ -94,7 +99,7 @@ public class PolymerImpl implements Polymer
 
 	Monomer chooseRandom()
 	{
-		return mMonomers.get(MathUtil.kRng.nextInt(mSize));
+		return mMonomers.get(MathUtil.kRng.nextInt(getMonomerCount()));
 	}
 
 	double monomerRadius()
@@ -111,7 +116,7 @@ public class PolymerImpl implements Polymer
 	public CartesianVector getDirection()
 	{
 		Monomer vFront = mMonomers.get(0);
-		Monomer vEnd = mMonomers.get(mSize - 1);
+		Monomer vEnd = mMonomers.get(getMonomerCount() - 1);
 		return vEnd.position().subtract(vFront.position());
 	}
 
@@ -121,7 +126,7 @@ public class PolymerImpl implements Polymer
 		Function<Pair<Monomer, Monomer>, CartesianVector> vDirection = (pPair) -> pPair
 				.getA().position().subtract(pPair.getB().position());
 		return StreamUtil.dualSream(getMonomers().skip(1),
-				getMonomers().limit(getSize() - 1)).map(vDirection);
+				getMonomers().limit(getMonomerCount() - 1)).map(vDirection);
 	}
 
 	public Equilibration<Polymer> getEquilibration()
@@ -143,7 +148,7 @@ public class PolymerImpl implements Polymer
 		vMonomers.add(vFrontMonomer);
 		vMonomers.add(createNext(vFrontMonomer));
 
-		for (int i = 2; i < getSize() - 1; i++)
+		for (int i = 2; i < getMonomerCount() - 1; i++)
 		{
 			vMonomers.add(createNext(vMonomers.get(i - 1)));
 		}
