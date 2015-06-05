@@ -9,4 +9,4 @@ ln -s $newDir /Users/jwilley44/Documents/workspace/dev/results/Rods/latest
 results=${newDir}/results.tsv
 error=${newDir}/err.log
 cp $parameters ${newDir}/
-time java -Xmx2048m willey.app.physics.RodsExperimentApp $parameters > $results 2> $error
+time java -Xmx2048m  willey.app.physics.RodsExperimentApp $parameters > $results 2> $error

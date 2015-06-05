@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
@@ -184,6 +185,15 @@ public class PolymerImpl implements Polymer
 		{
 			mPolymer = pPolymer;
 		}
+		
+		@Override
+		public Stream<Interactor> getTestPoints(Interactor pNew)
+		{
+			List<Interactor> vList = new ArrayList<Interactor>();
+			vList.add(pNew.reposition(getLattice()
+				.projectIntoLattice(pNew.position())));
+			return vList.stream();
+		}
 
 		@Override
 		public Stream<? extends Interactor> stream()
@@ -232,5 +242,11 @@ public class PolymerImpl implements Polymer
 		{
 			return mPolymer.testMoveRandom();
 		}
+	}
+
+	@Override
+	public Lattice getLattice()
+	{
+		return mLattice;
 	}
 }

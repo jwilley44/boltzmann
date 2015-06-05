@@ -195,4 +195,10 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 					: mPolymerAndRods.mRods.testMoveRandom();
 		}
 	}
+
+	@Override
+	public Lattice getLattice()
+	{
+		return mRods.getLattice();
+	}
 }

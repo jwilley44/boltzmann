@@ -20,6 +20,7 @@ public class PolymerExperiment extends Experiment<Polymer>
 				Measurements.kInteractions,
 				Measurements.kMonomerDirectionCorrelation,
 				Measurements.kMonomerRadius,
+				Measurements.kEnergy,
 				Measurements.kHash));
 	}
 

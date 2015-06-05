@@ -10,6 +10,7 @@ import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.math.linearalgebra.CartesianVector.VectorSum;
 import willey.lib.physics.polymer.interactor.Interactor;
+import willey.lib.physics.polymer.interactor.Interactors;
 import willey.lib.physics.polymer.interactor.Measurable;
 import willey.lib.physics.polymer.interactor.Monomer;
 import willey.lib.physics.polymer.interactor.Polymer;
@@ -50,7 +51,26 @@ public class Measurements
 	public static final PolymerRodDistance kPolymerRodDistance = new PolymerRodDistance();
 	public static final PolymerSize kPolymerSize = new PolymerSize();
 	public static final MaxRodDistance kMaxRodDistance = new MaxRodDistance();
+	public static final Energy kEnergy = new Energy();
 
+	public static class Energy implements Measurement<Measurable, Double>
+	{
+
+		@Override
+		public Double apply(Measurable pMeasurable)
+		{
+			return Double.valueOf(StreamUtil
+				.getIncrementedStream(pMeasurable.getProjectedStream(), pMeasurable.getProjectedStream())
+				.mapToDouble(pPair -> pPair.getA().energy(pPair.getB())).sum());
+		}
+
+		@Override
+		public String getName()
+		{
+			return "energy";
+		}
+	}
+	
 	public static class RodRotation implements Measurement<Rods, Double>
 	{
 
@@ -671,7 +691,7 @@ public class Measurements
 		public void accept(final Interactor pInteractor)
 		{
 			mInteractions = mInteractors.getInteractors().skip(mIndex).anyMatch(
-					(p) -> pInteractor.interacts(p)) ? mInteractions + 1
+					(p) -> pInteractor.interactionDistance(p) > 0) ? mInteractions + 1
 					: mInteractions;
 			mIndex++;
 		}

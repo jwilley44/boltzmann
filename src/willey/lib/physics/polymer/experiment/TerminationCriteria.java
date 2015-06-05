@@ -34,6 +34,15 @@ public class TerminationCriteria
 			{
 				return polymerSizeTermination(pReferenceVariable);
 			}
+		},
+		InteractionsAndPowerTermination
+		{
+			@Override
+			public Predicate<Equilibrator<Polymer>> getPredicate(
+					double pReferenceVariable)
+			{
+				return interactionsAndPowerTermination(pReferenceVariable);
+			} 
 		};
 	}
 
@@ -109,6 +118,19 @@ public class TerminationCriteria
 						.takeMeasurement(Measurements.kPolymerSize)
 						.doubleValue(), pPower);
 	}
+	
+	private static <P extends Polymer> Predicate<Equilibrator<P>> polymerInteractionsTermination(double pPower)
+	{
+		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(
+				pEquilibrator.getState()
+						.takeMeasurement(Measurements.kPolymerSize)
+						.doubleValue(), pPower);
+	}
+	
+	private static <P extends Polymer> Predicate<Equilibrator<P>> interactionsAndPowerTermination(double pPower)
+	{
+		return new InteractionsAndPowerTermination(pPower);
+	}
 
 	private static <R extends Rods> Predicate<Equilibrator<R>> rodCountTermination(
 			double pPower)
@@ -117,5 +139,30 @@ public class TerminationCriteria
 				pEquilibrator.getState()
 						.takeMeasurement(Measurements.kRodCount).doubleValue(),
 				pPower);
+	}
+	
+	private static class InteractionsAndPowerTermination<P extends Polymer> implements Predicate<Equilibrator<P>>
+	{
+		private int vCount = 0;
+		private final double mPower;
+		
+		public InteractionsAndPowerTermination(double pPower)
+		{
+			mPower = pPower;
+		}
+
+		@Override
+		public boolean test(Equilibrator<P> pEquilibrator)
+		{
+			if(pEquilibrator.getInteractions() == 0)
+			{
+				vCount++;
+			}
+			return vCount >= Math.pow(
+					pEquilibrator.getState()
+					.takeMeasurement(Measurements.kPolymerSize)
+					.doubleValue(), mPower);
+		}
+		
 	}
 }

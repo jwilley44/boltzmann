@@ -171,7 +171,7 @@ public class RodsImpl implements Rods
 		return getRods();
 	}
 
-	Lattice getLattice()
+	public Lattice getLattice()
 	{
 		return mLattice;
 	}
