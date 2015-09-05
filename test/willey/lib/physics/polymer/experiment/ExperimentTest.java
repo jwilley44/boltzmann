@@ -1,49 +1,48 @@
 package willey.lib.physics.polymer.experiment;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.Test;
 
 public class ExperimentTest
 {
 	@Test
-	public void testPolymerTerminating() throws IOException
+	public void testPolymerTerminating() throws Exception
 	{
 		PolymerExperiment vExperiment = new PolymerExperiment(getFile("polymer.t.param"));
 		vExperiment.run();
 	}
 	
 	@Test
-	public void testPolymerContinuous() throws IOException
+	public void testPolymerContinuous() throws Exception
 	{
 		PolymerExperiment vExperiment = new PolymerExperiment(getFile("polymer.c.param"));
 		vExperiment.run();
 	}
 	
 	@Test
-	public void testRodsTerminating() throws IOException
+	public void testRodsTerminating() throws Exception
 	{
 		RodsExperiment vExperiment = new RodsExperiment(getFile("rods.t.param"));
 		vExperiment.run();
 	}
 	
 	@Test
-	public void testRodsContinous() throws IOException
+	public void testRodsContinous() throws Exception
 	{
 		RodsExperiment vExperiment = new RodsExperiment(getFile("rods.c.param"));
 		vExperiment.run();
 	}
 	
 	@Test
-	public void testPolymerAndRodsTerminating() throws IOException
+	public void testPolymerAndRodsTerminating() throws Exception
 	{
 		PolymerAndRodsExperiment vExperiment = new PolymerAndRodsExperiment(getFile("polymer.rods.t.param"));
 		vExperiment.run();
 	}
 	
 	@Test
-	public void testPolymerAndRodsContinous() throws IOException
+	public void testPolymerAndRodsContinous() throws Exception
 	{
 		PolymerAndRodsExperiment vExperiment = new PolymerAndRodsExperiment(getFile("polymer.rods.c.param"));
 		vExperiment.run();

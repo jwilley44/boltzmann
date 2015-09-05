@@ -7,6 +7,7 @@ import willey.lib.physics.polymer.interactor.Measurable;
 import willey.lib.physics.polymer.interactor.Polymer;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
 import willey.lib.physics.polymer.interactor.Rods;
+import willey.lib.physics.polymer.measurement.Measurements;
 
 public class TerminationCriteria
 {
@@ -113,31 +114,22 @@ public class TerminationCriteria
 	private static <P extends Polymer> Predicate<Equilibrator<P>> polymerSizeTermination(
 			double pPower)
 	{
-		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(
-				pEquilibrator.getState()
-						.takeMeasurement(Measurements.kPolymerSize)
-						.doubleValue(), pPower);
-	}
-	
-	private static <P extends Polymer> Predicate<Equilibrator<P>> polymerInteractionsTermination(double pPower)
-	{
-		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(
-				pEquilibrator.getState()
-						.takeMeasurement(Measurements.kPolymerSize)
-						.doubleValue(), pPower);
+		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(Measurements.polymerSize().apply(
+				pEquilibrator.getState().getInteractors())
+				.doubleValue(), pPower);
 	}
 	
 	private static <P extends Polymer> Predicate<Equilibrator<P>> interactionsAndPowerTermination(double pPower)
 	{
-		return new InteractionsAndPowerTermination(pPower);
+		return new InteractionsAndPowerTermination<>(pPower);
 	}
 
 	private static <R extends Rods> Predicate<Equilibrator<R>> rodCountTermination(
 			double pPower)
 	{
-		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(
-				pEquilibrator.getState()
-						.takeMeasurement(Measurements.kRodCount).doubleValue(),
+		return (pEquilibrator) -> pEquilibrator.totalMoves() >= Math.pow(Measurements.rodCount().apply(
+				pEquilibrator.getState().getInteractors())
+						.doubleValue(),
 				pPower);
 	}
 	
@@ -158,9 +150,8 @@ public class TerminationCriteria
 			{
 				vCount++;
 			}
-			return vCount >= Math.pow(
-					pEquilibrator.getState()
-					.takeMeasurement(Measurements.kPolymerSize)
+			return vCount >= Math.pow(Measurements.polymerSize().apply(
+					pEquilibrator.getState().getInteractors())
 					.doubleValue(), mPower);
 		}
 		

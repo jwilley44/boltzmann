@@ -1,11 +1,10 @@
 package willey.lib.physics.polymer.experiment;
 
-import static willey.lib.physics.polymer.experiment.Measurements.kInteractions;
-
 import java.util.function.Predicate;
 
 import willey.lib.physics.polymer.interactor.Interactors;
 import willey.lib.physics.polymer.interactor.Measurable;
+import willey.lib.physics.polymer.measurement.Measurements;
 
 
 public class Equilibrator<M extends Measurable>
@@ -53,7 +52,7 @@ public class Equilibrator<M extends Measurable>
 
 	public double getInteractions()
 	{
-		return kInteractions.apply(mEqulibration.getMeasurableState()).doubleValue();
+		return Measurements.interactions().apply(mEqulibration.getMeasurableState()).doubleValue();
 	}
 
 	public boolean isEquilibrated() throws Exception
@@ -123,9 +122,9 @@ public class Equilibrator<M extends Measurable>
 			return mValidMoves;
 		}
 
-		public <R> R takeMeasurement(Measurement<? super M, R> pMeasurment)
+		public M getInteractors()
 		{
-			return pMeasurment.apply(mInteractors);
+			return mInteractors;
 		}
 	}
 	

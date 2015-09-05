@@ -3,7 +3,6 @@ package willey.lib.physics.polymer.interactor;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import willey.lib.math.MathUtil;
 import willey.lib.util.StreamUtil;
 
 public interface Interactors

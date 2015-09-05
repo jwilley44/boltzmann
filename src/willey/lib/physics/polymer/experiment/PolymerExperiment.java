@@ -1,27 +1,33 @@
 package willey.lib.physics.polymer.experiment;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.function.Function;
 
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.Polymer;
 import willey.lib.physics.polymer.interactor.PolymerImpl;
+import willey.lib.physics.polymer.measurement.Measurements;
+import willey.lib.physics.polymer.measurement.Measurer;
 
 public class PolymerExperiment extends Experiment<Polymer>
 {
-	public PolymerExperiment(File pParameterFile) throws IOException
+	private static final Measurer.Builder<Polymer> kBuilder = Measurer.builder();
 	{
-		super(pParameterFile, new CreatePolymerEquilibration(), Arrays.asList(
-				Measurements.kAverageMonomerDistance,
-				Measurements.kPolymerFractalization,
-				Measurements.kPolymerRadius, Measurements.kPolymerSize,
-				Measurements.kInteractions,
-				Measurements.kMonomerDirectionCorrelation,
-				Measurements.kMonomerRadius,
-				Measurements.kEnergy,
-				Measurements.kHash));
+		kBuilder
+		.add(Measurements.averageMonomerDistance())
+		.add(Measurements.polymerFractalization())
+		.add(Measurements.polymerRadius())
+		.add(Measurements.polymerSize())
+		.add(Measurements.interactions())
+		.add(Measurements.monomerDirectionCorrelation())
+		.add(Measurements.monomerRadius())
+		.add(Measurements.energy())
+		.add(Measurements.hash());
+	}
+	
+	public PolymerExperiment(File pParameterFile) throws Exception
+	{
+		super(pParameterFile, new CreatePolymerEquilibration(), kBuilder.build());
 	}
 
 	private static class CreatePolymerEquilibration implements

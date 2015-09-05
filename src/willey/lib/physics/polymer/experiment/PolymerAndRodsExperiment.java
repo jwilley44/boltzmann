@@ -1,33 +1,41 @@
 package willey.lib.physics.polymer.experiment;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.function.Function;
 
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
 import willey.lib.physics.polymer.interactor.PolymerAndRodsImpl;
+import willey.lib.physics.polymer.measurement.Measurements;
+import willey.lib.physics.polymer.measurement.Measurer;
 
 public class PolymerAndRodsExperiment extends Experiment<PolymerAndRods>
 {
+	private static final Measurer.Builder<PolymerAndRods> kBuilder = Measurer.builder();
+	{
+		kBuilder
+		.add(Measurements.rodRotation())
+		.add(Measurements.averageMonomerDistance())
+		.add(Measurements.polymerFractalization())
+		.add(Measurements.interactions())
+		.add(Measurements.polymerRadius())
+		.add(Measurements.polymerSize())
+		.add(Measurements.monomerRadius())
+		.add(Measurements.orderParameter())
+		.add(Measurements.averageRodDistance())
+		.add(Measurements.averageRodRadius())
+		.add(Measurements.averageRodLength())
+		.add(Measurements.averageRodDirection())
+		.add(Measurements.polymerRodCorrelation())
+		.add(Measurements.occupiedVolume())
+		.add(Measurements.rodCount())
+		.add(Measurements.hash());
+	}
 
 	public PolymerAndRodsExperiment(File pParameterFile)
-			throws IOException
+			throws Exception
 	{
-		super(pParameterFile, new CreatePolymerAndRodsEquilibration(), Arrays
-				.asList(Measurements.kAverageMonomerDistance,
-						Measurements.kPolymerFractalization,
-						Measurements.kInteractions,
-						Measurements.kPolymerRadius, Measurements.kPolymerSize,
-						Measurements.kMonomerRadius,
-						Measurements.kRodUniformity,
-						Measurements.kAverageRodDistance,
-						Measurements.kAverageRodRadius,
-						Measurements.kAverageRodLength,
-						Measurements.kAverageRodDirection,
-						Measurements.kRodPolymerCorrelation,
-						Measurements.kOccupiedVolume, Measurements.kRodCount, Measurements.kHash));
+		super(pParameterFile, new CreatePolymerAndRodsEquilibration(), kBuilder.build());
 	}
 
 	private static class CreatePolymerAndRodsEquilibration implements

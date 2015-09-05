@@ -2,23 +2,36 @@ package willey.lib.physics.polymer.experiment;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.Rods;
 import willey.lib.physics.polymer.interactor.RodsImpl;
+import willey.lib.physics.polymer.measurement.Measurement;
+import willey.lib.physics.polymer.measurement.Measurements;
+import willey.lib.physics.polymer.measurement.Measurer;
 
 public class RodsExperiment extends Experiment<Rods>
 {
-
-	public RodsExperiment(File pParameterFile) throws IOException
+	private static final Measurer.Builder<Rods> kBuilder = Measurer.builder();
 	{
-		super(pParameterFile, new CreateRodEquilibration(), Arrays.asList(
-				Measurements.kRodUniformity, Measurements.kAverageRodDistance,
-				Measurements.kAverageRodRadius, Measurements.kAverageRodLength, Measurements.kMaxRodDistance,
-				Measurements.kRodRotation, Measurements.kRodTranslation,
-				Measurements.kOccupiedVolume, Measurements.kRodCount, Measurements.kOrderParameter));
+		kBuilder
+		.add(Measurements.orderParameter())
+		.add(Measurements.averageRodDistance())
+		.add(Measurements.averageRodRadius())
+		.add(Measurements.averageRodLength())
+		.add(Measurements.maxRodDistance())
+		.add(Measurements.rodRotation())
+		.add(Measurements.rodTranslation())
+		.add(Measurements.occupiedVolume())
+		.add(Measurements.rodCount());
+	}
+	
+	public RodsExperiment(File pParameterFile) throws Exception
+	{
+		super(pParameterFile, new CreateRodEquilibration(), kBuilder.build());
 	}
 
 	private static class CreateRodEquilibration implements
