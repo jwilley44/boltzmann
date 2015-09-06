@@ -40,7 +40,7 @@ public class Rod implements Interactor
 
 	public CartesianVector position()
 	{
-		return mLineSegment.start();
+		return mLineSegment.getPoint(0.5);
 	}
 
 	public CartesianVector endPoint()
