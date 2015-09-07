@@ -16,6 +16,13 @@ import willey.lib.physics.polymer.interactor.RodsUtil.Position;
 
 public class RodsImpl implements Rods
 {
+	private final int mStateId;
+	
+	@Override
+	public int stateId()
+	{
+		return mStateId;
+	}
 	
 	public enum Parameter
 	{
@@ -77,9 +84,10 @@ public class RodsImpl implements Rods
 		mRodCount = mRods.size();
 		mRotation = pRotation;
 		mTranslation = pTranslation;
+		mStateId = hashCode();
 	}
 	
-	RodsImpl(List<Rod> pRods, Lattice pLattice, double pTranslation, double pRotation)
+	RodsImpl(List<Rod> pRods, Lattice pLattice, double pTranslation, double pRotation, int pStateId)
 	{
 		mRods = pRods;
 		mLattice = pLattice;
@@ -87,6 +95,7 @@ public class RodsImpl implements Rods
 		mVolume = pLattice.volume();
 		mTranslation = pTranslation;
 		mRotation = pRotation;
+		mStateId = pStateId;
 	}
 
 	@Override
@@ -178,9 +187,8 @@ public class RodsImpl implements Rods
 	
 	RodsImpl getMeasurableState()
 	{
-		
 		List<Rod> vRods = mRods.stream().map((pRod) -> pRod.reposition(getLattice().projectIntoLattice(pRod.position()))).collect(Collectors.toList());
-		return new RodsImpl(vRods, mLattice, mTranslation, mRotation);
+		return new RodsImpl(vRods, mLattice, mTranslation, mRotation, mStateId);
 	}
 
 	private static class RodEquilibration implements Equilibration<Rods>

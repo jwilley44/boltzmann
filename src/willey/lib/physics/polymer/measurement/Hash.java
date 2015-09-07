@@ -7,7 +7,7 @@ class Hash<M extends Measurable> implements Measurement<M, Integer>
 	@Override
 	public Integer apply(Measurable pMeasurable)
 	{
-		return Integer.valueOf(pMeasurable.hashCode());
+		return Integer.valueOf(pMeasurable.stateId());
 	}
 
 	@Override

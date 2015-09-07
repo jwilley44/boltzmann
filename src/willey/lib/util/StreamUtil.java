@@ -72,8 +72,27 @@ public class StreamUtil
 				new SupplierIterator<T>(pSupplier, pLimit), 0), true);
 	}
 	
+	public static <T> Stream<T> toStream(Supplier<T> pSupplier, int pLimit, boolean pIsParallel)
+	{
+		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+				new SupplierIterator<T>(pSupplier, pLimit), 0), pIsParallel);
+	}
+	
 	public static <F,T> Stream<T> manyMultiApply(Stream<F> pStream, int pApply, Function<F, T> pFunction)
 	{
 		return pStream.flatMap(FunctionUtil.getMultiApplyFunction(pApply, pFunction));
+	}
+	
+	public static <T> Stream<T> toStream(T pObject, int pLimit, boolean pIsParallel)
+	{
+		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+				new ObjectIterator<T>(pObject, pLimit), 0), false);
+	}
+	
+	public static <F, T> Stream<T> sequintialMultiply(F pFrom, int pApply,
+			Function<F, T> pFunction)
+	{
+		return toStream(pFrom, pApply, false)
+				.map(pFunction);
 	}
 }

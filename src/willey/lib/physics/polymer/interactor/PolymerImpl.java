@@ -15,6 +15,14 @@ import willey.lib.util.StreamUtil;
 
 public class PolymerImpl implements Polymer
 {
+	private final int mStateId;
+	
+	@Override
+	public int stateId()
+	{
+		return mStateId;
+	}
+	
 	public enum Parameters
 	{
 		LatticeSize, Radius, Size;
@@ -52,6 +60,16 @@ public class PolymerImpl implements Polymer
 		mMonomerRadius = pMonomerRadius;
 		mMonomers = createMonomers(pLattice.randomStart());
 		mLattice = pLattice;
+		mStateId = hashCode();
+	}
+	
+	private PolymerImpl(PolymerImpl pPolymer)
+	{
+		mSize = pPolymer.mSize;
+		mMonomerRadius = pPolymer.mMonomerRadius;
+		mMonomers = pPolymer.mMonomers;
+		mLattice = pPolymer.mLattice;
+		mStateId = pPolymer.stateId();
 	}
 
 	@Override
@@ -109,7 +127,7 @@ public class PolymerImpl implements Polymer
 	
 	PolymerImpl getMeasurableState()
 	{
-		return this;
+		return new PolymerImpl(this);
 	}
 
 	@Override
@@ -175,7 +193,7 @@ public class PolymerImpl implements Polymer
 		CartesianVector vDirection = CartesianVector.randomUnitVector();
 		return pPreviousPosition.add(vDirection.scale(kMonomerSeparation));
 	}
-
+	
 	private static class PolymerEquilibration implements Equilibration<Polymer>
 	{
 		private final PolymerImpl mPolymer;
@@ -200,24 +218,12 @@ public class PolymerImpl implements Polymer
 			return mPolymer.getMonomers();
 		}
 		
-//		@Override
-//		public Stream<? extends Interactor> projectedStream(Interactor pOldInteractor)
-//		{
-//			return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor));
-//		}
-
 		@Override
 		public Interactor chooseRandom()
 		{
 			return mPolymer.chooseRandom();
 		}
 		
-//		@Override
-//		public Stream<Interactor> getTestPoints(Interactor pNew)
-//		{
-//			return StreamUtil.toStream(pNew);
-//		}
-
 		@Override
 		public void replace(Interactor pOldInteractor, Interactor pNewInteractor)
 		{
@@ -233,7 +239,7 @@ public class PolymerImpl implements Polymer
 		@Override
 		public Polymer getMeasurableState()
 		{
-			return mPolymer;
+			return mPolymer.getMeasurableState();
 		}
 
 		@Override

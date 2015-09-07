@@ -15,7 +15,6 @@ public class PolymerAndRodsExperimentApp
 	{
 		Timer vTimer = Timer.start();
 		Measurer.Builder<PolymerAndRods> vBuilder = Measurer.builder();
-		vBuilder.add(Measurements.equilibrations());
 		vBuilder.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();

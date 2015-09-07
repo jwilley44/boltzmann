@@ -75,7 +75,7 @@ public class FunctionUtil
 		@Override
 		public Stream<T> apply(F pFrom)
 		{
-			return StreamUtil.toStream(() -> pFrom, mCount).sequential().map(mApplyFunction);
+			return StreamUtil.sequintialMultiply(pFrom, mCount, mApplyFunction);
 		}
 		
 	}

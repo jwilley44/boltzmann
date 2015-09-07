@@ -9,6 +9,8 @@ public interface Measurable
 	
 	Lattice getLattice();
 	
+	int stateId();
+	
 	default Stream<? extends Interactor> getProjectedStream()
 	{
 		final Lattice vLattice = getLattice();

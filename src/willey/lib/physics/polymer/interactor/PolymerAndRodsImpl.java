@@ -10,11 +10,12 @@ import willey.lib.util.StreamUtil;
 
 public class PolymerAndRodsImpl implements PolymerAndRods
 {
-	private int mEquilibrations = 0;
+	private final int mStateId;
 	
-	public int equilibrations()
+	@Override
+	public int stateId()
 	{
-		return ++mEquilibrations;
+		return mStateId;
 	}
 	
 	public enum Parameter
@@ -44,6 +45,14 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	{
 		mPolymer = pPolymer;
 		mRods = pRods;
+		mStateId = hashCode();
+	}
+	
+	private PolymerAndRodsImpl(PolymerImpl pPolymer, RodsImpl pRods, int pStateId)
+	{
+		mPolymer = pPolymer;
+		mRods = pRods;
+		mStateId = pStateId;
 	}
 
 	@Override
@@ -136,7 +145,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	PolymerAndRodsImpl getMeasurableState()
 	{
 		
-		return new PolymerAndRodsImpl(mPolymer.getMeasurableState(), mRods.getMeasurableState());
+		return new PolymerAndRodsImpl(mPolymer.getMeasurableState(), mRods.getMeasurableState(), mStateId);
 	}
 
 	private static class PolymerAndRodsEquilibration implements
