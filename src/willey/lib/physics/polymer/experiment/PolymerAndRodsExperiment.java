@@ -14,6 +14,7 @@ public class PolymerAndRodsExperiment extends Experiment<PolymerAndRods>
 	private static final Measurer.Builder<PolymerAndRods> kBuilder = Measurer.builder();
 	{
 		kBuilder
+		.add(Measurements.equilibrations())
 		.add(Measurements.rodRotation())
 		.add(Measurements.averageMonomerDistance())
 		.add(Measurements.polymerFractalization())
@@ -36,6 +37,11 @@ public class PolymerAndRodsExperiment extends Experiment<PolymerAndRods>
 			throws Exception
 	{
 		super(pParameterFile, new CreatePolymerAndRodsEquilibration(), kBuilder.build());
+	}
+	
+	public PolymerAndRodsExperiment(File pParameterFile, Measurer<PolymerAndRods> pMeasurer) throws Exception
+	{
+		super(pParameterFile, new CreatePolymerAndRodsEquilibration(), pMeasurer);
 	}
 
 	private static class CreatePolymerAndRodsEquilibration implements

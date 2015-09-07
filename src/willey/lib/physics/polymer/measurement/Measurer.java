@@ -3,10 +3,10 @@ package willey.lib.physics.polymer.measurement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import willey.lib.physics.polymer.experiment.Equilibrator.EquilibrationResult;
 import willey.lib.physics.polymer.interactor.Measurable;
-import willey.lib.util.StringJoiner;
 
 public class Measurer<M extends Measurable> implements Consumer<EquilibrationResult<M>>
 {
@@ -23,12 +23,12 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 			return this;
 		}
 		
-		public Measurer<M> build(Consumer<String> pResultsWriter)
+		public Measurer<M> build(Consumer<String> pResultsWriter) throws Exception
 		{
 			return new Measurer<M>(mMeasurements, pResultsWriter);
 		}
 		
-		public Measurer<M> build()
+		public Measurer<M> build() throws Exception
 		{
 			return build(pString -> System.out.println(pString));
 		}
@@ -47,16 +47,15 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 	@Override
 	public void accept(EquilibrationResult<M> pResult)
 	{
-		int vTime = pResult.equilibrationTime();
-		int vValidMoves = pResult.getValidMoves();
+		String vSuffix = "\t" + pResult.equilibrationTime() + "\t" + pResult.getValidMoves();
 		mConsumer.accept(mMeasurements
 				.stream()
-				.map(pMeasurement -> pMeasurement.apply(pResult.getInteractors()))
-				.collect(new StringJoiner("\t", String.valueOf(vTime), String.valueOf(vValidMoves))));
+				.map(pMeasurement -> pMeasurement.apply(pResult.getInteractors()).toString())
+				.collect(Collectors.joining("\t", "", vSuffix)));
 	}
 	
 	@SuppressWarnings("rawtypes") 
-	private Measurer(List<Measurement> pMeasurements, Consumer<String> pResultWriter)
+	private Measurer(List<Measurement> pMeasurements, Consumer<String> pResultWriter) throws Exception
 	{
 		mMeasurements = pMeasurements;
 		mConsumer = pResultWriter;
@@ -66,7 +65,7 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 	private void writeHeader()
 	{
 		mConsumer.accept(mMeasurements.stream()
-				.map((pMeasurement) -> pMeasurement.getName())
-				.collect(new StringJoiner("\t", "EquilibrationTime", "ValidMoves")));
+				.map(pMeasurement -> pMeasurement.getName())
+				.collect(Collectors.joining("\t", "", "\tequilibration.time\tvalid.moves")));
 	}
 }

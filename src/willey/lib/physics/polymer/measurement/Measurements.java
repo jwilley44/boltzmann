@@ -27,6 +27,11 @@ public class Measurements
 		return new Hash<M>();
 	}
 	
+	public static <PR extends PolymerAndRods> Equilibrations equilibrations()
+	{
+		return new Equilibrations();
+	}
+	
 	public static <R extends Rods> Measurement<R, CartesianVector> averageRodDirection()
 	{
 		return new AverageRodDirection<R>();

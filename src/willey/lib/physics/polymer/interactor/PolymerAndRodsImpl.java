@@ -10,6 +10,13 @@ import willey.lib.util.StreamUtil;
 
 public class PolymerAndRodsImpl implements PolymerAndRods
 {
+	private int mEquilibrations = 0;
+	
+	public int equilibrations()
+	{
+		return ++mEquilibrations;
+	}
+	
 	public enum Parameter
 	{
 		PolymerWeight;
