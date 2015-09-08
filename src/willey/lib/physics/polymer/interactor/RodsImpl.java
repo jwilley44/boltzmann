@@ -27,6 +27,7 @@ public class RodsImpl implements Rods
 	public enum Parameter
 	{
 		LatticeSize,
+		OccupiedVolume,
 		RodCount, 
 		RodLength, 
 		RodOrientation, 
@@ -56,7 +57,7 @@ public class RodsImpl implements Rods
 	
 	public static RodsImpl fromParameterMap(ParameterMap pParameters)
 	{
-		int vCount = pParameters.getInt(Parameter.RodCount.name());
+		int vCount = 0;
 		double vLength = pParameters.getDouble(Parameter.RodLength.name());
 		double vRadius = pParameters.getDouble(Parameter.RodRadius.name());
 		double vTranslation = pParameters.getDouble(Parameter.RodTranslation
@@ -68,6 +69,15 @@ public class RodsImpl implements Rods
 				.getString(Parameter.RodOrientation.name()));
 		Position vPosition = Position.valueOf(pParameters
 				.getString(Parameter.RodPosition.name()));
+		if (pParameters.contains(Parameter.OccupiedVolume.name()))
+		{
+			double vOccupiedVolume = pParameters.getDouble(Parameter.OccupiedVolume.name());
+			vCount = (int) Math.ceil(vLattice.volume() * vOccupiedVolume / Rod.volume(vRadius, vLength));
+		}
+		else
+		{
+			vCount = pParameters.getInt(Parameter.RodCount.name());
+		}
 		return new RodsImpl(vCount, vLength, vRadius, vTranslation, vRotation,
 				vLattice, vOrientation, vPosition);
 	}

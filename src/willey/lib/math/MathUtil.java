@@ -1,7 +1,9 @@
 package willey.lib.math;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.DoubleStream;
 
 public class MathUtil
 {
@@ -32,5 +34,25 @@ public class MathUtil
 			vSum += vElement.doubleValue();
 		}
 		return vSum;
+	}
+	
+	public static DoubleStream sequence(double pStart, int pSteps, double pStepSize)
+	{
+		double[] vSequence = new double[pSteps];
+		for (int i=0; i < pSteps; i++)
+		{
+			vSequence[i] = pStepSize * i + pStart;
+		}
+		return Arrays.stream(vSequence);
+	}
+	
+	public static DoubleStream randomStream(int pCount, double pMin, double pMax)
+	{
+		double[] vStream = new double[pCount];
+		for (int i = 0; i < pCount; i++)
+		{
+			vStream[i] = nextRandomBetween(pMin, pMax);
+		}
+		return Arrays.stream(vStream);
 	}
 }

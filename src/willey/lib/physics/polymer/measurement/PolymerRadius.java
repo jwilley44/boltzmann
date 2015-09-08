@@ -12,6 +12,6 @@ class PolymerRadius<P extends Polymer> implements Measurement<P, Double>
 
 	public String getName()
 	{
-		return "PolymerRadius";
+		return "polymer.radius";
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterators;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
@@ -20,6 +21,14 @@ public class StreamUtil
 				pA.isParallel() && pB.isParallel());
 	}
 	
+	public static <A, B, C> Stream<C> zipStreams(Stream<A> pA, Stream<B> pB,
+			BiFunction<A, B, C> pCombiner)
+	{
+		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+				new ZipIterator<>(pA.iterator(), pB.iterator(), pCombiner), 0),
+				false);
+	}
+	
 	public static <A> Stream<A> multiplyStream(Stream<A> pStream, int pMultiplier)
 	{
 		return pStream.flatMap(FunctionUtil.multiply(pMultiplier));
@@ -31,6 +40,13 @@ public class StreamUtil
 		Check.kIllegalArgument.checkTrue(!pAStream.equals(pBStream), "pA and pB cannot be the same instance.");
 		List<B> vBStream = ConsumerUtil.toCollection(pBStream, new ArrayList<B>());
 		return pAStream.flatMap((pA) -> vBStream.stream().map((pB) -> Pair.of(pA, pB)));
+	}
+	
+	public static <A, B, R> Function<A, Stream<R>> crossWith(
+			Supplier<? extends Stream<B>> pOtherSupplier,
+			BiFunction<? super A, ? super B, ? extends R> pCombiner)
+	{
+		return pA -> pOtherSupplier.get().map(pB -> pCombiner.apply(pA, pB));
 	}
 
 	public static <T> Stream<T> combine(Stream<? extends T> p1,

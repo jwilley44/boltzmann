@@ -302,11 +302,6 @@ public class CoverTree<P>
 			return mChildren;
 		}
 		
-		boolean hasChildren()
-		{
-			return !mChildren.isEmpty();
-		}
-
 		@Override
 		public int hashCode()
 		{

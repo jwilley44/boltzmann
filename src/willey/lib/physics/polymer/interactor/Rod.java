@@ -117,4 +117,10 @@ public class Rod implements Interactor
 	{
 		return mRadius;
 	}
+	
+	public static double volume(double pRadius, double pLength)
+	{
+		return Math.PI * pRadius * pRadius
+				* (pLength + pRadius * 4 / 3);
+	}
 }

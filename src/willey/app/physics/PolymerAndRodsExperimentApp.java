@@ -15,7 +15,25 @@ public class PolymerAndRodsExperimentApp
 	{
 		Timer vTimer = Timer.start();
 		Measurer.Builder<PolymerAndRods> vBuilder = Measurer.builder();
-		vBuilder.add(Measurements.hash());
+		vBuilder
+		.add(Measurements.rodRotation())
+		.add(Measurements.averageMonomerDistance())
+		.add(Measurements.polymerFractalization())
+		.add(Measurements.interactions())
+		.add(Measurements.polymerRadius())
+		.add(Measurements.polymerSize())
+		.add(Measurements.monomerRadius())
+		.add(Measurements.orderParameter())
+		.add(Measurements.averageRodDistance())
+		.add(Measurements.averageRodRadius())
+		.add(Measurements.averageRodLength())
+		.add(Measurements.averageRodDirection())
+		.add(Measurements.polymerRodCorrelation())
+		.add(Measurements.occupiedVolume())
+		.add(Measurements.rodCount())
+		.add(Measurements.polymerCenter())
+		.add(Measurements.polymerRodDistance())
+		.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();
 		System.err.println(vTimer.getElapsedTimeSeconds());

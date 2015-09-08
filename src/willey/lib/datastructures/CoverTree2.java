@@ -101,6 +101,7 @@ public class CoverTree2<P>
 			boolean vEquals = false;
 			if (pObject instanceof Node)
 			{
+				@SuppressWarnings("rawtypes")
 				Object vData = ((Node) pObject).getData();
 				vEquals = mData.equals(vData);
 			}
@@ -436,12 +437,6 @@ public class CoverTree2<P>
 		{
 			return mPoints.contains(new Node<P>(pPoint, mNearesetPoint
 					.getLevel()));
-		}
-
-		boolean remove(P pPoint)
-		{
-			return mPoints
-					.remove(new Node<P>(pPoint, mNearesetPoint.getLevel()));
 		}
 
 		Node<P> getNearestPoint()

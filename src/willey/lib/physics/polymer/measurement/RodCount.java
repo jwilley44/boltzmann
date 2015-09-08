@@ -13,6 +13,6 @@ class RodCount<R extends Rods> implements Measurement<R, Integer>
 	@Override
 	public String getName()
 	{
-		return "RodCount";
+		return "rod.count";
 	}
 }

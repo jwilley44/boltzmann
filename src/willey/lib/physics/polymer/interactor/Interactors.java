@@ -71,6 +71,7 @@ public interface Interactors
 		boolean vValidMove = StreamUtil.nestedStream(
 				projectedStream(vOld),
 				getTestPoints(vNew))
+				.parallel()
 				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
 //		double vDelta = calculateDeltaEnergy(vOld, vNew);
 //		boolean vValidMove = vDelta <= 0 ? true : MathUtil.kRng.nextDouble() < Math.exp(-vDelta);

@@ -1,15 +1,11 @@
 package willey.lib.physics.polymer.experiment;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.Rods;
 import willey.lib.physics.polymer.interactor.RodsImpl;
-import willey.lib.physics.polymer.measurement.Measurement;
 import willey.lib.physics.polymer.measurement.Measurements;
 import willey.lib.physics.polymer.measurement.Measurer;
 

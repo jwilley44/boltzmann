@@ -173,6 +173,11 @@ public class ParameterCombiner
 			return get(pName).toString();
 		}
 		
+		public boolean contains(String pName)
+		{
+			return mMap.containsKey(pName);
+		}
+		
 		@Override
 		public int hashCode()
 		{

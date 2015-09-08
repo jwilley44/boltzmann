@@ -29,6 +29,7 @@ public class PolymerAndRodsExperiment extends Experiment<PolymerAndRods>
 		.add(Measurements.polymerRodCorrelation())
 		.add(Measurements.occupiedVolume())
 		.add(Measurements.rodCount())
+		.add(Measurements.polymerRodDistance())
 		.add(Measurements.hash());
 	}
 

@@ -12,6 +12,6 @@ class PolymerSize<P extends Polymer> implements Measurement<P, Double>
 
 	public String getName()
 	{
-		return "PolymerSize";
+		return "polymer.size";
 	}
 }

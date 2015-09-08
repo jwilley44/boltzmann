@@ -1,17 +1,14 @@
 package willey.lib.physics.polymer.interactor;
 
-import static willey.lib.math.linearalgebra.CartesianVector.randomUnitVector;
-
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.util.ConsumerUtil;
 import willey.lib.util.Pair;
 import willey.lib.util.StreamUtil;
 
@@ -21,33 +18,34 @@ class RodsUtil
 			double pTranslation, double pRotation, Lattice pLattice,
 			Orientation pOrientation, Position pPosition)
 	{
-		Stream<Rod> vRods = StreamUtil.toStream(new RodSupplier(pLength,
-				pRadius, pOrientation.getSupplier(), pPosition.getSupplier(pLattice)), pCount);
-		return ConsumerUtil.toCollection(vRods, new ArrayList<Rod>());
+		return StreamUtil.zipStreams(pOrientation.stream(pCount),
+				pPosition.stream(pLattice, pCount),
+				UniformRodCreator.get(pLength, pRadius)).collect(
+				Collectors.toList());
 	}
 
-	private static class RodSupplier implements Supplier<Rod>
+	private static class UniformRodCreator implements BiFunction<CartesianVector, CartesianVector, Rod>
 	{
 		private final double mLength;
 		private final double mRadius;
-		private final Supplier<CartesianVector> mOrientation;
-		private final Supplier<CartesianVector> mPosition;
-
-		RodSupplier(double pLength, double pRadius, Supplier<CartesianVector> pOrientation,
-				Supplier<CartesianVector> pPosition)
+		
+		static UniformRodCreator get(double pLength, double pRadius)
+		{
+			return new UniformRodCreator(pLength, pRadius);
+		}
+		
+		public UniformRodCreator(double pLength, double pRadius)
 		{
 			mLength = pLength;
 			mRadius = pRadius;
-			mOrientation = pOrientation;
-			mPosition = pPosition;
 		}
-
+		
 		@Override
-		public Rod get()
+		public Rod apply(CartesianVector pDirection, CartesianVector pPosition)
 		{
-			return new Rod(mOrientation.get(), mPosition.get(), mLength,
-					mRadius);
+			return new Rod(pDirection, pPosition, mLength, mRadius);
 		}
+		
 	}
 
 	public enum Orientation
@@ -55,21 +53,31 @@ class RodsUtil
 		Random
 		{
 			@Override
-			Supplier<CartesianVector> getSupplier()
+			Stream<CartesianVector> stream(int pCount)
 			{
-				return new RandomDirectionSupplier();
+				DoubleStream vX = MathUtil.randomStream(pCount, 0, 1);
+				DoubleStream vY = MathUtil.randomStream(pCount, 0, 1);
+				DoubleStream vZ = MathUtil.randomStream(pCount, 0, 1);
+				
+				return vX.boxed()
+						.flatMap(StreamUtil.crossWith(vY::boxed, Pair::of))
+						.flatMap(StreamUtil.crossWith(vZ::boxed, Pair::of))
+						.map(pCoor -> CartesianVector.of(
+								pCoor.getA().getA().doubleValue(), 
+								pCoor.getA().getB().doubleValue(), 
+								pCoor.getB().doubleValue()));
 			}
 		},
 		Ordered
 		{
 			@Override
-			Supplier<CartesianVector> getSupplier()
+			Stream<CartesianVector> stream(int pCount)
 			{
-				return new UniformDirectionSupplier(CartesianVector.of(0, 0, 1));
+				return StreamUtil.toStream(CartesianVector.of(0,  0, 1), pCount, false);
 			}
 		};
 
-		abstract Supplier<CartesianVector> getSupplier();
+		abstract Stream<CartesianVector> stream(int pCount);
 	}
 
 	public enum Position
@@ -77,102 +85,44 @@ class RodsUtil
 		Random
 		{
 			@Override
-			Supplier<CartesianVector> getSupplier(Lattice pLattice)
+			Stream<CartesianVector> stream(Lattice pLattice, int pCount)
 			{
-				return new RandomStart(pLattice);
+				DoubleStream vX = MathUtil.randomStream(pCount, 0, pLattice.xDimension());
+				DoubleStream vY = MathUtil.randomStream(pCount, 0, pLattice.yDimension());
+				DoubleStream vZ = MathUtil.randomStream(pCount, 0, pLattice.zDimension());
+				
+				return vX.boxed()
+				.flatMap(StreamUtil.crossWith(vY::boxed, Pair::of))
+				.flatMap(StreamUtil.crossWith(vZ::boxed, Pair::of))
+				.map(pCoor -> CartesianVector.of(
+						pCoor.getA().getA().doubleValue(), 
+						pCoor.getA().getB().doubleValue(), 
+						pCoor.getB().doubleValue()));
 			}
 		},
 		Ordered
 		{
 			@Override
-			Supplier<CartesianVector> getSupplier(Lattice pLattice)
+			Stream<CartesianVector> stream(Lattice pLattice, int pCount)
 			{
-				return new OrderedStart(pLattice);
+				int vScale = (int) Math.ceil((double)pCount / (pLattice.xDimension() * pLattice.yDimension()));
+				double vStepSize = 1.0 / vScale;
+				List<CartesianVector> vCoordinates = StreamUtil
+						.nestedStream(
+								MathUtil.sequence(0.0,
+										pLattice.xDimension() * vScale,
+										vStepSize).boxed(),
+								MathUtil.sequence(0.0,
+										pLattice.yDimension() * vScale,
+										vStepSize).boxed())
+						.map(pPair -> CartesianVector.of(pPair.getA()
+								.doubleValue(), pPair.getB().doubleValue(), 0))
+						.collect(Collectors.toList());
+				Collections.shuffle(vCoordinates);
+				return vCoordinates.subList(0, pCount - 1).stream();
 			}
 		};
 
-		abstract Supplier<CartesianVector> getSupplier(Lattice pLattice);
-	}
-
-	static class OrderedStart implements Supplier<CartesianVector>
-	{
-		private final Iterator<Pair<Integer, Integer>> mCoordinates;
-
-		private OrderedStart(Lattice pLattice)
-		{
-			List<Pair<Integer, Integer>> vCoordiantes = new ArrayList<Pair<Integer, Integer>>();
-			for (int i = 0; i < pLattice.xDimension(); i++)
-			{
-				for (int j = 0; j < pLattice.yDimension(); j++)
-				{
-					vCoordiantes.add(Pair.of(Integer.valueOf(i),
-							Integer.valueOf(j)));
-				}
-			}
-			Collections.shuffle(vCoordiantes);
-			mCoordinates = vCoordiantes.iterator();
-		}
-
-		@Override
-		public CartesianVector get()
-		{
-			CartesianVector vReturn = null;
-			try
-			{
-				Pair<Integer, Integer> vXy = mCoordinates.next();
-				vReturn = CartesianVector.of(vXy.getA().intValue() + 0.5, vXy
-						.getB().intValue() + 0.5, 0.0);
-			} catch (NullPointerException e)
-			{
-				throw new IllegalStateException(
-						"Cannot have more than the maximum numbered of ordered rods");
-			}
-			return vReturn;
-		}
-	}
-
-	static class RandomStart implements Supplier<CartesianVector>
-	{
-		private final Lattice mLattice;
-
-		RandomStart(Lattice pLattice)
-		{
-			mLattice = pLattice;
-		}
-
-		@Override
-		public CartesianVector get()
-		{
-			double vX = MathUtil.kRng.nextInt(mLattice.xDimension())
-					+ MathUtil.kRng.nextDouble();
-			double vY = MathUtil.kRng.nextInt(mLattice.yDimension())
-					+ MathUtil.kRng.nextDouble();
-			return CartesianVector.of(vX, vY, 0.0);
-		}
-	}
-
-	static class RandomDirectionSupplier implements Supplier<CartesianVector>
-	{
-		@Override
-		public CartesianVector get()
-		{
-			return randomUnitVector();
-		}
-	}
-
-	static class UniformDirectionSupplier implements Supplier<CartesianVector>
-	{
-		private final CartesianVector mDirection;
-
-		private UniformDirectionSupplier(CartesianVector pDirection)
-		{
-			mDirection = pDirection;
-		}
-
-		@Override
-		public CartesianVector get()
-		{
-			return mDirection;
-		}
+		abstract Stream<CartesianVector> stream(Lattice pLattice, int pCount);
 	}
 }

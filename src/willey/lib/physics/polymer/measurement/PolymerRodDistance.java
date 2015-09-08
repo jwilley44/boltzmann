@@ -23,7 +23,7 @@ class PolymerRodDistance<PR extends PolymerAndRods> implements
 	@Override
 	public String getName()
 	{
-		return "PolymerRodDistance";
+		return "polymer.rod.distance";
 	}
 
 }

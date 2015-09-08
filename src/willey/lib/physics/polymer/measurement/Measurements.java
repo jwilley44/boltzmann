@@ -32,6 +32,11 @@ public class Measurements
 		return new AverageRodDirection<R>();
 	}
 	
+	public static <P extends Polymer> Measurement<P, Double> polymerCenter()
+	{
+		return new PolymerCenter<P>();
+	}
+	
 	public static <P extends Polymer> Measurement<P, Double> polymerSize()
 	{
 		return new PolymerSize<P>();

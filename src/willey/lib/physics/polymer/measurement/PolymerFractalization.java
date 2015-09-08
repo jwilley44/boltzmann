@@ -50,6 +50,6 @@ class PolymerFractalization<P extends Polymer> implements
 	@Override
 	public String getName()
 	{
-		return "PolymerFractilization";
+		return "polymer.fractilization";
 	}
 }
