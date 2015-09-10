@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import willey.lib.math.MathUtil;
@@ -47,6 +46,7 @@ public class CoverTreeTest
 		Assert.assertEquals(vSize, vCoverTree.size());
 	}
 	
+	@SuppressWarnings("unused")
 	private static final double[] kDoubles = new double[] { 7.36093474937793,
 		12.144945517950134, 1.4974055540703524, 11.409550250214993,
 		11.501652411167358, 12.578750903378511, 19.15958403198488,

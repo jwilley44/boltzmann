@@ -27,7 +27,7 @@ public class StreamUtilTest
 				get("D"));
 		int vLimit = 10;
 		Function<TestObject, TestObject> vFunction = (pTestObject) -> pTestObject
-				.increment();
+				.increment().snapshot();
 		Stream<TestObject> vResultStream = StreamUtil.manyMultiApply(vList
 				.stream().parallel(), vLimit, vFunction);
 		List<TestObject> vResults = ConsumerUtil.toCollection(vResultStream,
@@ -116,6 +116,11 @@ public class StreamUtilTest
 		TestObject increment()
 		{
 			mCount++;
+			return this;
+		}
+		
+		TestObject snapshot()
+		{
 			TestObject vReturn = new TestObject(mLabel);
 			vReturn.mCount = this.mCount;
 			return vReturn;

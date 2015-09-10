@@ -3,7 +3,7 @@ package willey.lib.math.linearalgebra;
 import static willey.lib.math.linearalgebra.CartesianVector.of;
 import static willey.lib.math.linearalgebra.CartesianVector.randomUnitVector;
 import static willey.lib.math.linearalgebra.CartesianVector.randomVector;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

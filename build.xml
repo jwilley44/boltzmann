@@ -13,5 +13,10 @@
 		<javac srcdir="${sourceDir}" destdir="${outputDir}">
 			<compilerarg line="-version" />
 		</javac>
+		<exec executable="git">
+			<arg value="rev-parse" />
+			<arg value="HEAD" />
+			<redirector output="${outputDir}/willey/lib/util/Version.txt" />
+		</exec>
 	</target>
 </project>

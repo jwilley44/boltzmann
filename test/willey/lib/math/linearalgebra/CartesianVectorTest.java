@@ -1,12 +1,10 @@
 package willey.lib.math.linearalgebra;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import willey.lib.math.MathUtil;
 import willey.lib.test.AbstractTest;
-
-import junit.framework.Assert;
-
 import static willey.lib.math.linearalgebra.CartesianVector.*;
 
 public class CartesianVectorTest extends AbstractTest

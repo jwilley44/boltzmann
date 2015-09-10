@@ -22,7 +22,29 @@ public class LatticeTest extends AbstractTest
 		Assert.assertTrue(CartesianVector.of(1.4, 2.3, 3.8).coordinatesEqual(
 				vLattice.projectIntoLattice(vVector)));
 	}
-
+	
+	@Test
+	public void testBoundaryConditions()
+	{
+		int vSize = 4;
+		Lattice vLattice = Lattice.cubeLattice(vSize);
+		final CartesianVector vVector = CartesianVector.of(1.5, 3.5, 2.5);
+		vLattice.getNewLatticeCoordinatesFunctions()
+				.stream()
+				.forEach(
+						pFunction -> assertEquals(
+								pFunction.apply(CartesianVector.zeroVector())
+										.magnitude(), pFunction.apply(vVector)
+										.distance(vVector), 1e-4));
+		final CartesianVector vPoint1 = CartesianVector.zeroVector();
+		final CartesianVector vAdjustment = CartesianVector.of(0.01, 0.01, 0.01);
+		final CartesianVector vPoint2 = CartesianVector.of(4,4,4).subtract(vAdjustment);
+		assertEquals(vAdjustment.magnitude(), vLattice.getNewLatticeCoordinatesFunctions()
+				.stream()
+				.map(pFunction -> pFunction.apply(vPoint1))
+				.mapToDouble(pVector -> pVector.distance(vPoint2)).min().getAsDouble(), 1e-4);
+	}
+	
 	@Test
 	public void testMovements()
 	{

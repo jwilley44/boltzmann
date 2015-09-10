@@ -1,7 +1,0 @@
-I=LatticeSize=64
-I=Size=8,16
-D=Radius=0.45
-S=TerminationCriteria=PolymerSize
-D=TerminationValue=2
-I=Equilibrations=10
-S=Type=Continuous

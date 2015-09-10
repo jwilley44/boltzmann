@@ -1,19 +1,23 @@
 package willey.app.physics;
 
 import java.io.File;
+import java.io.IOException;
 
 import willey.lib.physics.polymer.experiment.Experiment;
 import willey.lib.physics.polymer.experiment.PolymerAndRodsExperiment;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
 import willey.lib.physics.polymer.measurement.Measurements;
 import willey.lib.physics.polymer.measurement.Measurer;
-import willey.lib.util.Timer;
 
-public class PolymerAndRodsExperimentApp
+public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 {
-	public static void main(String pArgs[]) throws Exception
+	public static void main(String[] pArgs) throws IOException
 	{
-		Timer vTimer = Timer.start();
+		PhysicsExperimentApp.runMain(new PolymerAndRodsExperimentApp(), pArgs);
+	}
+	
+	public void run(String pArgs[]) throws Exception
+	{
 		Measurer.Builder<PolymerAndRods> vBuilder = Measurer.builder();
 		vBuilder
 		.add(Measurements.rodRotation())
@@ -36,6 +40,5 @@ public class PolymerAndRodsExperimentApp
 		.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();
-		System.err.println(vTimer.getElapsedTimeSeconds());
 	}
 }

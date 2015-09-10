@@ -1,6 +1,6 @@
 package willey.lib.math.linearalgebra;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
