@@ -21,5 +21,7 @@
 		<copy todir="${outputDir}">
 			<fileset dir="scripts" includes="*.sh"/>
 		</copy>
+		<chmod file="${outputDir}/*.sh" perm="+x" />
+		<chmod file="${outputDir}/*.R" perm="+x" />
 	</target>
 </project>
