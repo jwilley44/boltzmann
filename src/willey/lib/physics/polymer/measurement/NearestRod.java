@@ -22,6 +22,6 @@ class NearestRod<R extends Rods> implements Measurement<R, Double>
 	@Override
 	public String getName()
 	{
-		return "NearestRod";
+		return "nearest.rod";
 	}
 }

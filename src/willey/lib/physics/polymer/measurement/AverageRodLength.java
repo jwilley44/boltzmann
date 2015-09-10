@@ -13,6 +13,6 @@ class AverageRodLength<R extends Rods> implements Measurement<R, Double>
 	@Override
 	public String getName()
 	{
-		return "RodLength";
+		return "rod.length";
 	}
 }

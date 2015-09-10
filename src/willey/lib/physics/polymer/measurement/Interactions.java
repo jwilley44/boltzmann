@@ -16,6 +16,6 @@ class Interactions<M extends Measurable> implements
 	@Override
 	public String getName()
 	{
-		return "Interactions";
+		return "interactions";
 	}
 }

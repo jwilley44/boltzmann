@@ -15,6 +15,6 @@ class PolymerDirection<P extends Polymer> implements
 	@Override
 	public String getName()
 	{
-		return "PolymerDirection";
+		return "polymer.direction";
 	}
 }

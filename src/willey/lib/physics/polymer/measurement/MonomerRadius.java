@@ -14,7 +14,7 @@ class MonomerRadius<P extends Polymer> implements Measurement<P, Double>
 	@Override
 	public String getName()
 	{
-		return "MonomerRadius";
+		return "monomer.radius";
 	}
 	
 }

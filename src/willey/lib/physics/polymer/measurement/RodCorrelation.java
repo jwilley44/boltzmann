@@ -16,6 +16,6 @@ class RodCorrelation<R extends Rods> implements Measurement<R, Double>
 
 	public String getName()
 	{
-		return "RodCorrelation";
+		return "rod.correlation";
 	}
 }

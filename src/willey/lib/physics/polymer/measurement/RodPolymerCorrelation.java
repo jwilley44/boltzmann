@@ -20,6 +20,6 @@ class RodPolymerCorrelation<PR extends PolymerAndRods> implements
 	@Override
 	public String getName()
 	{
-		return "RodPolymerCorrelation";
+		return "rod.polymer.correlation";
 	}
 }

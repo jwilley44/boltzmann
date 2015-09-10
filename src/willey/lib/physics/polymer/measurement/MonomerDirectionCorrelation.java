@@ -23,6 +23,6 @@ class MonomerDirectionCorrelation<P extends Polymer> implements
 	@Override
 	public String getName()
 	{
-		return "MonomerDirectionCorrelation";
+		return "monomer.direction.correlation";
 	}
 }

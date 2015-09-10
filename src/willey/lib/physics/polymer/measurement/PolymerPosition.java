@@ -19,6 +19,6 @@ class PolymerPosition<P extends Polymer> implements
 	@Override
 	public String getName()
 	{
-		return "PolymerPosition";
+		return "polymer.position";
 	}
 }

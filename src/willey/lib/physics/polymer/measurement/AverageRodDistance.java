@@ -22,7 +22,7 @@ class AverageRodDistance<R extends Rods> implements
 	@Override
 	public String getName()
 	{
-		return "AverageRodDistance";
+		return "average.rod.distance";
 	}
 
 }
