@@ -10,7 +10,7 @@ class PolymerCenter<P extends Polymer> implements Measurement<P, Double>
 		return Double.valueOf(pMeasurable.getLattice().centerStart().distance(
 				pMeasurable.getMonomers()
 				.map(pMonomer -> pMonomer.position())
-				.reduce(CartesianVector.zeroVector(), (a, b) -> a.add(b)).scale(1 / pMeasurable.getSize())));
+				.reduce(CartesianVector.zeroVector(), (a, b) -> a.add(b)).scale(1.0 / pMeasurable.getSize())));
 	}
 
 	@Override
