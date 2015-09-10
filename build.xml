@@ -18,5 +18,8 @@
 			<arg value="HEAD" />
 			<redirector output="${outputDir}/willey/lib/util/Version.txt" />
 		</exec>
+		<copy todir="${outputDir}">
+			<fileset dir="scripts" includes="*.sh"/>
+		</copy>
 	</target>
 </project>

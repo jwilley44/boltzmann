@@ -1,12 +1,18 @@
 #!/bin/bash
 
 parameters=$1
-expDate=$(date | tr ' ' '.')
-newDir="/Users/jwilley44/Documents/workspace/dev/results/Polymer/${expDate}"
-mkdir $newDir
-rm /Users/jwilley44/Documents/workspace/dev/results/Polymer/latest
-ln -s $newDir /Users/jwilley44/Documents/workspace/dev/results/Polymer/latest
-results=${newDir}/results.tsv
-error=${newDir}/err.log
-cp $parameters ${newDir}/
-time java -Xmx2048m willey.app.physics.PolymerExperimentApp $parameters > $results 2> $error
+expBucket=$(date | tr ' ' '.')
+typeBucket="polymer"
+expBucket=$(date | tr ' ' '.')
+expBucket=${typeBucket}.${expBucket}
+results=${expBucket}.results.tsv
+log=${expBucket}.log
+echo "Parameters" > $log
+cat $parameters >> $log
+echo "" >> $log
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+java -cp $DIR -Xmx2048m willey.app.physics.PolymerExperimentApp $parameters > $results 2>> $log
+aws s3 cp $results s3://johnwilley
+aws s3 cp $log s3://johnwilley
+rm $results
+rm $log
