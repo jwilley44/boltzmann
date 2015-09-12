@@ -14,7 +14,7 @@ class AverageRodRadius<R extends Rods> implements Measurement<R, Double>
 	@Override
 	public String getName()
 	{
-		return "RodRadius";
+		return "rod.radius";
 	}
 
 }

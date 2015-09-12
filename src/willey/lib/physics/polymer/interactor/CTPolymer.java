@@ -13,21 +13,21 @@ import willey.lib.util.Check;
 import willey.lib.util.Pair;
 import willey.lib.util.StreamUtil;
 
-public class PolymerImpl implements Polymer
+public class CTPolymer implements Polymer
 {
 	private final int mStateId;
-	
+
 	@Override
 	public int stateId()
 	{
 		return mStateId;
 	}
-	
+
 	public enum Parameters
 	{
 		LatticeSize, Radius, Size;
 	}
-	
+
 	private static final double kMonomerSeparation = 1.0;
 
 	private final int mSize;
@@ -35,21 +35,23 @@ public class PolymerImpl implements Polymer
 	private final List<Monomer> mMonomers;
 	private final Lattice mLattice;
 
-	public static Equilibration<Polymer> getEquilibration(ParameterMap pParameters)
+	public static Equilibration<Polymer> getEquilibration(
+			ParameterMap pParameters)
 	{
-		PolymerImpl vPolymer = fromParameterMap(pParameters);
+		CTPolymer vPolymer = fromParameterMap(pParameters);
 		return new PolymerEquilibration(vPolymer);
 	}
-	
-	public static PolymerImpl fromParameterMap(ParameterMap pParameters)
+
+	public static CTPolymer fromParameterMap(ParameterMap pParameters)
 	{
 		int vSize = pParameters.getInt(Parameters.Size.name());
 		double vRadius = pParameters.getDouble(Parameters.Radius.name());
-		Lattice vLattice = Lattice.cubeLattice(pParameters.getInt(Parameters.LatticeSize.name()));
-		return new PolymerImpl(vSize, vRadius, vLattice);
+		Lattice vLattice = Lattice.cubeLattice(pParameters
+				.getInt(Parameters.LatticeSize.name()));
+		return new CTPolymer(vSize, vRadius, vLattice);
 	}
-	
-	public PolymerImpl(int pSize, double pMonomerRadius, Lattice pLattice)
+
+	public CTPolymer(int pSize, double pMonomerRadius, Lattice pLattice)
 	{
 		Check.kIllegalArgument.checkTrue(pSize > 2,
 				"Polymer size must be greater than 2");
@@ -62,19 +64,19 @@ public class PolymerImpl implements Polymer
 		mLattice = pLattice;
 		mStateId = hashCode();
 	}
-	
+
 	public boolean searchInteractions(Monomer pMonomer)
 	{
-		//search covertree
+		// search covertree
 		return false;
 	}
-	
+
 	public boolean searchInteractions(final Rod pRod)
 	{
 		return stream().noneMatch(pMonomer -> pRod.interacts(pMonomer));
 	}
-	
-	private PolymerImpl(PolymerImpl pPolymer)
+
+	private CTPolymer(CTPolymer pPolymer)
 	{
 		mSize = pPolymer.mSize;
 		mMonomerRadius = pPolymer.mMonomerRadius;
@@ -88,7 +90,7 @@ public class PolymerImpl implements Polymer
 	{
 		return getMonomerCount() - 1;
 	}
-	
+
 	private int getMonomerCount()
 	{
 		return mSize;
@@ -107,7 +109,7 @@ public class PolymerImpl implements Polymer
 	{
 		return mMonomers.stream();
 	}
-	
+
 	public Stream<? extends Interactor> stream()
 	{
 		return mMonomers.stream();
@@ -135,10 +137,10 @@ public class PolymerImpl implements Polymer
 	{
 		return mMonomerRadius;
 	}
-	
-	PolymerImpl getMeasurableState()
+
+	CTPolymer getMeasurableState()
 	{
-		return new PolymerImpl(this);
+		return new CTPolymer(this);
 	}
 
 	@Override
@@ -162,7 +164,7 @@ public class PolymerImpl implements Polymer
 	{
 		return new PolymerEquilibration(this);
 	}
-	
+
 	public MovedInteractor testMoveRandom()
 	{
 		Monomer vOld = chooseRandom();
@@ -204,22 +206,22 @@ public class PolymerImpl implements Polymer
 		CartesianVector vDirection = CartesianVector.randomUnitVector();
 		return pPreviousPosition.add(vDirection.scale(kMonomerSeparation));
 	}
-	
+
 	private static class PolymerEquilibration implements Equilibration<Polymer>
 	{
-		private final PolymerImpl mPolymer;
+		private final CTPolymer mPolymer;
 
-		private PolymerEquilibration(PolymerImpl pPolymer)
+		private PolymerEquilibration(CTPolymer pPolymer)
 		{
 			mPolymer = pPolymer;
 		}
-		
+
 		@Override
 		public Stream<Interactor> getTestPoints(Interactor pNew)
 		{
 			List<Interactor> vList = new ArrayList<Interactor>();
-			vList.add(pNew.reposition(getLattice()
-				.projectIntoLattice(pNew.position())));
+			vList.add(pNew.reposition(getLattice().projectIntoLattice(
+					pNew.position())));
 			return vList.stream();
 		}
 
@@ -228,13 +230,13 @@ public class PolymerImpl implements Polymer
 		{
 			return mPolymer.getMonomers();
 		}
-		
+
 		@Override
 		public Interactor chooseRandom()
 		{
 			return mPolymer.chooseRandom();
 		}
-		
+
 		@Override
 		public void replace(Interactor pOldInteractor, Interactor pNewInteractor)
 		{
