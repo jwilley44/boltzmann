@@ -2,7 +2,7 @@
 
 parameters=$1
 expBucket=$(date | tr ' ' '.')
-typeBucket="polymer"
+typeBucket="rods"
 expBucket=$(date | tr ' ' '.')
 expBucket=${typeBucket}.${expBucket}
 results=${expBucket}.results.tsv
