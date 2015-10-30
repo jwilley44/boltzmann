@@ -131,7 +131,8 @@ public class PolymerImpl implements Polymer
 		return mMonomers.get(MathUtil.kRng.nextInt(getMonomerCount()));
 	}
 
-	double monomerRadius()
+	@Override
+	public double monomerRadius()
 	{
 		return mMonomerRadius;
 	}

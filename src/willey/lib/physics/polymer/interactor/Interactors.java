@@ -72,8 +72,6 @@ public interface Interactors
 				projectedStream(vOld),
 				getTestPoints(vNew))
 				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
-//		double vDelta = calculateDeltaEnergy(vOld, vNew);
-//		boolean vValidMove = vDelta <= 0 ? true : MathUtil.kRng.nextDouble() < Math.exp(-vDelta);
 		if (vValidMove)
 		{
 			replace(vOld, vNew);

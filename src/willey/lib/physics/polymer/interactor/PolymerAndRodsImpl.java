@@ -217,4 +217,10 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	{
 		return mRods.getLattice();
 	}
+
+	@Override
+	public double monomerRadius()
+	{
+		return mPolymer.monomerRadius();
+	}
 }

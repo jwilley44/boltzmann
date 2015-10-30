@@ -10,6 +10,8 @@ public interface Polymer extends Measurable
 	
 	public double getEndToEndDistance();
 	
+	public double monomerRadius();
+	
 	public Stream<Monomer> getMonomers();
 	
 	public CartesianVector getDirection();
