@@ -29,6 +29,11 @@ public class RodsExperiment extends Experiment<Rods>
 	{
 		super(pParameterFile, new CreateRodEquilibration(), kBuilder.build());
 	}
+	
+	public RodsExperiment(File pParameterFile, Measurer<Rods> pMeasurer) throws Exception
+	{
+		super(pParameterFile, new CreateRodEquilibration(), pMeasurer);
+	}
 
 	private static class CreateRodEquilibration implements
 			Function<ParameterMap, Equilibrator<Rods>>

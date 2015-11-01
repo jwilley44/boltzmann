@@ -29,7 +29,12 @@ public class PolymerExperiment extends Experiment<Polymer>
 	{
 		super(pParameterFile, new CreatePolymerEquilibration(), kBuilder.build());
 	}
-
+	
+	public PolymerExperiment(File pParameterFile, Measurer<Polymer> pMeasurer) throws Exception
+	{
+		super(pParameterFile, new CreatePolymerEquilibration(), pMeasurer);
+	}
+	
 	private static class CreatePolymerEquilibration implements
 			Function<ParameterMap, Equilibrator<Polymer>>
 	{
