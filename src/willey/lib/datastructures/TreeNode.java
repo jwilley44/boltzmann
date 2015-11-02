@@ -1,5 +1,7 @@
 package willey.lib.datastructures;
 
+import java.util.stream.Stream;
+
 
 public interface TreeNode<E>
 {
@@ -9,5 +11,5 @@ public interface TreeNode<E>
 	
 	public void removeChild(TreeNode<E> pChild);
 	
-	public Iterable<? extends TreeNode<E>> getChildren();
+	public Stream<TreeNode<E>> getChildren();
 }

@@ -2,11 +2,13 @@ package willey.lib.math.linearalgebra;
 
 import static willey.lib.math.MathUtil.equal;
 
+import java.util.Spliterators;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import willey.lib.math.MathUtil;
 import willey.lib.util.Check;
-import willey.lib.util.StringJoiner;
 
 public class CartesianVector
 {
@@ -17,6 +19,8 @@ public class CartesianVector
 	private final double mX;
 	private final double mY;
 	private final double mZ;
+	
+	private final double[] mCoordinates = new double[3];
 
 	private double mMagnitude = -1;
 
@@ -30,6 +34,26 @@ public class CartesianVector
 		mX = pX;
 		mY = pY;
 		mZ = pZ;
+		mCoordinates[0] = mX;
+		mCoordinates[1] = mY;
+		mCoordinates[2] = mZ;
+	}
+	
+	private CartesianVector(double[] pCoordinates)
+	{
+		this(pCoordinates[0], pCoordinates[1], pCoordinates[2]);
+	}
+	
+	public double getCoordinate(int pIndex)
+	{
+		return mCoordinates[pIndex];
+	}
+	
+	public static CartesianVector normal(int pIndex)
+	{
+		double[] vCoord = new double[3];
+		vCoord[pIndex] = 1.0;
+		return new CartesianVector(vCoord);
 	}
 
 	public double x()
@@ -224,12 +248,9 @@ public class CartesianVector
 	@Override
 	public String toString()
 	{
-		StringBuilder vString = new StringBuilder();
-		vString.append("(");
-		String vCoords = StringJoiner.join(", ", mX, mY, mZ);
-		vString.append(vCoords);
-		vString.append(")");
-		return vString.toString();
+		return StreamSupport
+				.doubleStream(Spliterators.spliterator(mCoordinates, 0), false)
+				.boxed().map(pD -> pD.toString()).collect(Collectors.joining(", ", "(", ")"));
 	}
 
 	public static CartesianVector randomVector()

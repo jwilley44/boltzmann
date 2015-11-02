@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
@@ -55,17 +54,17 @@ class RodsUtil
 			@Override
 			Stream<CartesianVector> stream(int pCount)
 			{
-				DoubleStream vX = MathUtil.randomStream(pCount, 0, 1);
-				DoubleStream vY = MathUtil.randomStream(pCount, 0, 1);
-				DoubleStream vZ = MathUtil.randomStream(pCount, 0, 1);
+				Stream<Pair<Double, Double>> vXY = StreamUtil.zipStreams(
+						MathUtil.randomStream(pCount, 0, 1).boxed(), 
+						MathUtil.randomStream(pCount, 0, 1).boxed(), Pair::of);
 				
-				return vX.boxed()
-						.flatMap(StreamUtil.crossWith(vY::boxed, Pair::of))
-						.flatMap(StreamUtil.crossWith(vZ::boxed, Pair::of))
+				return StreamUtil.zipStreams(
+						vXY, 
+						MathUtil.randomStream(pCount, 0, 1).boxed(),Pair::of)
 						.map(pCoor -> CartesianVector.of(
-								pCoor.getA().getA().doubleValue(), 
-								pCoor.getA().getB().doubleValue(), 
-								pCoor.getB().doubleValue()));
+						pCoor.getA().getA().doubleValue(), 
+						pCoor.getA().getB().doubleValue(), 
+						pCoor.getB().doubleValue()));
 			}
 		},
 		Ordered
@@ -87,14 +86,14 @@ class RodsUtil
 			@Override
 			Stream<CartesianVector> stream(Lattice pLattice, int pCount)
 			{
-				DoubleStream vX = MathUtil.randomStream(pCount, 0, pLattice.xDimension());
-				DoubleStream vY = MathUtil.randomStream(pCount, 0, pLattice.yDimension());
-				DoubleStream vZ = MathUtil.randomStream(pCount, 0, pLattice.zDimension());
+				Stream<Pair<Double, Double>> vXY = StreamUtil.zipStreams(
+						MathUtil.randomStream(pCount, 0, pLattice.xDimension()).boxed(), 
+						MathUtil.randomStream(pCount, 0, pLattice.xDimension()).boxed(), Pair::of);
 				
-				return vX.boxed()
-				.flatMap(StreamUtil.crossWith(vY::boxed, Pair::of))
-				.flatMap(StreamUtil.crossWith(vZ::boxed, Pair::of))
-				.map(pCoor -> CartesianVector.of(
+				return StreamUtil.zipStreams(
+						vXY, 
+						MathUtil.randomStream(pCount, 0, pLattice.xDimension()).boxed(),Pair::of)
+						.map(pCoor -> CartesianVector.of(
 						pCoor.getA().getA().doubleValue(), 
 						pCoor.getA().getB().doubleValue(), 
 						pCoor.getB().doubleValue()));
