@@ -71,6 +71,7 @@ public interface Interactors
 		boolean vValidMove = StreamUtil.nestedStream(
 				projectedStream(vOld),
 				getTestPoints(vNew))
+				.parallel()
 				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
 		if (vValidMove)
 		{
