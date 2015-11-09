@@ -3,11 +3,12 @@ package willey.lib.math;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.DoubleStream;
 
 public class MathUtil
 {
-	public static final Random kRng = new Random();
+	public static final ThreadLocalRandom kRng = ThreadLocalRandom.current();
 	
 	private MathUtil()
 	{
