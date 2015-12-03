@@ -2,6 +2,7 @@ package willey.lib.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class RandomCollection<E> implements Collection<E>
 	
 	public E getNextRandom()
 	{
-		return mElements.get(MathUtil.kRng.nextInt(mElements.size()));
+		return mElements.get(MathUtil.getThreadLocal().nextInt(mElements.size()));
 	}
 	
 	@Override
@@ -55,7 +56,9 @@ public class RandomCollection<E> implements Collection<E>
 	@Override
 	public Iterator<E> iterator()
 	{
-		return  mElements.iterator();
+		List<E> vElements = new ArrayList<E>(mElements);
+		Collections.shuffle(vElements, MathUtil.getThreadLocal());
+		return  vElements.iterator();
 	}
 
 	@Override

@@ -124,7 +124,7 @@ public class RodsImpl implements Rods
 
 	public Rod chooseRandom()
 	{
-		int vIndex = MathUtil.kRng.nextInt(rodCount());
+		int vIndex = MathUtil.getThreadLocal().nextInt(rodCount());
 		return mRods.get(vIndex);
 	}
 	

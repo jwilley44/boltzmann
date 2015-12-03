@@ -197,7 +197,7 @@ public class CartesianVector
 				&& equalCoor(mZ, pVector.z());
 	}
 
-	private boolean equalCoor(double p1, double p2)
+	private static boolean equalCoor(double p1, double p2)
 	{
 		return equal(p1, p2, kEqualTolerance);
 	}

@@ -46,7 +46,7 @@ public interface Interactor
 	default boolean acceptMove(double pInteractionRadius, double pDistance)
 	{
 		return pDistance <= pInteractionRadius ?
-		MathUtil.kRng.nextDouble() < Math.exp(-1.0/(10*pDistance*pDistance)) :
+		MathUtil.getThreadLocal().nextDouble() < Math.exp(-1.0/(10*pDistance*pDistance)) :
 		true;
 	}
 }

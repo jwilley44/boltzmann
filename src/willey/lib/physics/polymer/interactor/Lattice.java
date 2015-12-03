@@ -83,12 +83,12 @@ public class Lattice
 
 	public CartesianVector randomStart()
 	{
-		double vX = MathUtil.kRng.nextInt(mXDimension)
-				+ MathUtil.kRng.nextDouble();
-		double vY = MathUtil.kRng.nextInt(mYDimension)
-				+ MathUtil.kRng.nextDouble();
-		double vZ = MathUtil.kRng.nextInt(mZDimension)
-				+ MathUtil.kRng.nextDouble();
+		double vX = MathUtil.getThreadLocal().nextInt(mXDimension)
+				+ MathUtil.getThreadLocal().nextDouble();
+		double vY = MathUtil.getThreadLocal().nextInt(mYDimension)
+				+ MathUtil.getThreadLocal().nextDouble();
+		double vZ = MathUtil.getThreadLocal().nextInt(mZDimension)
+				+ MathUtil.getThreadLocal().nextDouble();
 		return CartesianVector.of(vX, vY, vZ);
 	}
 

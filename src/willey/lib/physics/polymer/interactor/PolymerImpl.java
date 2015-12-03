@@ -128,7 +128,7 @@ public class PolymerImpl implements Polymer
 
 	Monomer chooseRandom()
 	{
-		return mMonomers.get(MathUtil.kRng.nextInt(getMonomerCount()));
+		return mMonomers.get(MathUtil.getThreadLocal().nextInt(getMonomerCount()));
 	}
 
 	@Override

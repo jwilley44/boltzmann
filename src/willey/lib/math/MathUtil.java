@@ -8,23 +8,21 @@ import java.util.stream.DoubleStream;
 
 public class MathUtil
 {
-	public static final ThreadLocalRandom kRng = ThreadLocalRandom.current();
-	
 	private MathUtil()
 	{
 		
 	}
 	
-	synchronized public static boolean equal(double p1, double p2, double pTolerence)
+	public static boolean equal(double p1, double p2, double pTolerence)
 	{
 		return Math.abs(p1 - p2) < pTolerence;
 	}
 	
-	synchronized public static double nextRandomBetween(double pLower, double pUpper)
+	public static double nextRandomBetween(double pLower, double pUpper)
 	{
 		if (pLower >= pUpper) throw new IllegalArgumentException("Invalid interval.");
 		double vRange = pUpper - pLower;
-		return kRng.nextDouble()*vRange + pLower;
+		return getThreadLocal().nextDouble()*vRange + pLower;
 	}
 	
 	public static double sum(List<? extends Number> pNumbers)
@@ -55,5 +53,10 @@ public class MathUtil
 			vStream[i] = nextRandomBetween(pMin, pMax);
 		}
 		return Arrays.stream(vStream);
+	}
+	
+	public static Random getThreadLocal()
+	{
+		return ThreadLocalRandom.current();
 	}
 }

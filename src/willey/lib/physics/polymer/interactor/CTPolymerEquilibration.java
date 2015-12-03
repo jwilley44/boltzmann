@@ -3,6 +3,7 @@ package willey.lib.physics.polymer.interactor;
 import java.util.stream.Stream;
 
 import willey.lib.datastructures.CoverTree;
+import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianMetric;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;
@@ -24,22 +25,21 @@ public class CTPolymerEquilibration implements Equilibration<Polymer>
 	@Override
 	public Stream<? extends Interactor> stream()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return mPolymer.getInteractors();
 	}
 
 	@Override
-	public Interactor chooseRandom()
+	public Monomer chooseRandom()
 	{
-		// TODO Auto-generated method stub
+		//TODO fix this
 		return null;
 	}
 
 	@Override
 	public MovedInteractor testMoveRandom()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Monomer vOld = chooseRandom();
+		return new MovedInteractor(vOld, vOld.randomMove());
 	}
 
 	@Override

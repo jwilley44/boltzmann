@@ -30,7 +30,7 @@ public class CartesianPlane
 	
 	public CartesianVector randomUnitVector()
 	{
-		return mColumn1.scale(MathUtil.kRng.nextDouble()).add(mColumn2.scale(MathUtil.kRng.nextDouble())).unitVector();
+		return mColumn1.scale(MathUtil.getThreadLocal().nextDouble()).add(mColumn2.scale(MathUtil.getThreadLocal().nextDouble())).unitVector();
 	}
 	
 	@Override

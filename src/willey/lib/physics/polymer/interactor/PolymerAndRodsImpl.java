@@ -172,7 +172,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 		@Override
 		public Interactor chooseRandom()
 		{
-			mRandomWasMonomer = MathUtil.kRng.nextDouble() <= mPolymerWeight;
+			mRandomWasMonomer = MathUtil.getThreadLocal().nextDouble() <= mPolymerWeight;
 			return mRandomWasMonomer ? mPolymerAndRods.chooseRandomMonomer()
 					: mPolymerAndRods.chooseRandomRod();
 		}
@@ -206,7 +206,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 		@Override
 		public MovedInteractor testMoveRandom()
 		{
-			mRandomWasMonomer = MathUtil.kRng.nextDouble() <= mPolymerWeight;
+			mRandomWasMonomer = MathUtil.getThreadLocal().nextDouble() <= mPolymerWeight;
 			return mRandomWasMonomer ? mPolymerAndRods.mPolymer.testMoveRandom()
 					: mPolymerAndRods.mRods.testMoveRandom();
 		}
