@@ -121,7 +121,7 @@ public class CoverTreeTest
 				vCoverTree.getNearesetNeighbor(Double.valueOf(3.8)).getA());
 		for (int i=0; i < 100; i++)
 		{
-			Double vDouble = Double.valueOf(MathUtil.kRng.nextDouble()*MathUtil.kRng.nextInt(10));
+			Double vDouble = Double.valueOf(MathUtil.getThreadLocal().nextDouble()*MathUtil.getThreadLocal().nextInt(10));
 			vCoverTree.insert(vDouble);
 			vCoverTree.remove(vDouble);
 		}

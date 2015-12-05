@@ -130,10 +130,10 @@ public class CTPolymer implements Polymer
 
 	Monomer chooseRandom()
 	{
-		return mMonomers.get(MathUtil.kRng.nextInt(getMonomerCount()));
+		return mMonomers.get(MathUtil.getThreadLocal().nextInt(getMonomerCount()));
 	}
 
-	double monomerRadius()
+	public double monomerRadius()
 	{
 		return mMonomerRadius;
 	}

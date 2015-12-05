@@ -27,7 +27,7 @@ public class RodTest extends AbstractTest
 	public void testParametric()
 	{
 		Rod vRod = createRodAtOrigin(0, 0);
-		CartesianVector vPoint = vRod.parametricEquation(MathUtil.kRng
+		CartesianVector vPoint = vRod.parametricEquation(MathUtil.getThreadLocal()
 				.nextDouble());
 		Assert.assertTrue(vPoint.magnitude() <= vRod.endPoint().magnitude());
 		Assert.assertTrue(vPoint.crossProduct(vRod.direction()).isZeroVector());
@@ -105,13 +105,13 @@ public class RodTest extends AbstractTest
 		Assert.assertFalse(vRod1.interacts(vRod3));
 		for (int i=0; i < 1000; i++)
 		{
-			Rod vRod4 = move(vRod1, MathUtil.kRng.nextDouble(), 0.0);
+			Rod vRod4 = move(vRod1, MathUtil.getThreadLocal().nextDouble(), 0.0);
 			Assert.assertTrue(vRod1.interacts(vRod4));
 		}
 		
 		for (int i=0; i < 1000; i++)
 		{
-			Rod vRod4 = move(vRod1, MathUtil.kRng.nextDouble() + 11, 0.0);
+			Rod vRod4 = move(vRod1, MathUtil.getThreadLocal().nextDouble() + 11, 0.0);
 			boolean vInteracts = vRod1.interacts(vRod4);
 			if (vInteracts)
 			{

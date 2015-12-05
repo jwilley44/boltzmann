@@ -1,7 +1,0 @@
-I=LatticeSize=32
-I=Size=8,16,32
-D=Radius=0.4,0.5
-S=TerminationCriteria=PolymerSize
-D=TerminationValue=2
-I=Equilibrations=2
-S=Type=Terminating

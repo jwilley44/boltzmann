@@ -2,7 +2,7 @@
 
 dir
 2
-file:///usr/share/svn/svnrep/dev/src/willey/app
+file:///usr/share/svn/svnrep/dev/src
 file:///usr/share/svn/svnrep
 
 
@@ -26,6 +26,12 @@ svn:special svn:externals svn:needs-lock
 
 20648e0c-3501-0010-8ebb-5398682d95ab
 
-physics
+castlight
+dir
+
+quantcast
+dir
+
+willey
 dir
 

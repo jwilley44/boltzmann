@@ -1,8 +1,0 @@
-package willey.incubator;
-
-import willey.lib.util.Function;
-
-public interface VectorFunction<T,F> extends Function<Vector<F>, Vector<T>>
-{
-
-}
