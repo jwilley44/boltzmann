@@ -9,6 +9,8 @@ import willey.lib.physics.polymer.measurement.Measurements;
 
 public class Equilibrator<M extends Measurable>
 {
+	private int mEquilibration = 0;
+	
 	private int mTotalMoves = 0;
 	private int mValidMoves = 0;
 	
@@ -62,7 +64,7 @@ public class Equilibrator<M extends Measurable>
 
 	public EquilibrationResult<M> getState()
 	{
-		return new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mValidMoves,
+		return new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibration, mValidMoves,
 				mTotalMoves);
 	}
 	
@@ -79,7 +81,7 @@ public class Equilibrator<M extends Measurable>
 		EquilibrationResult<M> vResult = null;
 		try
 		{
-			while (!isEquilibrated())
+			while (!isEquilibrated() && mEquilibration > 0)
 			{
 				if (move())
 				{
@@ -88,8 +90,9 @@ public class Equilibrator<M extends Measurable>
 				addToTotal();
 			}
 			finish();
-			vResult = new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mAgregatedValid,
+			vResult = new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibration, mAgregatedValid,
 					mAgregatedTotal);
+			mEquilibration++;
 		}
 		catch(Exception e)
 		{
@@ -101,15 +104,22 @@ public class Equilibrator<M extends Measurable>
 	public static class EquilibrationResult<M extends Measurable>
 	{
 		private final M mInteractors;
+		private final int mEquilibration;
 		private final int mValidMoves;
 		private final int mTotalMoves;
 
-		private EquilibrationResult(M pInteractors, int pValidMoves,
+		private EquilibrationResult(M pInteractors, int pEquilibration, int pValidMoves,
 				int pTotalMoves)
 		{
 			mInteractors = pInteractors;
+			mEquilibration = pEquilibration;
 			mValidMoves = pValidMoves;
 			mTotalMoves = pTotalMoves;
+		}
+		
+		public int equilibration()
+		{
+			return mEquilibration;
 		}
 
 		public int equilibrationTime()

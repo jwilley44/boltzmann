@@ -47,7 +47,7 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 	@Override
 	public void accept(EquilibrationResult<M> pResult)
 	{
-		String vSuffix = "\t" + pResult.equilibrationTime() + "\t" + pResult.getValidMoves();
+		String vSuffix = "\t" + pResult.equilibration() + "\t" + pResult.equilibrationTime() + "\t" + pResult.getValidMoves();
 		mConsumer.accept(mMeasurements
 				.stream()
 				.map(pMeasurement -> pMeasurement.apply(pResult.getInteractors()).toString())
@@ -66,6 +66,6 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 	{
 		mConsumer.accept(mMeasurements.stream()
 				.map(pMeasurement -> pMeasurement.getName())
-				.collect(Collectors.joining("\t", "", "\tequilibration.time\tvalid.moves")));
+				.collect(Collectors.joining("\t", "", "\tequilibration\tequilibration.time\tvalid.moves")));
 	}
 }
