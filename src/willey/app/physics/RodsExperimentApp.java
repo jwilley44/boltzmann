@@ -20,6 +20,7 @@ public class RodsExperimentApp extends PhysicsExperimentApp
 		Measurer.Builder<Rods> vBuilder = Measurer.builder();
 		vBuilder
 		.add(Measurements.orderParameter())
+		.add(Measurements.rodCorrelation())
 		.add(Measurements.averageRodDistance())
 		.add(Measurements.averageRodRadius())
 		.add(Measurements.averageRodLength())
