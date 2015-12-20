@@ -12,7 +12,23 @@ import java.util.stream.Stream;
 
 public class KdTree<P>
 {
-
+	public enum Side
+	{
+		Left(-1), Right(1);
+		
+		private final int mInt;
+		
+		Side(int pInt)
+		{
+			mInt = pInt;
+		}
+		
+		public static Side convert(int pComparison)
+		{
+			return pComparison > 0 ? Right : Left;
+		}
+	}
+	
 	public interface PointSelector<P>
 	{
 		/**
@@ -20,7 +36,7 @@ public class KdTree<P>
 		 * point.
 		 * 
 		 * @param pPoint
-		 *            the point that defines the plan
+		 *            the point that defines the plane
 		 * @param pInsertPoint
 		 *            the point to be inserted
 		 * @param pAxis
@@ -28,7 +44,7 @@ public class KdTree<P>
 		 * @return -1 if pInsertPoint is left of pPoint, 1 if pInsertPoint is
 		 *         right of pPoint and 0 if it is equal.
 		 */
-		int chooseSide(P pPoint, P pInsertPoint, int pAxis);
+		Side chooseSide(P pPoint, P pInsertPoint, int pAxis);
 
 		/**
 		 * Choose axis which defines the plane
@@ -39,19 +55,16 @@ public class KdTree<P>
 		int chooseAxis(int pDepth);
 
 		/**
-		 * If a range of points spans multiple sides of a plane split it into
-		 * two points
+		 * Is the test point located between the two end points;
 		 * 
-		 * @param pStart
-		 *            the start of the range
-		 * @param pEnd
-		 *            the end of the range
-		 * @param pAxis
-		 *            the axis perpendicular to the plane
-		 * @return the point which the range intersects the plane
+		 * @param pTest the point to test
+		 * @param pEnd1 endpoint 1
+		 * @param pEnd2 endpoint 2
+		 * @param pAxis axis that defines the range of pEnd1 and pEnd2
+		 * @return
 		 */
-		P splitPoint(P pStart, P pEnd, P pPlane, int pAxis);
-
+		boolean contains(P pTest, P pEnd1, P pEnd2, int pAxis);
+		
 		/**
 		 * @return the dimension of P
 		 */
@@ -72,10 +85,10 @@ public class KdTree<P>
 		@Override
 		public int compare(P pPoint1, P pPoint2)
 		{
-			return mPointSelector.chooseSide(pPoint1, pPoint2, mAxis);
+			return mPointSelector.chooseSide(pPoint1, pPoint2, mAxis).mInt;
 		}
 	}
-
+	
 	private static class Node<P>
 	{
 		private Node<P> mRightChild;
@@ -102,6 +115,11 @@ public class KdTree<P>
 			}
 			return vChildren.stream();
 		}
+		
+		boolean isLeaf()
+		{
+			return false;
+		}
 
 		int getAxis()
 		{
@@ -111,6 +129,11 @@ public class KdTree<P>
 		P getPoint()
 		{
 			return mPoint;
+		}
+		
+		Node<P> child(Side pSide)
+		{
+			return pSide.equals(Side.Left) ? left() : right();
 		}
 
 		Node<P> left()
@@ -167,15 +190,23 @@ public class KdTree<P>
 		{
 			return "";
 		}
+		
+		@Override
+		boolean isLeaf()
+		{
+			return true;
+		}
 	}
 
 	private final Node<P> mRoot;
 	private final PointSelector<P> mPointSelector;
+	private final int mDepth;
 
 	public KdTree(PointSelector<P> pPointSelector, List<P> pPoints)
 	{
 		mPointSelector = pPointSelector;
-		mRoot = kdtree(pPoints, 0);
+		mRoot = kdtree(new ArrayList<P>(pPoints), 0);
+		mDepth = (int)Math.ceil(Math.log(pPoints.size())/Math.log(2));
 	}
 
 	private Node<P> kdtree(List<P> pPoints, int pDepth)
@@ -208,6 +239,11 @@ public class KdTree<P>
 		}
 		return vNode;
 	}
+	
+	public int getDepth()
+	{
+		return mDepth;
+	}
 
 	public P find(P pPoint)
 	{
@@ -220,36 +256,40 @@ public class KdTree<P>
 		return vNext.mLeftChild == null && vNext.mRightChild == null ? vNext.mPoint : find(pSearchPoint, vNext);
 	}
 
-	public Set<P> find(P pStart, P pEnd)
+	/**
+	 * Find the set of points contained in the range
+	 * 
+	 * @param pRange the hypercube which defines the range
+	 * @return the set of leaf nodes contained in the hyper cube
+	 */
+	public Set<P> find(HyperCube<P> pRange)
 	{
-		return find(pStart, pEnd, mRoot);
+		return find(mRoot, pRange);
 	}
-
-	private Set<P> find(P pStart, P pEnd, Node<P> pNode)
+	
+	private Set<P> find(Node<P> pNode, HyperCube<P> pRange)
 	{
-		Node<P> vStart = chooseNode(pStart, pNode);
-		Node<P> vEnd = chooseNode(pEnd, pNode);
-		Set<P> vNodes = new HashSet<P>();
-		if (vStart.equals(vEnd))
+		Set<P> vPoints = new HashSet<P>();
+		if (pNode.isLeaf())
 		{
-			if (vStart.equals(pNode))
-			{
-				vNodes.add(pNode.getPoint());
-			}
-			else
-			{
-				vNodes = find(pStart, pEnd, vStart);
-			}
+			vPoints.add(pNode.getPoint());
 		}
 		else
 		{
-			P vSplit = mPointSelector.splitPoint(pStart, pEnd,
-					pNode.getPoint(), pNode.getAxis());
-			vNodes.addAll(find(pStart, vSplit, pNode));
-			vNodes.addAll(find(vSplit, pEnd, pNode));
+			if (pRange.intersects(pNode.getPoint()))
+			{
+				vPoints.addAll(find(pNode.left(), pRange));
+				vPoints.addAll(find(pNode.right(), pRange));
+			}
+			else
+			{
+				Side vSide = mPointSelector.chooseSide(pNode.getPoint(), pRange.getCorner(pNode.getAxis()).getA(), pNode.getAxis());
+				vPoints.addAll(find(pNode.child(vSide), pRange));
+			}
 		}
-		return vNodes;
+		return vPoints;
 	}
+	
 
 	public String toDot()
 	{
@@ -274,12 +314,9 @@ public class KdTree<P>
 
 	private Node<P> chooseNode(P pSearchPoint, Node<P> pNode)
 	{
-		int vChoice = mPointSelector.chooseSide(pSearchPoint, pNode.getPoint(), 
-				pNode.getAxis());
-		return vChoice == 0 ? pNode : vChoice == -1 ? pNode.left() : pNode
-				.right();
+		return pNode.child(mPointSelector.chooseSide(pSearchPoint, pNode.getPoint(), pNode.getAxis()));
 	}
-
+	
 	private int splitIndex(int pSize)
 	{
 		return Math.floorDiv(pSize - 1, 2);

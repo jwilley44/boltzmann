@@ -155,17 +155,22 @@ public class ParameterCombiner
 		
 		public Object get(String pName)
 		{
-			return mMap.get(pName);
+			Object vReturn = mMap.get(pName);
+			if (vReturn == null)
+			{
+				throw new RuntimeException(pName + " was not found in parameter map.");
+			}
+			return vReturn;
 		}
 		
 		public int getInt(String pName)
 		{
-			return ((Integer)mMap.get(pName)).intValue();
+			return ((Integer)get(pName)).intValue();
 		}
 		
 		public double getDouble(String pName)
 		{
-			return ((Double)mMap.get(pName)).doubleValue();
+			return ((Double)get(pName)).doubleValue();
 		}
 		
 		public String getString(String pName)

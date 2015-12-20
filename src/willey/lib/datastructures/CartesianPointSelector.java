@@ -1,19 +1,19 @@
 package willey.lib.datastructures;
 
 import willey.lib.datastructures.KdTree.PointSelector;
+import willey.lib.datastructures.KdTree.Side;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
 
 public class CartesianPointSelector implements PointSelector<CartesianVector>
 {
 
 	@Override
-	public int chooseSide(CartesianVector pPoint, CartesianVector pInsertPoint,
+	public Side		 chooseSide(CartesianVector pPoint, CartesianVector pInsertPoint,
 			int pAxis)
 	{
 		double vPoint = pPoint.getCoordinate(pAxis);
 		double vInsertPoint = pInsertPoint.getCoordinate(pAxis);
-		return Double.compare(vPoint, vInsertPoint);
+		return Side.convert(Double.compare(vPoint, vInsertPoint));
 	}
 
 	@Override
@@ -23,17 +23,15 @@ public class CartesianPointSelector implements PointSelector<CartesianVector>
 	}
 
 	@Override
-	public  CartesianVector splitPoint(
-			CartesianVector pStart, CartesianVector pEnd,
-			CartesianVector pPlane, int pAxis)
+	public boolean contains(CartesianVector pTest, CartesianVector pEnd1,
+			CartesianVector pEnd2, int pAxis)
 	{
-		CartesianVector vNormal = CartesianVector.normal(pAxis);
-		double vT = vNormal.dotProduct(pPlane.subtract(pStart)) / vNormal.dotProduct(pStart.subtract(pEnd));
-		if (vT < 0)
-		{
-			vT = vNormal.dotProduct(pPlane.subtract(pEnd)) / vNormal.dotProduct(pStart.subtract(pEnd));
-		}
-		return new LineSegment(pStart, pEnd).getPoint(Math.abs(vT));
+		double vTest = pTest.getCoordinate(pAxis);
+		double vEnd1 = pEnd1.getCoordinate(pAxis);
+		double vEnd2 = pEnd2.getCoordinate(pAxis);
+		double vMax = Math.max(vEnd1, vEnd2);
+		double vMin = Math.min(vEnd1, vEnd2);
+		return vTest <= vMax && vTest >= vMin;
 	}
 
 	@Override
@@ -41,5 +39,4 @@ public class CartesianPointSelector implements PointSelector<CartesianVector>
 	{
 		return 3;
 	}
-
 }

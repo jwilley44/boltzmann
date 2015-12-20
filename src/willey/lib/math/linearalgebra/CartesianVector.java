@@ -28,6 +28,11 @@ public class CartesianVector
 	{
 		return new CartesianVector(pX, pY, pZ);
 	}
+	
+	public static CartesianVector of(double[] pCoordinates)
+	{
+		return new CartesianVector(pCoordinates);
+	}
 
 	private CartesianVector(double pX, double pY, double pZ)
 	{
