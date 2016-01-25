@@ -9,7 +9,7 @@ import willey.lib.physics.polymer.measurement.Measurements;
 
 public class Equilibrator<M extends Measurable>
 {
-	private int mEquilibration = 0;
+	private int mEquilibrationCount = 0;
 	
 	private int mTotalMoves = 0;
 	private int mValidMoves = 0;
@@ -64,7 +64,7 @@ public class Equilibrator<M extends Measurable>
 
 	public EquilibrationResult<M> getState()
 	{
-		return new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibration, mValidMoves,
+		return new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibrationCount, mValidMoves,
 				mTotalMoves);
 	}
 	
@@ -75,13 +75,19 @@ public class Equilibrator<M extends Measurable>
 		mAgregatedValid += mValidMoves;
 		mValidMoves = 0;
 	}
+	
+	public Equilibrator<M> convertToTerminating()
+	{
+		mEquilibrationCount = 1;
+		return this;
+	}
 
 	public EquilibrationResult<M> equilibrate()
 	{
 		EquilibrationResult<M> vResult = null;
 		try
 		{
-			while (!isEquilibrated() && mEquilibration > 0)
+			while (!isEquilibrated() && mEquilibrationCount > 0)
 			{
 				if (move())
 				{
@@ -90,9 +96,9 @@ public class Equilibrator<M extends Measurable>
 				addToTotal();
 			}
 			finish();
-			vResult = new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibration, mAgregatedValid,
+			vResult = new EquilibrationResult<M>(mEqulibration.getMeasurableState(), mEquilibrationCount, mAgregatedValid,
 					mAgregatedTotal);
-			mEquilibration++;
+			mEquilibrationCount++;
 		}
 		catch(Exception e)
 		{

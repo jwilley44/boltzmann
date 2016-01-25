@@ -49,6 +49,7 @@ public abstract class Experiment<M extends Measurable>
 	{
 		StreamUtil.multiplyStream(mParameterCombiner.getParameterCombinations(), mParameterCombiner.getNumberOfEquilibrations())
 				.map(mParameter2Equilibration).parallel()
+				.map(pEquilibration -> pEquilibration.convertToTerminating())
 				.map((pEquilibration) -> pEquilibration.equilibrate())
 				.forEach(mMeasurer);
 	}
