@@ -37,6 +37,8 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.rodCount())
 		.add(Measurements.polymerCenter())
 		.add(Measurements.polymerRodDistance())
+		.add(Measurements.polymerParallelRadius())
+		.add(Measurements.polymerPerpendicularRadius())
 		.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();
