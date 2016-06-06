@@ -9,7 +9,7 @@ Measurement<PR, Double>
 	@Override
 	public Double apply(PR pMeasurable)
 	{
-		return Measurements.averageRodDirection().apply(pMeasurable).dotProduct(pMeasurable.getDirection());
+		return Math.abs(Measurements.averageRodDirection().apply(pMeasurable).dotProduct(pMeasurable.getDirection()));
 	}
 
 	@Override
