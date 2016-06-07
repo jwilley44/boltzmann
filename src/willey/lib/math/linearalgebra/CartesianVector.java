@@ -232,9 +232,8 @@ public class CartesianVector
 	 */
 	public CartesianVector projectOntoPlane(CartesianVector pNormal)
 	{
-		CartesianVector vNorm = pNormal.unitVector();
-		CartesianVector vA = vNorm.crossProduct(this.crossProduct(vNorm));
-		return vA.scale(vA.dotProduct(this) / vA.magnitude());
+		CartesianVector vNormal = pNormal.unitVector();
+		return this.subtract(vNormal.scale(vNormal.dotProduct(this)));
 	}
 	
 	public CartesianPlane getNullSpace()
