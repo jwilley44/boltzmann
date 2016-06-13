@@ -147,6 +147,16 @@ public class Measurements
 		return new PolymerPerpendicularRadius<PR>();
 	}
 	
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerPerpendicularFractilization()
+	{
+		return new PolymerPerpendicularFractilization<PR>();
+	}
+	
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerParallelFractilization()
+	{
+		return new PolymerParallelFractilization<PR>();
+	}
+	
 	public static <R extends Rods> Measurement<R, Double> averageRodLength()
 	{
 		return new AverageRodLength<R>();

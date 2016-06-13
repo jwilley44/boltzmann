@@ -6,6 +6,7 @@ import java.io.IOException;
 import willey.lib.physics.polymer.experiment.Experiment;
 import willey.lib.physics.polymer.experiment.PolymerAndRodsExperiment;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
+import willey.lib.physics.polymer.measurement.Measurement;
 import willey.lib.physics.polymer.measurement.Measurements;
 import willey.lib.physics.polymer.measurement.Measurer;
 
@@ -39,6 +40,8 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.polymerRodDistance())
 		.add(Measurements.polymerParallelRadius())
 		.add(Measurements.polymerPerpendicularRadius())
+		.add(Measurements.polymerPerpendicularFractilization())
+		.add(Measurements.polymerParallelFractilization())
 		.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();
