@@ -21,21 +21,12 @@ class AverageRodDirection<R extends Rods> implements
 	private CartesianVector orient(CartesianVector pVector)
 	{
 		CartesianVector vVector = pVector;
-		double vSign = Math.signum(vVector.z());
-		if (vSign != 0)
-		{
-			vVector = vVector.scale(vSign);
-		} else
-		{
-			vSign = Math.signum(vVector.x());
-			if (vSign != 0)
-			{
-				vVector = vVector.scale(vSign);
-			} else
-			{
-				vVector = vVector.scale(Math.signum(vVector.y()));
-			}
-		}
+		double vZSign = Math.signum(vVector.z());
+		double vXSign = Math.signum(vVector.x());
+		double vYSign = Math.signum(vVector.y());
+		if (vZSign != 0) vVector = vVector.scale(vZSign);
+		else if  (vXSign != 0) vVector = vVector.scale(vXSign);
+		else if  (vYSign != 0) vVector = vVector.scale(vYSign);
 		return vVector;
 	}
 

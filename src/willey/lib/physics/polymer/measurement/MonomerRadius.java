@@ -8,7 +8,7 @@ class MonomerRadius<P extends Polymer> implements Measurement<P, Double>
 	@Override
 	public Double apply(P pMeasurable)
 	{
-		return Double.valueOf(pMeasurable.getMonomers().mapToDouble((pMonomer) -> pMonomer.interactionRadius()).sum() / pMeasurable.getSize());
+		return pMeasurable.getMonomers().map((pMonomer) -> Double.valueOf(pMonomer.interactionRadius())).findFirst().get();
 	}
 
 	@Override

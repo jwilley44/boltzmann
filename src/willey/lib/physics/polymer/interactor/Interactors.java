@@ -1,8 +1,12 @@
 package willey.lib.physics.polymer.interactor;
 
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
+import willey.lib.math.MathUtil;
 import willey.lib.util.StreamUtil;
 
 public interface Interactors
@@ -21,7 +25,7 @@ public interface Interactors
 	{
 		final Lattice vLattice = getLattice();
 		Function<Interactor, Interactor> vProjectFunction = (pInteractor) -> pInteractor.reposition(vLattice.projectIntoLattice(pInteractor.position()));
-		return stream().filter((pInteractor) -> !pInteractor.equals(pOldInteractor)).map(vProjectFunction);
+		return stream().filter((pInteractor) -> !pInteractor.position().coordinatesEqual(pOldInteractor.position())).map(vProjectFunction);
 	}
 	
 	default Stream<? extends Interactor> projectedStream()
@@ -33,11 +37,14 @@ public interface Interactors
 	
 	default double calculateDeltaEnergy(Interactor pOld, Interactor pNew)
 	{
-		return StreamUtil.nestedStream(
-				projectedStream(pOld),
-				getTestPoints(pNew)).mapToDouble((p) -> p.getA().energy(p.getB())).sum() - StreamUtil.nestedStream(
-						projectedStream(pOld),
+		List<Interactor> vOtherInteractors = projectedStream(pOld).collect(Collectors.toList());
+		double vNewEnergy = StreamUtil.nestedStream(
+				vOtherInteractors.stream(),
+				getTestPoints(pNew)).mapToDouble((p) -> p.getA().energy(p.getB())).sum();
+		double vOldEnergy = StreamUtil.nestedStream(
+						vOtherInteractors.stream(),
 						getTestPoints(pOld)).mapToDouble((p) -> p.getA().energy(p.getB())).sum();
+		return vNewEnergy - vOldEnergy;
 	}
 	
 	default double calculateEnergy()
@@ -66,17 +73,27 @@ public interface Interactors
 
 	default boolean randomMove() {
 		MovedInteractor vMoved = testMoveRandom();
-		Interactor vOld = vMoved.getOldInteractor();
-		Interactor vNew = vMoved.getNewInteractor();
-		boolean vValidMove = StreamUtil.nestedStream(
-				projectedStream(vOld),
-				getTestPoints(vNew))
-				.parallel()
-				.noneMatch((pPair) -> pPair.getA().interacts(pPair.getB()));
+		final Interactor vOld = vMoved.getOldInteractor().project(getLattice());
+		final Interactor vNew = vMoved.getNewInteractor();
+		double vDeltaEnergy = calculateDeltaEnergy(vOld, vNew);
+//		boolean vValidMove = StreamUtil.nestedStream(getTestPoints(vNew), projectedStream(vMoved.getOldInteractor()))
+//				.noneMatch(pPair -> ! acceptMove(vOld, pPair.getA(), pPair.getB()));
+//				
+		boolean vValidMove = MathUtil.getThreadLocal().nextDouble() < Math.exp(-vDeltaEnergy/10);
 		if (vValidMove)
 		{
-			replace(vOld, vNew);
+			replace(vMoved.getOldInteractor(), vMoved.getNewInteractor());
 		}
 		return vValidMove;
+	}
+	
+	default boolean acceptMove(Interactor pOldInteractor, Interactor pNewInteractor, Interactor pTest)
+	{
+		double vInteractionDistance = pNewInteractor.interactionDistance(pTest);
+		double vNewDistance = pNewInteractor.distance(pTest);
+		double vOldDistance = pOldInteractor.distance(pTest);
+	    double vNewEnergy = 1/(vNewDistance * vNewDistance);
+	    double vOldEnergy =1/(vOldDistance*vOldDistance);
+		return MathUtil.getThreadLocal().nextDouble() < Math.exp((vOldEnergy - vNewEnergy)/10);
 	}
 }

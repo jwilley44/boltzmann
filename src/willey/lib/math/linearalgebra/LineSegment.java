@@ -2,8 +2,12 @@ package willey.lib.math.linearalgebra;
 
 import static willey.lib.math.linearalgebra.CartesianVector.of;
 
-public class LineSegment
+import java.io.Serializable;
+
+public class LineSegment implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private final CartesianVector mStart;
 	private final CartesianVector mEnd;
 	private final CartesianVector mDirection;
@@ -223,5 +227,12 @@ public class LineSegment
 	public static LineSegment get(CartesianVector pStart, CartesianVector pEnd)
 	{
 		return new LineSegment(pStart, pEnd);
+	}
+	
+	public boolean segmentsEqual(LineSegment pLineSegment)
+	{
+		return pLineSegment.mDirection.coordinatesEqual(mDirection) &&
+				pLineSegment.mEnd.coordinatesEqual(mEnd) &&
+				pLineSegment.mStart.coordinatesEqual(mStart);
 	}
 }

@@ -18,6 +18,11 @@ public interface Interactor
 	
 	LineSegment getLineSegment();
 	
+	default Interactor project(Lattice pLattice)
+	{
+		return reposition(pLattice.projectIntoLattice(position()));
+	}
+	
 	default boolean interacts(Interactor pInteractor)
 	{
 		double vInteractionRadius = pInteractor.interactionRadius()
@@ -25,6 +30,11 @@ public interface Interactor
 		CartesianVector vClosest = pInteractor.getNearestPoint(this);
 		double vDistance = getDistance(vClosest);
 		return !acceptMove(vInteractionRadius, vDistance);
+	}
+	
+	default double distance(Interactor pInteractor)
+	{
+		return getDistance(pInteractor.getNearestPoint(this));
 	}
 	
 	default double interactionDistance(Interactor pInteractor)
@@ -40,7 +50,12 @@ public interface Interactor
 	{
 		CartesianVector vClosest = pInteractor.getNearestPoint(this);
 		double vDistance = getDistance(vClosest);
-		return 1 /(vDistance * vDistance);
+		return energy(vDistance, interactionDistance(pInteractor));
+	}
+	
+	static double energy(double pDistance, double pInteractionDistance)
+	{
+		return Math.pow(pInteractionDistance/pDistance, 12.0) - 2*Math.pow(pInteractionDistance/pDistance, 6);
 	}
 	
 	default boolean acceptMove(double pInteractionRadius, double pDistance)

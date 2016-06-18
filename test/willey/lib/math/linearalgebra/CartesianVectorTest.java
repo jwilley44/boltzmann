@@ -119,4 +119,20 @@ public class CartesianVectorTest extends AbstractTest
 		Assert.assertTrue(vAxis.isPerpendicular(vRotated));
 		assertEquals(vRadians, Math.acos(vVector.cosTheta(vRotated)), 1e-6);
 	}
+	
+	@Test
+	public void testProjectIntoPlane()
+	{
+		CartesianVector vV = CartesianVector.of(1,1,1);
+		CartesianVector vNormal = CartesianVector.of(0,0,1);
+		System.out.println(vV.projectOntoPlane(vNormal).toString());
+		System.out.println(simpleProject(vV, vNormal));
+		Assert.assertTrue(vV.projectOntoPlane(vNormal).coordinatesEqual(simpleProject(vV, vNormal)));
+	}
+	
+	private CartesianVector simpleProject(CartesianVector pV, CartesianVector pNormal)
+	{
+		CartesianVector vNormal = pNormal.unitVector();
+		return pV.subtract(vNormal.scale(pV.dotProduct(vNormal)));
+	}
 }

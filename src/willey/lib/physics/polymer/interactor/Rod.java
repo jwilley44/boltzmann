@@ -1,10 +1,13 @@
 package willey.lib.physics.polymer.interactor;
 
+import java.io.Serializable;
+
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.math.linearalgebra.LineSegment;
 
-public class Rod implements Interactor
+public class Rod implements Interactor, Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private final LineSegment mLineSegment;
 	private final double mRadius;
 

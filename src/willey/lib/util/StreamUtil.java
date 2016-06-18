@@ -1,6 +1,5 @@
 package willey.lib.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -37,9 +37,9 @@ public class StreamUtil
 	public static <A, B> Stream<Pair<A, B>> nestedStream(Stream<A> pAStream,
 			Stream<B> pBStream)
 	{
-		Check.kIllegalArgument.checkTrue(!pAStream.equals(pBStream), "pA and pB cannot be the same instance.");
-		List<B> vBStream = ConsumerUtil.toCollection(pBStream, new ArrayList<B>());
-		return pAStream.flatMap((pA) -> vBStream.stream().map((pB) -> Pair.of(pA, pB)));
+		final List<B> vBStream = pBStream.collect(Collectors.toList());
+		return pAStream.collect(Collectors.toList()).stream()
+				.flatMap(pA -> vBStream.stream().map(pB -> Pair.of(pA, pB)));
 	}
 	
 	public static <A, B, R> Function<A, Stream<R>> crossWith(

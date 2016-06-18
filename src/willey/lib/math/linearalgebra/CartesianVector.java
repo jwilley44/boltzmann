@@ -2,6 +2,7 @@ package willey.lib.math.linearalgebra;
 
 import static willey.lib.math.MathUtil.equal;
 
+import java.io.Serializable;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -10,8 +11,10 @@ import java.util.stream.StreamSupport;
 import willey.lib.math.MathUtil;
 import willey.lib.util.Check;
 
-public class CartesianVector
+public class CartesianVector implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private static final double kEqualTolerance = 1e-14;
 	private static final CartesianVector kZeroVector = new CartesianVector(0,
 			0, 0);
