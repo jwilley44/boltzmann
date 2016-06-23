@@ -3,15 +3,12 @@ package willey.lib.math.linearalgebra;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ejml.simple.SimpleMatrix;
-
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 
 public class MomentOfInertiaTensor
 {
 	private final Matrix mTensor;
-	SimpleMatrix v;
 	
 	public static MomentOfInertiaTensor get(List<CartesianVector> pVectors)
 	{
