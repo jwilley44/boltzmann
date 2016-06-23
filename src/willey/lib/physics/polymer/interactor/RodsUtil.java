@@ -54,17 +54,18 @@ class RodsUtil
 			@Override
 			Stream<CartesianVector> stream(int pCount)
 			{
-				Stream<Pair<Double, Double>> vXY = StreamUtil.zipStreams(
-						MathUtil.randomStream(pCount, 0, 1).boxed(), 
-						MathUtil.randomStream(pCount, 0, 1).boxed(), Pair::of);
-				
-				return StreamUtil.zipStreams(
-						vXY, 
-						MathUtil.randomStream(pCount, 0, 1).boxed(),Pair::of)
-						.map(pCoor -> CartesianVector.of(
-						pCoor.getA().getA().doubleValue(), 
-						pCoor.getA().getB().doubleValue(), 
-						pCoor.getB().doubleValue()));
+//				Stream<Pair<Double, Double>> vXY = StreamUtil.zipStreams(
+//						MathUtil.randomStream(pCount, 0, 1).boxed(), 
+//						MathUtil.randomStream(pCount, 0, 1).boxed(), Pair::of);
+//				
+//				return StreamUtil.zipStreams(
+//						vXY, 
+//						MathUtil.randomStream(pCount, 0, 1).boxed(),Pair::of)
+//						.map(pCoor -> CartesianVector.of(
+//						pCoor.getA().getA().doubleValue(), 
+//						pCoor.getA().getB().doubleValue(), 
+//						pCoor.getB().doubleValue()));
+				return StreamUtil.toStream(() -> CartesianVector.randomUnitVector(), pCount);
 			}
 		},
 		Ordered

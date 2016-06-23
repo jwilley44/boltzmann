@@ -63,17 +63,6 @@ public class PolymerImpl implements Polymer
 		mStateId = hashCode();
 	}
 	
-	public boolean searchInteractions(Monomer pMonomer)
-	{
-		//search covertree
-		return false;
-	}
-	
-	public boolean searchInteractions(final Rod pRod)
-	{
-		return stream().noneMatch(pMonomer -> pRod.interacts(pMonomer));
-	}
-	
 	private PolymerImpl(PolymerImpl pPolymer)
 	{
 		mSize = pPolymer.mSize;
@@ -215,14 +204,14 @@ public class PolymerImpl implements Polymer
 			mPolymer = pPolymer;
 		}
 		
-		@Override
-		public Stream<Interactor> getTestPoints(Interactor pNew)
-		{
-			List<Interactor> vList = new ArrayList<Interactor>();
-			vList.add(pNew.reposition(getLattice()
-				.projectIntoLattice(pNew.position())));
-			return vList.stream();
-		}
+//		@Override
+//		public Stream<Interactor> getTestPoints(Interactor pNew)
+//		{
+//			List<Interactor> vList = new ArrayList<Interactor>();
+//			vList.add(pNew.reposition(getLattice()
+//				.projectIntoLattice(pNew.position())));
+//			return vList.stream();
+//		}
 
 		@Override
 		public Stream<? extends Interactor> stream()

@@ -17,7 +17,7 @@ public class Measurements
 		return new Energy<M>();
 	}
 	
-	public static <M extends Measurable> Measurement<M, Integer> interactions()
+	public static <M extends Measurable> Measurement<M, Long> interactions()
 	{
 		return new Interactions<M>();
 	}

@@ -1,6 +1,5 @@
 package willey.lib.util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -15,12 +14,12 @@ public class FunctionUtil
 		return (pFrom) -> StreamUtil.toStream(() -> pFrom, pCount);
 	}
 	
-	static <A, B> Function<A, Stream<Pair<A, B>>> getIncrementFunction(Stream<B> pStream)
+	static <A, B> Function<A, Stream<Pair<A, B>>> getIncrementFunction(List<B> pStream)
 	{
 		return getIncrementFunction(pStream, (pInt) -> Integer.valueOf(pInt + 1));
 	}
 	
-	static <A, B> Function<A, Stream<Pair<A, B>>> getIncrementFunction(Stream<B> pStream, IntFunction<Integer> pIncrementFunction)
+	static <A, B> Function<A, Stream<Pair<A, B>>> getIncrementFunction(List<B> pStream, IntFunction<Integer> pIncrementFunction)
 	{
 		return new IncrementedStreamFunction<A, B>(pStream, pIncrementFunction);
 	}
@@ -44,11 +43,11 @@ public class FunctionUtil
 		private final IntFunction<Integer> mIncrementFunction;
 		private final List<B> mBStream;
 		
-		public IncrementedStreamFunction(Stream<B> pBStream, IntFunction<Integer> pIncrementFunction)
+		public IncrementedStreamFunction(List<B> pBList, IntFunction<Integer> pIncrementFunction)
 		{
 			mIncrementFunction = pIncrementFunction;
 			mIndex = mIncrementFunction.apply(0).intValue();
-			mBStream = ConsumerUtil.toCollection(pBStream, new ArrayList<B>());
+			mBStream = pBList;
 		}
 
 		@Override

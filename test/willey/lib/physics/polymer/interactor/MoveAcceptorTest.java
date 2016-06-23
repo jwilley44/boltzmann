@@ -1,6 +1,5 @@
 package willey.lib.physics.polymer.interactor;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class MoveAcceptorTest

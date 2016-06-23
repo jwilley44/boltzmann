@@ -26,7 +26,6 @@ public class PolymerExperimentApp extends PhysicsExperimentApp
 			.add(Measurements.interactions())
 			.add(Measurements.monomerDirectionCorrelation())
 			.add(Measurements.monomerRadius())
-			.add(Measurements.energy())
 			.add(Measurements.hash());
 		new PolymerExperiment(new File(pArgs[0]), vBuilder.build()).run();
 	}

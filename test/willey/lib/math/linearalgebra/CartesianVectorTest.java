@@ -1,5 +1,7 @@
 package willey.lib.math.linearalgebra;
 
+import java.util.Arrays;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -128,6 +130,20 @@ public class CartesianVectorTest extends AbstractTest
 		System.out.println(vV.projectOntoPlane(vNormal).toString());
 		System.out.println(simpleProject(vV, vNormal));
 		Assert.assertTrue(vV.projectOntoPlane(vNormal).coordinatesEqual(simpleProject(vV, vNormal)));
+	}
+	
+	@Test
+	public void testSum()
+	{
+		CartesianVector v1 = randomUnitVector();
+		CartesianVector v2 = randomUnitVector();
+		CartesianVector v3 = randomUnitVector();
+		CartesianVector v4 = randomUnitVector();
+		
+		CartesianVector vExpected = v1.add(v2).add(v3).add(v4);
+		CartesianVector vActual = Arrays.asList(v1, v2, v3, v4).stream().collect(CartesianVector.sumVectors());
+		
+		Assert.assertTrue(vExpected.coordinatesEqual(vActual));
 	}
 	
 	private CartesianVector simpleProject(CartesianVector pV, CartesianVector pNormal)

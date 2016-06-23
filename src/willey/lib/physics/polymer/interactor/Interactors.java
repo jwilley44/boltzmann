@@ -3,7 +3,6 @@ package willey.lib.physics.polymer.interactor;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
@@ -73,27 +72,16 @@ public interface Interactors
 
 	default boolean randomMove() {
 		MovedInteractor vMoved = testMoveRandom();
-		final Interactor vOld = vMoved.getOldInteractor().project(getLattice());
+		final Interactor vOld = vMoved.getOldInteractor();
 		final Interactor vNew = vMoved.getNewInteractor();
-		double vDeltaEnergy = calculateDeltaEnergy(vOld, vNew);
 //		boolean vValidMove = StreamUtil.nestedStream(getTestPoints(vNew), projectedStream(vMoved.getOldInteractor()))
 //				.noneMatch(pPair -> ! acceptMove(vOld, pPair.getA(), pPair.getB()));
-//				
-		boolean vValidMove = MathUtil.getThreadLocal().nextDouble() < Math.exp(-vDeltaEnergy/10);
+		double vDeltaEnergy = calculateDeltaEnergy(vOld, vNew);
+		boolean vValidMove = MathUtil.getThreadLocal().nextDouble() <= Math.exp(-vDeltaEnergy);
 		if (vValidMove)
 		{
 			replace(vMoved.getOldInteractor(), vMoved.getNewInteractor());
 		}
 		return vValidMove;
-	}
-	
-	default boolean acceptMove(Interactor pOldInteractor, Interactor pNewInteractor, Interactor pTest)
-	{
-		double vInteractionDistance = pNewInteractor.interactionDistance(pTest);
-		double vNewDistance = pNewInteractor.distance(pTest);
-		double vOldDistance = pOldInteractor.distance(pTest);
-	    double vNewEnergy = 1/(vNewDistance * vNewDistance);
-	    double vOldEnergy =1/(vOldDistance*vOldDistance);
-		return MathUtil.getThreadLocal().nextDouble() < Math.exp((vOldEnergy - vNewEnergy)/10);
 	}
 }

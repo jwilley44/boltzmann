@@ -1,0 +1,9 @@
+<ivysettings>
+	<property name="ivy.cache.local" value="${user.home}/.ivy2/cache"
+		override="false" />
+	<caches defaultCacheDir="${ivy.cache.local}" />
+	<settings defaultResolver='central' />
+	<resolvers>
+		<ibiblio name='central' m2compatible='true' />
+	</resolvers>
+</ivysettings>

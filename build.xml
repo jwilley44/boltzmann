@@ -1,4 +1,33 @@
-<project name="simpleCompile" default="compile" basedir=".">
+<project name="simpleCompile" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property name="lib" location="lib" />
+	<property name="bin" location="bin" />
+	<property name="ivy.version" value="2.4.0" />
+
+	<available property="ivy.installed" file="${bin}/ivy-${ivy.version}.jar" />
+
+	<target name="ivy.download" unless="ivy.installed">
+		<mkdir dir="${bin}" />
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar" dest="${bin}/ivy-${ivy.version}.jar" usetimestamp="true" />
+	</target>
+
+	<target name="ivy.init" depends="ivy.download" unless="ivy.initialized">
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${bin}/ivy-${ivy.version}.jar" />
+		<fail if="ivy.dep.file" message="Can't double set ivy.dep.file" />
+		<property name="ivy.dep.file" value="${basedir}/ivy.xml" />
+		<ivy:configure file="ivy.config.xml" />
+		<ivy:info file="ivy.xml" />
+		<property name="ivy.initialized" value="true" />
+	</target>
+
+	<target name="ivy.resolve" depends="ivy.init" description="Resolve dependencies with Ivy">
+		<ivy:resolve />
+	</target>
+
+	<target name="ivy.retrieve" depends="ivy.init" description="Retrieve dependencies with Ivy">
+		<ivy:retrieve pattern="${lib}/[artifact]-[revision].[ext]" type="jar,bundle" sync="true" />
+	</target>
+
 	<target name="init">
 		<property name="sourceDir" value="src" />
 		<property name="outputDir" value="bld" />
@@ -6,12 +35,17 @@
 	<target name="clean" depends="init">
 		<delete dir="${outputDir}" />
 	</target>
-	<target name="prepare" depends="clean">
+	<target name="prepare" depends="clean,ivy.retrieve">
 		<mkdir dir="${outputDir}" />
 	</target>
 	<target name="compile" depends="prepare">
 		<javac srcdir="${sourceDir}" destdir="${outputDir}">
 			<compilerarg line="-version" />
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</javac>
 		<exec executable="git">
 			<arg value="rev-parse" />
@@ -19,9 +53,10 @@
 			<redirector output="${outputDir}/willey/lib/util/Version.txt" />
 		</exec>
 		<copy todir="${outputDir}">
-			<fileset dir="scripts" includes="*.sh"/>
+			<fileset dir="scripts" includes="*.sh" />
 		</copy>
 		<chmod file="${outputDir}/*.sh" perm="+x" />
 		<chmod file="${outputDir}/*.R" perm="+x" />
 	</target>
+
 </project>

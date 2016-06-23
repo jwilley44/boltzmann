@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.math.linearalgebra.LineSegment;
 import willey.lib.util.ConsumerUtil;
-import willey.lib.util.StreamUtil;
 
 public class InteractorsTest
 {
@@ -46,6 +42,7 @@ public class InteractorsTest
 //		}
 //	}
 
+	@SuppressWarnings("unused")
 	private static class TestInteractors implements Interactors
 	{
 

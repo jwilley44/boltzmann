@@ -25,11 +25,7 @@ public interface Interactor
 	
 	default boolean interacts(Interactor pInteractor)
 	{
-		double vInteractionRadius = pInteractor.interactionRadius()
-				+ interactionRadius();
-		CartesianVector vClosest = pInteractor.getNearestPoint(this);
-		double vDistance = getDistance(vClosest);
-		return !acceptMove(vInteractionRadius, vDistance);
+		return getDistance(pInteractor) <= interactionDistance(pInteractor);
 	}
 	
 	default double distance(Interactor pInteractor)
@@ -39,11 +35,12 @@ public interface Interactor
 	
 	default double interactionDistance(Interactor pInteractor)
 	{
-		double vInteractionRadius = pInteractor.interactionRadius()
-				+ interactionRadius();
-		CartesianVector vClosest = pInteractor.getNearestPoint(this);
-		double vDistance = getDistance(vClosest);
-		return vInteractionRadius-vDistance;
+		return interactionRadius() + pInteractor.interactionRadius();
+	}
+	
+	default double getDistance(Interactor pInteractor)
+	{
+		return getDistance(pInteractor.getNearestPoint(this));
 	}
 	
 	default double energy(Interactor pInteractor)
@@ -55,7 +52,7 @@ public interface Interactor
 	
 	static double energy(double pDistance, double pInteractionDistance)
 	{
-		return Math.pow(pInteractionDistance/pDistance, 12.0) - 2*Math.pow(pInteractionDistance/pDistance, 6);
+		return pDistance >= pInteractionDistance ? 0 : 1/(pDistance*pDistance);
 	}
 	
 	default boolean acceptMove(double pInteractionRadius, double pDistance)

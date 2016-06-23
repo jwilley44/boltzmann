@@ -6,7 +6,6 @@ import java.io.IOException;
 import willey.lib.physics.polymer.experiment.Experiment;
 import willey.lib.physics.polymer.experiment.PolymerAndRodsExperiment;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
-import willey.lib.physics.polymer.measurement.Measurement;
 import willey.lib.physics.polymer.measurement.Measurements;
 import willey.lib.physics.polymer.measurement.Measurer;
 
@@ -30,8 +29,6 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.monomerRadius())
 		.add(Measurements.orderParameter())
 		.add(Measurements.averageRodDistance())
-		.add(Measurements.averageRodRadius())
-		.add(Measurements.averageRodLength())
 		.add(Measurements.averageRodDirection())
 		.add(Measurements.polymerRodCorrelation())
 		.add(Measurements.occupiedVolume())

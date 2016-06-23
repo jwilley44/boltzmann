@@ -64,16 +64,19 @@ public class StreamUtil
 				Spliterators.spliteratorUnknownSize(pIterator, 0), pIsParallel);
 	}
 	
+	public static <A, B> Stream<Pair<A, B>> getIncrementedStream(List<A> pA, List<B> pB)
+	{
+		return getIncrementedStream(pA.stream(), pB.stream());
+	}
+	
 	public static <A, B> Stream<Pair<A, B>> getIncrementedStream(Stream<A> pStream, Stream<B> pStream2Increment)
 	{
-		Check.kIllegalArgument.checkTrue(!pStream.equals(pStream2Increment), "pStream and pStream2Increment cannot be the same instance.");
-		return pStream.flatMap(FunctionUtil.getIncrementFunction(pStream2Increment));
+		return pStream.flatMap(FunctionUtil.getIncrementFunction(pStream2Increment.collect(Collectors.toList())));
 	}
 	
 	public static <A, B> Stream<Pair<A, B>> getIncrementedStream(Stream<A> pStream, Stream<B> pStream2Increment, IntFunction<Integer> pIncrementFunction)
 	{
-		Check.kIllegalArgument.checkTrue(!pStream.equals(pStream2Increment), "pStream and pStream2Increment cannot be the same instance.");
-		return pStream.flatMap(FunctionUtil.getIncrementFunction(pStream2Increment, pIncrementFunction));
+		return pStream.collect(Collectors.toList()).stream().flatMap(FunctionUtil.getIncrementFunction(pStream2Increment.collect(Collectors.toList()), pIncrementFunction));
 	}
 	
 	@SafeVarargs

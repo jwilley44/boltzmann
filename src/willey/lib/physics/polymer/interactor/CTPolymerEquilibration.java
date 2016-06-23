@@ -3,7 +3,6 @@ package willey.lib.physics.polymer.interactor;
 import java.util.stream.Stream;
 
 import willey.lib.datastructures.CoverTree;
-import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianMetric;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;

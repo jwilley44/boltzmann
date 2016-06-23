@@ -3,8 +3,15 @@ package willey.lib.math.linearalgebra;
 import static willey.lib.math.MathUtil.equal;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Spliterators;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,6 +33,8 @@ public class CartesianVector implements Serializable
 	private final double[] mCoordinates = new double[3];
 
 	private double mMagnitude = -1;
+	
+	private CartesianVector mUnitVector = null;
 
 	public static CartesianVector of(double pX, double pY, double pZ)
 	{
@@ -50,6 +59,11 @@ public class CartesianVector implements Serializable
 	private CartesianVector(double[] pCoordinates)
 	{
 		this(pCoordinates[0], pCoordinates[1], pCoordinates[2]);
+	}
+	
+	public double[] getCoordinates()
+	{
+		return mCoordinates;
 	}
 	
 	public double getCoordinate(int pIndex)
@@ -166,7 +180,11 @@ public class CartesianVector implements Serializable
 
 	public CartesianVector unitVector()
 	{
-		return scale(1 / magnitude());
+		if (mUnitVector == null)
+		{
+			mUnitVector = scale(1 / magnitude());
+		}
+		return mUnitVector;
 	}
 
 	public CartesianVector crossProduct(CartesianVector pVector)
@@ -275,6 +293,50 @@ public class CartesianVector implements Serializable
 	public static CartesianVector zeroVector()
 	{
 		return kZeroVector;
+	}
+	
+	public static Collector<CartesianVector, CartesianVector, CartesianVector> sumVectors()
+	{
+		return new VectorCollector();
+	}
+	
+	private static class VectorCollector implements Collector<CartesianVector, CartesianVector, CartesianVector>
+	{
+		private CartesianVector mMutable = zeroVector();
+
+		@Override
+		public Supplier<CartesianVector> supplier()
+		{
+			return () -> zeroVector();
+		}
+
+		@Override
+		public BiConsumer<CartesianVector, CartesianVector> accumulator()
+		{
+			return (p1, p2) -> p1.add(p2);
+		}
+
+		@Override
+		public BinaryOperator<CartesianVector> combiner()
+		{
+			return (p1, p2) -> mMutable = p1.add(p2);
+		}
+
+		@Override
+		public Function<CartesianVector, CartesianVector> finisher()
+		{
+			return p1 -> p1;
+		}
+
+		@Override
+		public Set<Characteristics> characteristics()
+		{
+			Set<Characteristics> vChar = new HashSet<Collector.Characteristics>();
+			vChar.add(Characteristics.CONCURRENT);
+			vChar.add(Characteristics.UNORDERED);
+			vChar.add(Characteristics.IDENTITY_FINISH);
+			return vChar;
+		}
 	}
 	
 	public static class VectorSum implements Consumer<CartesianVector>
