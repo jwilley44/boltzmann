@@ -141,7 +141,7 @@ public class CartesianVectorTest extends AbstractTest
 		CartesianVector v4 = randomUnitVector();
 		
 		CartesianVector vExpected = v1.add(v2).add(v3).add(v4);
-		CartesianVector vActual = Arrays.asList(v1, v2, v3, v4).stream().collect(CartesianVector.sumVectors());
+		CartesianVector vActual = Arrays.asList(v1, v2, v3, v4).stream().reduce(vectorSum()).get();
 		
 		Assert.assertTrue(vExpected.coordinatesEqual(vActual));
 	}

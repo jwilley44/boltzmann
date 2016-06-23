@@ -62,6 +62,11 @@ public class Measurements
 		return new MonomerRadius<P>();
 	}
 	
+	public static <PR extends PolymerAndRods> Measurement<PR, Double> monomerRodCorrelation()
+	{
+		return new MonomerRodCorrelation<PR>();
+	}
+	
 	public static <P extends Polymer> Measurement<P, List<Double>> polymerFractalization()
 	{
 		return new PolymerFractalization<P>();
@@ -153,6 +158,16 @@ public class Measurements
 	}
 	
 	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerParallelFractilization()
+	{
+		return new PolymerParallelFractilization<PR>();
+	}
+	
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerPerpendicularFractilization2()
+	{
+		return new PolymerPerpendicularFractilization<PR>();
+	}
+	
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerParallelFractilization2()
 	{
 		return new PolymerParallelFractilization<PR>();
 	}

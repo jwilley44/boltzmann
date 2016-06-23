@@ -1,7 +1,6 @@
 package willey.lib.physics.polymer.measurement;
 
-import java.util.stream.Collectors;
-
+import static willey.lib.math.linearalgebra.CartesianVector.averageVector;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.interactor.Rods;
 
@@ -11,10 +10,9 @@ class AverageRodDirection<R extends Rods> implements
 	@Override
 	public CartesianVector apply(R pMeasurable)
 	{
-		return MeasurementUtil.averageDirection(
-				pMeasurable.getRods()
+				return pMeasurable.getRods()
 				.map(pRod -> pRod.direction().unitVector())
-				.collect(Collectors.toList()));
+				.collect(averageVector());
 	}
 
 	@Override

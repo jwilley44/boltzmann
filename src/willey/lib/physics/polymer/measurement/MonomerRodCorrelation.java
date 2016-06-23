@@ -5,26 +5,22 @@ import static willey.lib.physics.polymer.measurement.MeasurementUtil.correlation
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
 
-class RodPolymerCorrelation<PR extends PolymerAndRods> implements
+public class MonomerRodCorrelation<PR extends PolymerAndRods> implements
 		Measurement<PR, Double>
 {
 
 	@Override
 	public Double apply(PR pFrom)
 	{
-		CartesianVector vAverageRodDirection = pFrom.getRods().map(pRod -> pRod.direction())
-						.collect(averageVector());
-		double vCorrelation = pFrom
-				.getDirections()
-				.mapToDouble(
-						(pDirection) -> correlation(vAverageRodDirection,
-								pDirection)).sum();
-		return Double.valueOf(vCorrelation / (pFrom.getSize() - 1));
+		CartesianVector vAverageRodDirection = 
+				pFrom.getRods().map(pRod -> pRod.direction()).collect(averageVector());
+		CartesianVector vAverageMonomerDirection = pFrom.getDirections().collect(averageVector());
+		return Double.valueOf(correlation(vAverageMonomerDirection, vAverageRodDirection));
 	}
 
 	@Override
 	public String getName()
 	{
-		return "rod.polymer.correlation";
+		return "monomer.rod.correlation";
 	}
 }

@@ -1,5 +1,7 @@
 package willey.lib.physics.polymer.measurement;
 
+import static willey.lib.math.linearalgebra.CartesianVector.vectorSum;
+
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -7,8 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import static willey.lib.math.linearalgebra.CartesianVector.*;
-import willey.lib.math.linearalgebra.MomentOfInertiaTensor;
 import willey.lib.physics.polymer.interactor.Interactor;
 import willey.lib.physics.polymer.interactor.Measurable;
 import willey.lib.physics.polymer.interactor.Polymer;
@@ -95,16 +95,10 @@ public class MeasurementUtil
 				/ (pDirections.size() * vOrderParameter);
 	}
 
-	public static CartesianVector averageDirection(
-			List<CartesianVector> pDirections)
-	{
-		return MomentOfInertiaTensor.get(pDirections).dominantDirection();
-	}
-
 	public static CartesianVector polymerPosition(Polymer pPolymer)
 	{
 		return pPolymer.getMonomers().map(pMonomer -> pMonomer.position())
-				.collect(sumVectors());
+				.reduce(vectorSum()).get();
 	}
 	
 	public static List<Double> arcLength2Distance(List<CartesianVector> pPositions)

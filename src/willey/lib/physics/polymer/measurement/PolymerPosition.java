@@ -10,7 +10,7 @@ class PolymerPosition<P extends Polymer> implements
 	public CartesianVector apply(P pMeasurable)
 	{
 		return pMeasurable.getMonomers().map(pMonomer -> pMonomer.position())
-				.collect(CartesianVector.sumVectors());
+				.reduce(CartesianVector.vectorSum()).get();
 	}
 
 	@Override

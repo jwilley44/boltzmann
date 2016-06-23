@@ -1,7 +1,7 @@
 package willey.lib.physics.polymer.measurement;
 
+import static willey.lib.math.linearalgebra.CartesianVector.averageVector;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import willey.lib.math.linearalgebra.CartesianVector;
@@ -14,37 +14,18 @@ public class PolymerPerpendicularFractilization2<PR extends PolymerAndRods>
 	@Override
 	public List<Double> apply(PR pMeasurable)
 	{
-		CartesianVector vRodDirection = MeasurementUtil
-				.averageDirection(pMeasurable.getRods()
+		CartesianVector vRodDirection = pMeasurable.getRods()
 						.map(pRod -> pRod.direction().unitVector())
-						.collect(Collectors.toList()));
+						.collect(averageVector());
 		List<CartesianVector> vMonomerPositions = pMeasurable.getMonomers()
 				.map(pMonomer -> pMonomer.position())
 				.collect(Collectors.toList());
-		return ArcLength2Distance.calcDistances(new PerpendicularFunction(
-				vRodDirection), vMonomerPositions);
+		return MeasurementUtil.arcLenth2PependicularDistance(vRodDirection, vMonomerPositions);
 	}
 
 	@Override
 	public String getName()
 	{
 		return "polymer.parallel.fractilization.2";
-	}
-
-	private static class PerpendicularFunction implements
-			BiFunction<CartesianVector, CartesianVector, Double>
-	{
-		private final CartesianVector mDirection;
-
-		PerpendicularFunction(CartesianVector pDirection)
-		{
-			mDirection = pDirection;
-		}
-
-		@Override
-		public Double apply(CartesianVector pV1, CartesianVector pV2)
-		{
-			return Double.valueOf(pV1.subtract(pV2).projectOntoPlane(mDirection).magnitude());
-		}
 	}
 }

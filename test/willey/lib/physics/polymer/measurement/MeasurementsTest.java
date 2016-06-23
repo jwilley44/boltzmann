@@ -1,7 +1,7 @@
 package willey.lib.physics.polymer.measurement;
 
-import static willey.lib.math.linearalgebra.CartesianVector.of;
 import static java.util.Arrays.asList;
+import static willey.lib.math.linearalgebra.CartesianVector.of;
 import static willey.lib.math.linearalgebra.CartesianVector.randomUnitVector;
 import static willey.lib.math.linearalgebra.CartesianVector.randomVector;
 
@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.MomentOfInertiaTensor;
 
 public class MeasurementsTest
 {
@@ -78,12 +77,9 @@ public class MeasurementsTest
 	@Test
 	public void testMomentOfInertia()
 	{
-		List<CartesianVector> vDirections = Arrays.asList(randomUnitVector(), randomUnitVector(), randomUnitVector());
-		MomentOfInertiaTensor vMomentOfInertiaTensor = new MomentOfInertiaTensor(vDirections);
-		CartesianVector vVector = randomVector().scale(2.0);
-		CartesianVector vAverageDirection = vMomentOfInertiaTensor.dominantDirection();
-		double vOrderParameter = MeasurementUtil.orderParameter(vDirections);
-		System.out.print(vVector + " " + vAverageDirection + " " + vOrderParameter);
+		CartesianVector vDirection = CartesianVector.of(0,0,1);
+		CartesianVector vAverCartesianVector = Arrays.asList(vDirection, vDirection.scale(-1), vDirection.scale(2)).stream().collect(CartesianVector.averageVector());
+		Assert.assertTrue(vDirection.coordinatesEqual(vAverCartesianVector));
 	}
 	
 	@Test

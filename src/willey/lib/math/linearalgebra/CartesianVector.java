@@ -3,12 +3,13 @@ package willey.lib.math.linearalgebra;
 import static willey.lib.math.MathUtil.equal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Spliterators;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -295,63 +296,51 @@ public class CartesianVector implements Serializable
 		return kZeroVector;
 	}
 	
-	public static Collector<CartesianVector, CartesianVector, CartesianVector> sumVectors()
+	public static BinaryOperator<CartesianVector> vectorSum()
 	{
-		return new VectorCollector();
+		return (p1, p2) -> p1.add(p2);
 	}
 	
-	private static class VectorCollector implements Collector<CartesianVector, CartesianVector, CartesianVector>
+	public static Collector<CartesianVector, List<CartesianVector>, CartesianVector> averageVector()
 	{
-		private CartesianVector mMutable = zeroVector();
+		return new AverageVectorCollector();
+	}
+	
+	private static class AverageVectorCollector implements Collector<CartesianVector, List<CartesianVector>, CartesianVector>
+	{
 
 		@Override
-		public Supplier<CartesianVector> supplier()
+		public Supplier<List<CartesianVector>> supplier()
 		{
-			return () -> zeroVector();
+			return () -> new ArrayList<>();
 		}
 
 		@Override
-		public BiConsumer<CartesianVector, CartesianVector> accumulator()
+		public BiConsumer<List<CartesianVector>, CartesianVector> accumulator()
 		{
-			return (p1, p2) -> p1.add(p2);
+			return (p1, p2) -> p1.add(p2.unitVector());
 		}
 
 		@Override
-		public BinaryOperator<CartesianVector> combiner()
+		public BinaryOperator<List<CartesianVector>> combiner()
 		{
-			return (p1, p2) -> mMutable = p1.add(p2);
+			return (p1, p2) -> {p1.addAll(p2); return p1;};
 		}
 
 		@Override
-		public Function<CartesianVector, CartesianVector> finisher()
+		public Function<List<CartesianVector>, CartesianVector> finisher()
 		{
-			return p1 -> p1;
+			return p1 -> MomentOfInertiaTensor.get(p1).dominantDirection();
 		}
 
 		@Override
-		public Set<Characteristics> characteristics()
+		public Set<java.util.stream.Collector.Characteristics> characteristics()
 		{
 			Set<Characteristics> vChar = new HashSet<Collector.Characteristics>();
 			vChar.add(Characteristics.CONCURRENT);
 			vChar.add(Characteristics.UNORDERED);
-			vChar.add(Characteristics.IDENTITY_FINISH);
 			return vChar;
 		}
-	}
-	
-	public static class VectorSum implements Consumer<CartesianVector>
-	{
-		private CartesianVector mVector = zeroVector();
-
-		@Override
-		public void accept(CartesianVector pVector)
-		{
-			mVector = mVector.add(pVector);
-		}
 		
-		public CartesianVector getSum()
-		{
-			return mVector;
-		}
 	}
 }
