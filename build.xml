@@ -47,6 +47,9 @@
 				</fileset>
 			</classpath>
 		</javac>
+		<copy todir="${outputDir}" overwrite="false">
+		  <fileset dir="${lib}"/>
+		</copy>
 		<exec executable="git">
 			<arg value="rev-parse" />
 			<arg value="HEAD" />

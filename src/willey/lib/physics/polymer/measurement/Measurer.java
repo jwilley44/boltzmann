@@ -54,6 +54,12 @@ public class Measurer<M extends Measurable> implements Consumer<EquilibrationRes
 				.collect(Collectors.joining("\t", "", vSuffix)));
 	}
 	
+	@SuppressWarnings("rawtypes")
+	List<Measurement> getMeasurements()
+	{
+		return mMeasurements;
+	}
+	
 	@SuppressWarnings("rawtypes") 
 	private Measurer(List<Measurement> pMeasurements, Consumer<String> pResultWriter) throws Exception
 	{

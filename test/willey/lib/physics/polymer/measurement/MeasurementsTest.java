@@ -5,6 +5,7 @@ import static willey.lib.math.linearalgebra.CartesianVector.of;
 import static willey.lib.math.linearalgebra.CartesianVector.randomUnitVector;
 import static willey.lib.math.linearalgebra.CartesianVector.randomVector;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import willey.lib.math.linearalgebra.CartesianVector;
+import willey.lib.physics.polymer.experiment.ParameterCombiner;
+import willey.lib.physics.polymer.interactor.PolymerAndRods;
+import willey.lib.physics.polymer.interactor.PolymerAndRodsImpl;
 
 public class MeasurementsTest
 {
@@ -95,4 +99,41 @@ public class MeasurementsTest
 		Assert.assertEquals(1.0, vDistances.get(0), 1e-4);
 		Assert.assertEquals(Math.sqrt(2.0), vDistances.get(1), 1e-4);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testAllMeasurements() throws Exception
+	{
+		
+		Measurer.Builder<PolymerAndRods> vBuilder = Measurer.builder();
+		vBuilder
+		.add(Measurements.rodRotation())
+		.add(Measurements.averageMonomerDistance())
+		.add(Measurements.polymerFractalization())
+		.add(Measurements.interactions())
+		.add(Measurements.polymerRadius())
+		.add(Measurements.polymerSize())
+		.add(Measurements.monomerRadius())
+		.add(Measurements.orderParameter())
+		.add(Measurements.averageRodDistance())
+		.add(Measurements.averageRodDirection())
+		.add(Measurements.polymerRodCorrelation())
+		.add(Measurements.occupiedVolume())
+		.add(Measurements.rodCount())
+		.add(Measurements.polymerCenter())
+		.add(Measurements.polymerRodDistance())
+		.add(Measurements.polymerParallelRadius())
+		.add(Measurements.polymerPerpendicularRadius())
+		//.add(Measurements.polymerPerpendicularFractilization())
+		//.add(Measurements.polymerParallelFractilization())
+		.add(Measurements.polymerPerpendicularFractilization2())
+		.add(Measurements.monomerRodCorrelation())
+		.add(Measurements.polymerParallelFractilization2())
+		.add(Measurements.hash());
+		Measurer<PolymerAndRods> vMeasurer = vBuilder.build();
+		new ParameterCombiner(new File("/Users/jwilley44/test.param")).getParameterCombinations()
+		.map(pMap -> PolymerAndRodsImpl.fromParameterMap(pMap)).forEach(pSystem -> vMeasurer.getMeasurements().stream().forEach(pMeasurement -> pMeasurement.apply(pSystem)));
+	}
+	
+	
 }

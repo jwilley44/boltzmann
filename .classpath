@@ -5,7 +5,6 @@
 	<classpathentry kind="src" path="res"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/ejml-0.25.jar"/>
 	<classpathentry kind="lib" path="lib/jama-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

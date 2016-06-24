@@ -11,7 +11,7 @@ echo "Parameters" > $log
 cat $parameters >> $log
 echo "" >> $log
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-java -cp $DIR -Xmx2048m willey.app.physics.PolymerAndRodsExperimentApp $parameters > $results 2>> $log
+java -cp $DIR:$DIR/jama-1.0.3.jar -Xmx2048m willey.app.physics.PolymerAndRodsExperimentApp $parameters > $results 2>> $log
 aws s3 cp $results s3://johnwilley
 aws s3 cp $log s3://johnwilley
 rm $results
