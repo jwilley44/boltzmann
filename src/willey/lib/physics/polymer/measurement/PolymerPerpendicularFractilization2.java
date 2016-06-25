@@ -26,6 +26,6 @@ public class PolymerPerpendicularFractilization2<PR extends PolymerAndRods>
 	@Override
 	public String getName()
 	{
-		return "polymer.parallel.fractilization.2";
+		return "polymer.perpendicular.fractilization";
 	}
 }
