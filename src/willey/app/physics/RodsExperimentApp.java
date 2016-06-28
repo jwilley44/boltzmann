@@ -29,6 +29,7 @@ public class RodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.rodTranslation())
 		.add(Measurements.occupiedVolume())
 		.add(Measurements.rodCount())
+		.add(Measurements.rodsStartingState())
 		.add(Measurements.hash());
 		new RodsExperiment(new File(pArgs[0]), vBuilder.build()).run();
 	}

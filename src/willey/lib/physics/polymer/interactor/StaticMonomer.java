@@ -1,7 +1,6 @@
 package willey.lib.physics.polymer.interactor;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
 
 public class StaticMonomer implements Monomer
 {
@@ -18,24 +17,6 @@ public class StaticMonomer implements Monomer
 	public double interactionRadius()
 	{
 		return mRadius;
-	}
-
-	@Override
-	public CartesianVector getNearestPoint(Interactor pInteractor)
-	{
-		return mPosition;
-	}
-
-	@Override
-	public double getDistance(CartesianVector pVector)
-	{
-		return mPosition.distance(pVector);
-	}
-
-	@Override
-	public LineSegment getLineSegment()
-	{
-		return new LineSegment(mPosition, mPosition);
 	}
 
 	@Override

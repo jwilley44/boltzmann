@@ -12,7 +12,7 @@ class NearestRod<R extends Rods> implements Measurement<R, Double>
 				.map((pRod1) -> pFrom
 						.getRods().filter((pRod2) -> !pRod2.equals(pRod1))
 						.map((pRod2) -> Double.valueOf(pRod1
-								.minimumDistance(pRod2)))
+								.distance(pRod2)))
 						.min(Double::compare))
 				.mapToDouble((pOptional) -> pOptional.get().doubleValue())
 				.sum();

@@ -25,6 +25,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 
 	private final PolymerImpl mPolymer;
 	private final RodsImpl mRods;
+	private final double mPolymerWeight;
 
 	public static Equilibration<PolymerAndRods> getEquilibration(
 			ParameterMap pParameters)
@@ -38,20 +39,23 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	{
 		return new PolymerAndRodsImpl(
 				PolymerImpl.fromParameterMap(pParameters),
-				RodsImpl.fromParameterMap(pParameters));
+				RodsImpl.fromParameterMap(pParameters),
+				pParameters.getDouble("PolymerWeight"));
 	}
 
-	public PolymerAndRodsImpl(PolymerImpl pPolymer, RodsImpl pRods)
+	public PolymerAndRodsImpl(PolymerImpl pPolymer, RodsImpl pRods, double pPolymerWeight)
 	{
 		mPolymer = pPolymer;
 		mRods = pRods;
+		mPolymerWeight = pPolymerWeight;
 		mStateId = hashCode();
 	}
 	
-	private PolymerAndRodsImpl(PolymerImpl pPolymer, RodsImpl pRods, int pStateId)
+	private PolymerAndRodsImpl(PolymerImpl pPolymer, RodsImpl pRods, double pPolymerWeight, int pStateId)
 	{
 		mPolymer = pPolymer;
 		mRods = pRods;
+		mPolymerWeight = pPolymerWeight;
 		mStateId = pStateId;
 	}
 
@@ -145,7 +149,7 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	PolymerAndRodsImpl getMeasurableState()
 	{
 		
-		return new PolymerAndRodsImpl(mPolymer.getMeasurableState(), mRods.getMeasurableState(), mStateId);
+		return new PolymerAndRodsImpl(mPolymer.getMeasurableState(), mRods.getMeasurableState(), mPolymerWeight,  mStateId);
 	}
 
 	private static class PolymerAndRodsEquilibration implements
@@ -222,5 +226,17 @@ public class PolymerAndRodsImpl implements PolymerAndRods
 	public double monomerRadius()
 	{
 		return mPolymer.monomerRadius();
+	}
+
+	@Override
+	public String startingState()
+	{
+		return mRods.startingState();
+	}
+
+	@Override
+	public double polymerMoveWeight()
+	{
+		return mPolymerWeight;
 	}
 }

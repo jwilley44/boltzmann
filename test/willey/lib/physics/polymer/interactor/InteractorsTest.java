@@ -6,7 +6,8 @@ import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 import willey.lib.util.ConsumerUtil;
 
 public class InteractorsTest
@@ -123,12 +124,12 @@ public class InteractorsTest
 	private static class TestInteractor implements Interactor
 	{
 		private final CartesianVector mPosition;
-		private final LineSegment mLineSegment;
+		private final Segment mLineSegment;
 
 		public TestInteractor(CartesianVector pPosition)
 		{
 			mPosition = pPosition;
-			mLineSegment = new LineSegment(mPosition, mPosition);
+			mLineSegment = SegmentUtil.get(mPosition, mPosition);
 		}
 
 		@Override
@@ -150,19 +151,7 @@ public class InteractorsTest
 		}
 
 		@Override
-		public CartesianVector getNearestPoint(Interactor pInteractor)
-		{
-			return mPosition;
-		}
-
-		@Override
-		public double getDistance(CartesianVector pVector)
-		{
-			return mPosition.distance(pVector);
-		}
-
-		@Override
-		public LineSegment getLineSegment()
+		public Segment getLineSegment()
 		{
 			return mLineSegment;
 		}

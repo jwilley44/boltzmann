@@ -1,22 +1,16 @@
 package willey.lib.physics.polymer.measurement;
 
+import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.interactor.Rods;
-import willey.lib.util.StreamUtil;
 
-class AverageRodDistance<R extends Rods> implements
-		Measurement<R, Double>
+class AverageRodDistance<R extends Rods> implements Measurement<R, Double>
 {
 
 	@Override
 	public Double apply(R pFrom)
 	{
-		double vDenominator = pFrom.rodCount()*pFrom.rodCount();
-		return StreamUtil
-				.nestedStream(pFrom.getRods(), pFrom.getRods())
-				.mapToDouble(
-						(pPair) -> pPair.getA().minimumDistance(
-								pPair.getB())).sum()
-				/ vDenominator;
+		return Double.valueOf(pFrom.getRods().map(pRod -> pRod.position())
+				.collect(CartesianVector.averageVector()).magnitude());
 	}
 
 	@Override

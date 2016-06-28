@@ -124,11 +124,9 @@ public class MeasurementsTest
 		.add(Measurements.polymerRodDistance())
 		.add(Measurements.polymerParallelRadius())
 		.add(Measurements.polymerPerpendicularRadius())
-		//.add(Measurements.polymerPerpendicularFractilization())
-		//.add(Measurements.polymerParallelFractilization())
-		.add(Measurements.polymerPerpendicularFractilization2())
+		.add(Measurements.polymerPerpendicularFractilization())
 		.add(Measurements.monomerRodCorrelation())
-		.add(Measurements.polymerParallelFractilization2())
+		.add(Measurements.polymerParallelFractilization())
 		.add(Measurements.hash());
 		Measurer<PolymerAndRods> vMeasurer = vBuilder.build();
 		new ParameterCombiner(new File("/Users/jwilley44/test.param")).getParameterCombinations()

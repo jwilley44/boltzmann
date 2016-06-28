@@ -301,14 +301,25 @@ public class CartesianVector implements Serializable
 		return (p1, p2) -> p1.add(p2);
 	}
 	
+	public static Collector<CartesianVector, List<CartesianVector>, CartesianVector> averageVector(CartesianVector pCenter)
+	{
+		return new AverageVectorCollector(pCenter);
+	}
+	
 	public static Collector<CartesianVector, List<CartesianVector>, CartesianVector> averageVector()
 	{
-		return new AverageVectorCollector();
+		return new AverageVectorCollector(zeroVector());
 	}
 	
 	private static class AverageVectorCollector implements Collector<CartesianVector, List<CartesianVector>, CartesianVector>
 	{
-
+		private final CartesianVector mCenter;
+		
+		public AverageVectorCollector(CartesianVector pCenter)
+		{
+			mCenter = pCenter;
+		}
+		
 		@Override
 		public Supplier<List<CartesianVector>> supplier()
 		{
@@ -330,7 +341,7 @@ public class CartesianVector implements Serializable
 		@Override
 		public Function<List<CartesianVector>, CartesianVector> finisher()
 		{
-			return p1 -> MomentOfInertiaTensor.get(p1).dominantDirection();
+			return p1 -> MomentOfInertiaTensor.get(p1).usingCenterOfMass(mCenter).dominantDirection();
 		}
 
 		@Override

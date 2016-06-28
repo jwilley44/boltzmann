@@ -16,7 +16,7 @@ class Interactions<M extends Measurable> implements Measurement<M, Long>
 
 	boolean interacts(Interactor p1, Interactor p2)
 	{
-		return p1.getDistance(p2) <= p1.interactionDistance(p2);
+		return p1.distance(p2) <= p1.interactionDistance(p2);
 	}
 
 	@Override

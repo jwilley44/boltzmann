@@ -2,7 +2,7 @@ package willey.lib.physics.polymer.interactor;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 public interface Interactor
 {
@@ -12,11 +12,7 @@ public interface Interactor
 	
 	double interactionRadius();
 	
-	CartesianVector getNearestPoint(Interactor pInteractor);
-	
-	double getDistance(CartesianVector pVector);
-	
-	LineSegment getLineSegment();
+	Segment getLineSegment();
 	
 	default Interactor project(Lattice pLattice)
 	{
@@ -25,12 +21,12 @@ public interface Interactor
 	
 	default boolean interacts(Interactor pInteractor)
 	{
-		return getDistance(pInteractor) <= interactionDistance(pInteractor);
+		return distance(pInteractor) <= interactionDistance(pInteractor);
 	}
 	
 	default double distance(Interactor pInteractor)
 	{
-		return getDistance(pInteractor.getNearestPoint(this));
+		return getLineSegment().distance(pInteractor.getLineSegment());
 	}
 	
 	default double interactionDistance(Interactor pInteractor)
@@ -38,16 +34,9 @@ public interface Interactor
 		return interactionRadius() + pInteractor.interactionRadius();
 	}
 	
-	default double getDistance(Interactor pInteractor)
-	{
-		return getDistance(pInteractor.getNearestPoint(this));
-	}
-	
 	default double energy(Interactor pInteractor)
 	{
-		CartesianVector vClosest = pInteractor.getNearestPoint(this);
-		double vDistance = getDistance(vClosest);
-		return energy(vDistance, interactionDistance(pInteractor));
+		return energy(distance(pInteractor), interactionDistance(pInteractor));
 	}
 	
 	static double energy(double pDistance, double pInteractionDistance)

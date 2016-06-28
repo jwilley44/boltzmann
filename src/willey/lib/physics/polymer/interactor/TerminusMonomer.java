@@ -1,7 +1,6 @@
 package willey.lib.physics.polymer.interactor;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
 
 abstract class TerminusMonomer implements Monomer
 {
@@ -34,23 +33,5 @@ abstract class TerminusMonomer implements Monomer
 	protected void setPosition(CartesianVector pPosition)
 	{
 		mPosition = pPosition;
-	}
-
-	@Override
-	public CartesianVector getNearestPoint(Interactor pInteractor)
-	{
-		return mPosition;
-	}
-
-	@Override
-	public double getDistance(CartesianVector pVector)
-	{
-		return pVector.distance(mPosition);
-	}
-
-	@Override
-	public LineSegment getLineSegment()
-	{
-		return new LineSegment(mPosition, mPosition);
 	}
 }

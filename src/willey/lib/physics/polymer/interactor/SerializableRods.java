@@ -2,17 +2,17 @@ package willey.lib.physics.polymer.interactor;
 
 import java.util.List;
 
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 public class SerializableRods implements  SerializableInteractors<Rods, SerializableRods>
 {
 	private static final long serialVersionUID = 1L;
-	private final List<LineSegment> mRods;
+	private final List<Segment> mRods;
 	private final double mRodRadius;
 	private final long mLatticeVolume;
 	private final int mStateId;
 	
-	public SerializableRods(List<LineSegment> pRods, double pRodRadius, long pLatticeVolume, int pStateId)
+	public SerializableRods(List<Segment> pRods, double pRodRadius, long pLatticeVolume, int pStateId)
 	{
 		mRods = pRods;
 		mRodRadius = pRodRadius;
@@ -20,7 +20,7 @@ public class SerializableRods implements  SerializableInteractors<Rods, Serializ
 		mStateId = pStateId;
 	}
 	
-	public List<LineSegment> getLineSegments()
+	public List<Segment> getLineSegments()
 	{
 		return mRods;
 	}

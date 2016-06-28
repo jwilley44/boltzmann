@@ -1,6 +1,5 @@
 package willey.lib.physics.polymer.measurement;
 
-import static willey.lib.math.linearalgebra.CartesianVector.averageVector;
 import static willey.lib.physics.polymer.measurement.MeasurementUtil.correlation;
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
@@ -12,8 +11,7 @@ class RodPolymerCorrelation<PR extends PolymerAndRods> implements
 	@Override
 	public Double apply(PR pFrom)
 	{
-		CartesianVector vAverageRodDirection = pFrom.getRods().map(pRod -> pRod.direction())
-						.collect(averageVector());
+		CartesianVector vAverageRodDirection = MeasurementUtil.averageRodDirection(pFrom);
 		double vCorrelation = pFrom
 				.getDirections()
 				.mapToDouble(

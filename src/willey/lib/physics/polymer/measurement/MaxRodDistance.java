@@ -11,7 +11,7 @@ class MaxRodDistance<R extends Rods> implements Measurement<R, Double>
 		return Double.valueOf(StreamUtil
 		.nestedStream(pFrom.getRods(), pFrom.getRods())
 		.mapToDouble(
-				(pPair) -> pPair.getA().minimumDistance(
+				(pPair) -> pPair.getA().distance(
 						pPair.getB())).max().getAsDouble());
 	}
 	

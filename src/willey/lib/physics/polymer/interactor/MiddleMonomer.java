@@ -1,7 +1,8 @@
 package willey.lib.physics.polymer.interactor;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 class MiddleMonomer implements Monomer
 {
@@ -92,20 +93,8 @@ class MiddleMonomer implements Monomer
 	}
 
 	@Override
-	public CartesianVector getNearestPoint(Interactor pInteractor)
+	public Segment getLineSegment()
 	{
-		return mPosition;
-	}
-
-	@Override
-	public double getDistance(CartesianVector pVector)
-	{
-		return pVector.distance(mPosition);
-	}
-
-	@Override
-	public LineSegment getLineSegment()
-	{
-		return new LineSegment(mPosition, mPosition);
+		return SegmentUtil.get(mPosition, mPosition);
 	}
 }

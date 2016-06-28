@@ -3,23 +3,24 @@ package willey.lib.physics.polymer.interactor;
 import java.io.Serializable;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 public class Rod implements Interactor, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private final LineSegment mLineSegment;
+	private final Segment mLineSegment;
 	private final double mRadius;
 
 	public Rod(CartesianVector pDirection, CartesianVector pPosition,
 			double pLength, double pRadius)
 	{
-		mLineSegment = LineSegment.get(pPosition,
+		mLineSegment = SegmentUtil.get(pPosition,
 				pPosition.add(pDirection.unitVector().scale(pLength)));
 		mRadius = pRadius;
 	}
 
-	Rod(LineSegment pLineSegment, double pRadius)
+	Rod(Segment pLineSegment, double pRadius)
 	{
 		mLineSegment = pLineSegment;
 		mRadius = pRadius;
@@ -31,7 +32,7 @@ public class Rod implements Interactor, Serializable
 				* (mLineSegment.length() + mRadius * 4 / 3);
 	}
 
-	Rod move(LineSegment pNewLineSegment)
+	Rod move(Segment pNewLineSegment)
 	{
 		return new Rod(pNewLineSegment, mRadius);
 	}
@@ -74,20 +75,11 @@ public class Rod implements Interactor, Serializable
 		return mLineSegment.getPoint(pScale);
 	}
 
-	public double minimumDistance(Rod pRod)
+	public Rod reposition(CartesianVector pNewCenterPosition)
 	{
-		return mLineSegment.minimumDistance(pRod.mLineSegment);
-	}
-
-	public double minimumDistance(CartesianVector pPoint)
-	{
-		return mLineSegment.minimumDistance(pPoint);
-	}
-
-	public Rod reposition(CartesianVector pNewPosition)
-	{
-		return new Rod(LineSegment.get(pNewPosition,
-				pNewPosition.add(mLineSegment.direction())), mRadius);
+		return new Rod(SegmentUtil.get(
+				pNewCenterPosition.subtract(direction().scale(0.5)),
+				pNewCenterPosition.add(direction().scale(0.5))), mRadius);
 	}
 
 	@Override
@@ -98,19 +90,7 @@ public class Rod implements Interactor, Serializable
 	}
 
 	@Override
-	public CartesianVector getNearestPoint(Interactor pInteractor)
-	{
-		return mLineSegment.closestPoint(pInteractor.getLineSegment());
-	}
-
-	@Override
-	public double getDistance(CartesianVector pVector)
-	{
-		return mLineSegment.minimumDistance(pVector);
-	}
-
-	@Override
-	public LineSegment getLineSegment()
+	public Segment getLineSegment()
 	{
 		return mLineSegment;
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 public class StaticRods implements Rods
 {
@@ -13,7 +13,7 @@ public class StaticRods implements Rods
 	private final int mStateId;
 	private final long mLatticeVolume;
 	
-	public StaticRods(List<LineSegment> pRods, double pRodRadius, int pStateId, long pLatticeVolume)
+	public StaticRods(List<Segment> pRods, double pRodRadius, int pStateId, long pLatticeVolume)
 	{
 		mRods = pRods.stream().map(pLineSegment -> new Rod(pLineSegment, pRodRadius)).collect(Collectors.toList());
 		mStateId = pStateId;
@@ -71,5 +71,11 @@ public class StaticRods implements Rods
 	public double rodTranslation()
 	{
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String startingState()
+	{
+		return "Unknown";
 	}
 }

@@ -13,4 +13,6 @@ public interface Rods extends Measurable
 	double rodRotation();
 	
 	double rodTranslation();
+	
+	String startingState();
 }

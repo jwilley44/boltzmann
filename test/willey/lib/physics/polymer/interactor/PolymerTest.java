@@ -23,8 +23,7 @@ public class PolymerTest extends AbstractTest
 					Monomer vMonomer = pPair.getA();
 					Assert.assertEquals(vRadius, vMonomer.interactionRadius(),
 							1e-6);
-					double vDistance = vMonomer.getDistance(pPair.getB()
-							.position());
+					double vDistance = vMonomer.distance(pPair.getB());
 					Assert.assertEquals(vMonomer.interactionRadius() * 2,
 							vDistance, 1e-6);
 					Assert.assertTrue(!vMonomer.interacts(pPair.getB()));

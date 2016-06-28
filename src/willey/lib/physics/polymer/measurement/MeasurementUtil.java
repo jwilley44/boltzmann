@@ -12,6 +12,7 @@ import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.interactor.Interactor;
 import willey.lib.physics.polymer.interactor.Measurable;
 import willey.lib.physics.polymer.interactor.Polymer;
+import willey.lib.physics.polymer.interactor.Rods;
 import willey.lib.util.Pair;
 import willey.lib.util.StreamUtil;
 
@@ -59,6 +60,20 @@ public class MeasurementUtil
 	{
 		double vCos = pA.cosTheta(pB);
 		return Math.sqrt(vCos * vCos);
+	}
+	
+	static CartesianVector averageRodDirection(Rods pRods)
+	{
+		return pRods.getRods().map(pRod -> pRod.direction()).collect(CartesianVector.averageVector());
+	}
+	
+	static CartesianVector polymerCenterOfMass(Polymer pPolymer)
+	{
+		return pPolymer
+				.getMonomers()
+				.map(pMonomer -> pMonomer.position())
+				.reduce(CartesianVector.zeroVector(), (a, b) -> a.add(b))
+				.scale(1.0 / pPolymer.getSize());
 	}
 
 	static double orderParameter(List<CartesianVector> pDirections)

@@ -1,6 +1,5 @@
 package willey.lib.physics.polymer.measurement;
 
-import static willey.lib.math.linearalgebra.CartesianVector.averageVector;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +13,7 @@ public class PolymerPerpendicularFractilization2<PR extends PolymerAndRods>
 	@Override
 	public List<Double> apply(PR pMeasurable)
 	{
-		CartesianVector vRodDirection = pMeasurable.getRods()
-						.map(pRod -> pRod.direction().unitVector())
-						.collect(averageVector());
+		CartesianVector vRodDirection = MeasurementUtil.averageRodDirection(pMeasurable);
 		List<CartesianVector> vMonomerPositions = pMeasurable.getMonomers()
 				.map(pMonomer -> pMonomer.position())
 				.collect(Collectors.toList());

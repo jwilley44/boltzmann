@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
-import willey.lib.physics.polymer.interactor.FrontMonomer;
-import willey.lib.physics.polymer.interactor.Rod;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 import willey.lib.test.AbstractTest;
 
 public class RodTest extends AbstractTest
@@ -27,8 +25,8 @@ public class RodTest extends AbstractTest
 	public void testParametric()
 	{
 		Rod vRod = createRodAtOrigin(0, 0);
-		CartesianVector vPoint = vRod.parametricEquation(MathUtil.getThreadLocal()
-				.nextDouble());
+		CartesianVector vPoint = vRod.parametricEquation(MathUtil
+				.getThreadLocal().nextDouble());
 		Assert.assertTrue(vPoint.magnitude() <= vRod.endPoint().magnitude());
 		Assert.assertTrue(vPoint.crossProduct(vRod.direction()).isZeroVector());
 	}
@@ -71,8 +69,8 @@ public class RodTest extends AbstractTest
 		Assert.assertTrue(vRod.parametricEquation(0.5).coordinatesEqual(
 				vRotated.parametricEquation(0.5)));
 		CartesianVector vDir = vRod.direction();
-		Assert.assertTrue(vDir
-				.coordinatesEqual(move(vRod, 0.0, 0.0).direction()));
+		Assert.assertTrue(vDir.coordinatesEqual(move(vRod, 0.0, 0.0)
+				.direction()));
 
 		Rod vNoRotation = move(vRod, 0.0, 0.0);
 		Assert.assertTrue(vNoRotation.position().coordinatesEqual(
@@ -93,37 +91,44 @@ public class RodTest extends AbstractTest
 				0.5, null);
 		Assert.assertTrue(vRod1.interacts(vMonomer));
 	}
-	
+
 	@Test
 	public void testRodInteraction()
 	{
+		Rod vRod0 = new Rod(of(1, 0, 0), of(1, 0, -1.0), 10, 0.4);
 		Rod vRod1 = new Rod(of(1, 0, 0), zeroVector(), 10, 0.5);
-		Rod vRod2 = new Rod(of(0,-1,0), of(1,1,0.7), 10, 0.5);
-		Rod vRod3 = new Rod(of(1,0,0), zeroVector().add(randomUnitVector().scale(2)), 10, 0.5);
+		Rod vRod2 = new Rod(of(0, -1, 0), of(1, 1, 0.5), 10, 0.5);
+		Assert.assertFalse(vRod0.interacts(vRod1));
+		Assert.assertFalse(vRod1.interacts(vRod0));
 		Assert.assertTrue(vRod1.interacts(vRod2));
-		Assert.assertTrue(vRod1.interacts(vRod2));
-		Assert.assertFalse(vRod1.interacts(vRod3));
-		for (int i=0; i < 1000; i++)
+		for (int i = 0; i < 1000; i++)
 		{
 			Rod vRod4 = move(vRod1, MathUtil.getThreadLocal().nextDouble(), 0.0);
 			Assert.assertTrue(vRod1.interacts(vRod4));
+			Assert.assertTrue(vRod4.interacts(vRod1));
 		}
-		
-		for (int i=0; i < 1000; i++)
+
+		for (int i = 0; i < 1000; i++)
 		{
-			Rod vRod4 = move(vRod1, MathUtil.getThreadLocal().nextDouble() + 11, 0.0);
+			Rod vRod4 = move(vRod1,
+					MathUtil.getThreadLocal().nextDouble() + 11, 0.0);
 			boolean vInteracts = vRod1.interacts(vRod4);
 			if (vInteracts)
 			{
 				System.err.println(vRod4.position());
 			}
 			Assert.assertFalse(vRod1.interacts(vRod4));
+			Assert.assertFalse(vRod4.interacts(vRod1));
 		}
 	}
-	
+
 	private Rod move(Rod pRod, double pTranslation, double pRotation)
 	{
-		LineSegment vLineSegment = pRod.getLineSegment().rotate(pRotation).translate(CartesianVector.randomUnitVector().scale(pTranslation));
+		Segment vLineSegment = pRod
+				.getLineSegment()
+				.rotate(pRotation)
+				.translate(
+						CartesianVector.randomUnitVector().scale(pTranslation));
 		return pRod.move(vLineSegment);
 	}
 

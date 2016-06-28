@@ -3,7 +3,7 @@ package willey.lib.physics.polymer.interactor;
 import java.util.List;
 
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 
 public class SerializablePolymerAndRods implements
 		SerializableInteractors<PolymerAndRods, SerializablePolymerAndRods>
@@ -13,7 +13,7 @@ public class SerializablePolymerAndRods implements
 	private final List<CartesianVector> mMonomerPositions;
 	private final double mMonomerRadius;
 
-	private final List<LineSegment> mRods;
+	private final List<Segment> mRods;
 	private final double mRodRadius;
 	private final long mLatticeVolume;
 
@@ -28,7 +28,7 @@ public class SerializablePolymerAndRods implements
 	}
 
 	public SerializablePolymerAndRods(List<CartesianVector> pMonomerPositions,
-			double pMonomerRadius, List<LineSegment> pRods, double pRodRadius,
+			double pMonomerRadius, List<Segment> pRods, double pRodRadius,
 			long pLatticeVolume, int pStateId)
 	{
 		mMonomerPositions = pMonomerPositions;

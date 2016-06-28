@@ -103,4 +103,16 @@ public class StaticPolymerAndRods implements PolymerAndRods
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public String startingState()
+	{
+		return "Unknown";
+	}
+
+	@Override
+	public double polymerMoveWeight()
+	{
+		return -1.0;
+	}
+
 }

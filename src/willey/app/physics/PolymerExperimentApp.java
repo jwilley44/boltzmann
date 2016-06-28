@@ -20,6 +20,7 @@ public class PolymerExperimentApp extends PhysicsExperimentApp
 		Measurer.Builder<Polymer> vBuilder = Measurer.builder();
 			vBuilder
 			.add(Measurements.averageMonomerDistance())
+			.add(Measurements.polymerCenter())
 			.add(Measurements.polymerFractalization())
 			.add(Measurements.polymerRadius())
 			.add(Measurements.polymerSize())

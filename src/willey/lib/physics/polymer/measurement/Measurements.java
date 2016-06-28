@@ -152,12 +152,12 @@ public class Measurements
 		return new PolymerPerpendicularRadius<PR>();
 	}
 	
-	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerPerpendicularFractilization2()
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerPerpendicularFractilization()
 	{
 		return new PolymerPerpendicularFractilization2<PR>();
 	}
 	
-	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerParallelFractilization2()
+	public static <PR extends PolymerAndRods> Measurement<PR, List<Double>> polymerParallelFractilization()
 	{
 		return new PolymerParallelFractilization2<PR>();
 	}
@@ -180,5 +180,15 @@ public class Measurements
 	public static <R extends Rods> Measurement<R, Integer> rodCount()
 	{
 		return new RodCount<R>();
+	}
+	
+	public static <R extends Rods> Measurement<R, String> rodsStartingState()
+	{
+		return new RodsStartingState<R>();
+	}
+	
+	public static <PR extends PolymerAndRods> Measurement<PR, Boolean> quenchedRods()
+	{
+		return new QuenchedRods<PR>();
 	}
 }

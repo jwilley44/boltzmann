@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import willey.lib.math.MathUtil;
 import willey.lib.math.linearalgebra.CartesianVector;
-import willey.lib.math.linearalgebra.LineSegment;
+import willey.lib.math.linearalgebra.SegmentUtil.Segment;
 import willey.lib.physics.polymer.experiment.Equilibrator.Equilibration;
 import willey.lib.physics.polymer.experiment.ParameterCombiner.ParameterMap;
 import willey.lib.physics.polymer.interactor.RodsUtil.Orientation;
@@ -43,6 +43,7 @@ public class RodsImpl implements Rods
 	private final long mVolume;
 	private final double mTranslation;
 	private final double mRotation;
+	private final String mStartingState;
 
 	public static Equilibration<Rods> getEquilibration(ParameterMap pParameters)
 	{
@@ -94,10 +95,11 @@ public class RodsImpl implements Rods
 		mRodCount = mRods.size();
 		mRotation = pRotation;
 		mTranslation = pTranslation;
+		mStartingState = pOrientation.name() + pPosition.name();
 		mStateId = hashCode();
 	}
 	
-	RodsImpl(List<Rod> pRods, Lattice pLattice, double pTranslation, double pRotation, int pStateId)
+	RodsImpl(List<Rod> pRods, Lattice pLattice, double pTranslation, double pRotation, String pStartingState, int pStateId)
 	{
 		mRods = pRods;
 		mLattice = pLattice;
@@ -105,6 +107,7 @@ public class RodsImpl implements Rods
 		mVolume = pLattice.volume();
 		mTranslation = pTranslation;
 		mRotation = pRotation;
+		mStartingState = pStartingState;
 		mStateId = pStateId;
 	}
 
@@ -137,7 +140,7 @@ public class RodsImpl implements Rods
 	
 	private Rod randomMove(Rod pRod)
 	{
-		LineSegment vNewLineSegment = pRod.getLineSegment().translate(
+		Segment vNewLineSegment = pRod.getLineSegment().translate(
 				CartesianVector.randomUnitVector().scale(mTranslation)).rotate(
 				mRotation);
 		return pRod.move(vNewLineSegment);
@@ -198,7 +201,7 @@ public class RodsImpl implements Rods
 	RodsImpl getMeasurableState()
 	{
 		List<Rod> vRods = mRods.stream().map((pRod) -> pRod.reposition(getLattice().projectIntoLattice(pRod.position()))).collect(Collectors.toList());
-		return new RodsImpl(vRods, mLattice, mTranslation, mRotation, mStateId);
+		return new RodsImpl(vRods, mLattice, mTranslation, mRotation, mStartingState, mStateId);
 	}
 
 	private static class RodEquilibration implements Equilibration<Rods>
@@ -245,5 +248,11 @@ public class RodsImpl implements Rods
 		{
 			return mRods.testMoveRandom();
 		}
+	}
+
+	@Override
+	public String startingState()
+	{
+		return mStartingState;
 	}
 }

@@ -27,6 +27,7 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.polymerRadius())
 		.add(Measurements.polymerSize())
 		.add(Measurements.monomerRadius())
+		.add(Measurements.monomerDirectionCorrelation())
 		.add(Measurements.orderParameter())
 		.add(Measurements.averageRodDistance())
 		.add(Measurements.averageRodDirection())
@@ -37,9 +38,11 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.polymerRodDistance())
 		.add(Measurements.polymerParallelRadius())
 		.add(Measurements.polymerPerpendicularRadius())
-		.add(Measurements.polymerPerpendicularFractilization2())
+		.add(Measurements.polymerPerpendicularFractilization())
 		.add(Measurements.monomerRodCorrelation())
-		.add(Measurements.polymerParallelFractilization2())
+		.add(Measurements.polymerParallelFractilization())
+		.add(Measurements.rodsStartingState())
+		.add(Measurements.quenchedRods())
 		.add(Measurements.hash());
 		Experiment<PolymerAndRods> vExperiment = new PolymerAndRodsExperiment(new File(pArgs[0]), vBuilder.build());
 		vExperiment.run();

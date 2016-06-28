@@ -12,8 +12,7 @@ public class MonomerRodCorrelation<PR extends PolymerAndRods> implements
 	@Override
 	public Double apply(PR pFrom)
 	{
-		CartesianVector vAverageRodDirection = 
-				pFrom.getRods().map(pRod -> pRod.direction()).collect(averageVector());
+		CartesianVector vAverageRodDirection = MeasurementUtil.averageRodDirection(pFrom);
 		CartesianVector vAverageMonomerDirection = pFrom.getDirections().collect(averageVector());
 		return Double.valueOf(correlation(vAverageMonomerDirection, vAverageRodDirection));
 	}
