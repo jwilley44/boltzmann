@@ -1,7 +1,11 @@
 package willey.lib.physics.polymer.interactor;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,6 +47,15 @@ public class LatticeTest extends AbstractTest
 				.stream()
 				.map(pFunction -> pFunction.apply(vPoint1))
 				.mapToDouble(pVector -> pVector.distance(vPoint2)).min().getAsDouble(), 1e-4);
+	}
+	
+	@Test
+	public void testBoundaryFunctions()
+	{
+		final Lattice vLattice = Lattice.cubeLattice(5);
+		final CartesianVector vVector = CartesianVector.of(6, 7, 8);
+		List<CartesianVector> vNew = vLattice.getNewLatticeCoordinatesFunctions().stream().map(pFunction -> pFunction.apply(vVector)).collect(Collectors.toList());
+		vNew.stream().forEach(pVector -> assertTrue(vLattice.projectIntoLattice(vVector).distance(pVector) <= Math.sqrt(75)));
 	}
 	
 	@Test

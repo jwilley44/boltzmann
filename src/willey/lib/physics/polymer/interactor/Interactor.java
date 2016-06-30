@@ -41,13 +41,7 @@ public interface Interactor
 	
 	static double energy(double pDistance, double pInteractionDistance)
 	{
-		return pDistance >= pInteractionDistance ? 0 : 1/(pDistance*pDistance);
-	}
-	
-	default boolean acceptMove(double pInteractionRadius, double pDistance)
-	{
-		return pDistance <= pInteractionRadius ?
-		MathUtil.getThreadLocal().nextDouble() < Math.exp(-1.0/(10*pDistance*pDistance)) :
-		true;
+		double vRatio = pInteractionDistance/pDistance;
+		return MathUtil.pow(vRatio, 12);
 	}
 }

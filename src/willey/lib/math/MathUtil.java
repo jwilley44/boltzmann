@@ -59,4 +59,11 @@ public class MathUtil
 	{
 		return ThreadLocalRandom.current();
 	}
+	
+	public static double pow(double pDouble, int pExponent)
+	{
+		double vReturn = 1;
+		for (int i=0; i < pExponent; i++) vReturn *= pDouble;
+		return vReturn;
+	}
 }

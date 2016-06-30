@@ -77,7 +77,7 @@ public interface Interactors
 //		boolean vValidMove = StreamUtil.nestedStream(getTestPoints(vNew), projectedStream(vMoved.getOldInteractor()))
 //				.noneMatch(pPair -> pPair.getA().interacts(pPair.getB()))
 		double vDeltaEnergy = calculateDeltaEnergy(vOld, vNew);
-		boolean vValidMove = MathUtil.getThreadLocal().nextDouble() <= Math.exp(-vDeltaEnergy);
+		boolean vValidMove = vDeltaEnergy > 0 ? MathUtil.getThreadLocal().nextDouble() <= Math.exp(-vDeltaEnergy/10) : true;
 		if (vValidMove)
 		{
 			replace(vMoved.getOldInteractor(), vMoved.getNewInteractor());
