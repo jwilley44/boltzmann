@@ -42,6 +42,6 @@ public interface Interactor
 	static double energy(double pDistance, double pInteractionDistance)
 	{
 		double vRatio = pInteractionDistance/pDistance;
-		return MathUtil.pow(vRatio, 12);
+		return pDistance >= pInteractionDistance ? 0 : MathUtil.pow(vRatio, 12);
 	}
 }

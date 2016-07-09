@@ -8,14 +8,18 @@ import static willey.lib.math.linearalgebra.CartesianVector.randomVector;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import willey.lib.math.linearalgebra.CartesianVector;
 import willey.lib.physics.polymer.experiment.ParameterCombiner;
+import willey.lib.physics.polymer.interactor.Lattice;
 import willey.lib.physics.polymer.interactor.PolymerAndRods;
 import willey.lib.physics.polymer.interactor.PolymerAndRodsImpl;
+import willey.lib.physics.polymer.interactor.PolymerImpl;
 
 public class MeasurementsTest
 {
@@ -94,10 +98,14 @@ public class MeasurementsTest
 		CartesianVector v3 = of(1,1,1);
 		CartesianVector v4 = of(2,1,1);
 		
+		Double vA1 = MeasurementUtil.mean(asList(v1.distance(v2), v2.distance(v3), v3.distance(v4)));
+		Double vA2 = MeasurementUtil.mean(asList(v1.distance(v3), v2.distance(v4)));
+		Double vA3 = MeasurementUtil.mean(asList(v1.distance(v4)));
+		
 		List<Double> vDistances = MeasurementUtil.arcLength2Distance(asList(v1, v2, v3, v4));
-		Assert.assertEquals(3, vDistances.size());
-		Assert.assertEquals(1.0, vDistances.get(0), 1e-4);
-		Assert.assertEquals(Math.sqrt(2.0), vDistances.get(1), 1e-4);
+		Assert.assertEquals(vA1.doubleValue(), vDistances.get(0).doubleValue(), 1e-4);
+		Assert.assertEquals(vA2.doubleValue(), vDistances.get(1).doubleValue(), 1e-4);
+		Assert.assertEquals(vA3.doubleValue(), vDistances.get(2).doubleValue(), 1e-4);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -133,5 +141,30 @@ public class MeasurementsTest
 		.map(pMap -> PolymerAndRodsImpl.fromParameterMap(pMap)).forEach(pSystem -> vMeasurer.getMeasurements().stream().forEach(pMeasurement -> pMeasurement.apply(pSystem)));
 	}
 	
+	@Test
+	public void testPerpendicular()
+	{
+		final CartesianVector vDirection = of(0,0,1);
+		BiFunction<CartesianVector, CartesianVector, Double> vPerpendicular = (pV1, pV2) -> Double.valueOf(pV1.subtract(pV2)
+				.projectOntoPlane(vDirection).magnitude());
+		
+		CartesianVector v1 = of(1,0,0);
+		CartesianVector v2 = of(1,1,0);
+		CartesianVector v3 = of(1,1,1);
+		CartesianVector v4 = of(2,1,1);
+		
+		Double vA1 = MeasurementUtil.mean(asList(vPerpendicular.apply(v1, v2), vPerpendicular.apply(v2, v3), vPerpendicular.apply(v3, v4)));
+		Double vA2 = MeasurementUtil.mean(asList(vPerpendicular.apply(v1, v3), vPerpendicular.apply(v2, v4)));
+		Double vA3 = MeasurementUtil.mean(asList(vPerpendicular.apply(v1, v4)));
+		
+		List<Double> vDistances = MeasurementUtil.arcLength2Distance(
+				asList(v1, v2, v3, v4)
+				.stream()
+				.map(p -> p.projectOntoPlane(vDirection))
+				.collect(Collectors.toList()));
+		Assert.assertEquals(vA1.doubleValue(), vDistances.get(0).doubleValue(), 1e-4);
+		Assert.assertEquals(vA2.doubleValue(), vDistances.get(1).doubleValue(), 1e-4);
+		Assert.assertEquals(vA3.doubleValue(), vDistances.get(2).doubleValue(), 1e-4);
+	}
 	
 }

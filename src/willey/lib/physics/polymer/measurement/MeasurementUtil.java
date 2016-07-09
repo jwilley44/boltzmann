@@ -145,6 +145,10 @@ public class MeasurementUtil
 				.map(pPosition -> Pair.of(
 						Integer.valueOf(pPositions.indexOf(pPosition)),
 						pPosition)).collect(Collectors.toList());
+		List<Pair<Integer, Double>> vPairs = StreamUtil
+				.getIncrementedStream(vPositions, vPositions)
+				.map(pPair -> calcDistance(pDistanceFunction, pPair.getA(),pPair.getB()))
+				.collect(Collectors.toList());
 		return StreamUtil
 				.getIncrementedStream(vPositions, vPositions) //increment the stream to pair up positions
 				.map(pPair -> calcDistance(pDistanceFunction, pPair.getA(),pPair.getB())) //calc arc length to distance 
@@ -165,10 +169,11 @@ public class MeasurementUtil
 				pDistanceFunction.apply(p1.getB(), p2.getB()));
 	}
 	
-	private static Double mean(List<Double> pDistances)
+	public static Double mean(List<Double> pDistances)
 	{
 		return Double.valueOf(pDistances.stream()
 				.mapToDouble(pDouble -> pDouble.doubleValue()).sum()
 				/ pDistances.size());
 	}
+	
 }
