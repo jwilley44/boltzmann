@@ -1,6 +1,7 @@
 package willey.lib.physics.polymer.measurement;
 
-import static willey.lib.physics.polymer.measurement.MeasurementUtil.correlation;
+import java.util.stream.Collectors;
+
 import willey.lib.physics.polymer.interactor.Rods;
 
 class RodCorrelation<R extends Rods> implements Measurement<R, Double>
@@ -8,10 +9,7 @@ class RodCorrelation<R extends Rods> implements Measurement<R, Double>
 	@Override
 	public Double apply(R pFrom)
 	{
-		return correlation(
-				pFrom.getRods().map((pRodA) -> pRodA.direction()), 
-				pFrom.getRods().map((pRodB) -> pRodB.direction()),
-				pFrom.rodCount());
+		return MeasurementUtil.legendreOrder(pFrom.getRods().map(pRod -> pRod.direction()).collect(Collectors.toList()));
 	}
 
 	public String getName()

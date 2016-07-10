@@ -87,6 +87,16 @@ public class MeasurementUtil
 								2) - 1 / 3).sum()
 				* (2 / (pDirections.size() * (pDirections.size() - 1.0)));
 	}
+	
+	static double legendreOrder(List<CartesianVector> pDirections)
+	{
+		final CartesianVector vAverageDirection = pDirections.stream().collect(CartesianVector.averageVector());
+		double vDenominator = 2*pDirections.size();
+		return pDirections
+		.stream()
+		.mapToDouble(pDirection -> 3*Math.pow(pDirection.cosTheta(vAverageDirection), 2) - 1)
+		.sum() / vDenominator;
+	}
 
 	public static double parallelMagnitude(final CartesianVector pDirection,
 			List<CartesianVector> pDirections)

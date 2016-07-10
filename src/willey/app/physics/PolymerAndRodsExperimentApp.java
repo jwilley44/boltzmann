@@ -40,6 +40,7 @@ public class PolymerAndRodsExperimentApp extends PhysicsExperimentApp
 		.add(Measurements.polymerPerpendicularRadius())
 		.add(Measurements.polymerPerpendicularFractilization())
 		.add(Measurements.monomerRodCorrelation())
+		.add(Measurements.rodCorrelation())
 		.add(Measurements.polymerParallelFractilization())
 		.add(Measurements.rodsStartingState())
 		.add(Measurements.quenchedRods())
